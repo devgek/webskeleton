@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" href="data:,">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap-4.3.1.min.css" crossorigin="anonymous">
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- activate following line, if there is another version of jquery somewhere in the project-->
+    <!--script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" onload="window.$ = window.jQuery;"-->
+    <script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="assets/js/popper-1.14.7.min.js" crossorigin="anonymous"></script>
+    <script src="assets/js/bootstrap-4.3.1.min.js" crossorigin="anonymous"></script>
+    <!-- gktable JavaScript -->
+    <script src="assets/js/gktable-1.1.js" crossorigin="anonymous"></script>
+
+    <title>My cool go project</title>
+</head>
+
+<body>
+
+    <div class="container border mt-2 p-2">
+        {{template "t_menu" .VersionInfo }}
+
+        {{template "t_content"}}
+
+    </div>
+
+</body>
+
+</html>
+{{ define "t_menu" }}{{ end }}
