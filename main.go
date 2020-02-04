@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"sync"
 	"text/template"
-
-	"github.com/stretchr/objx"
 )
 
 // templ represents a single template
@@ -32,12 +30,12 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	})
 
+	cData, _ := FromContext(r.Context())
+
 	data := map[string]interface{}{
 		"Host":        r.Host,
 		"VersionInfo": "V1.0",
-	}
-	if authCookie, err := r.Cookie("webskeleton-auth"); err == nil {
-		data["UserData"] = objx.MustFromBase64(authCookie.Value)
+		"UserID":      cData.UserID(),
 	}
 
 	t.templ.Execute(w, data)
@@ -49,6 +47,7 @@ func main() {
 	flag.Parse() // parse the flags
 
 	http.Handle("/login", &templateHandler{filename: "login.html"})
+	http.HandleFunc("/loginuser", loginHandler)
 	http.Handle("/page1", MustAuth(&templateHandler{filename: "page1.html"}))
 	http.Handle("/page2", &templateHandler{filename: "page2.html"})
 	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +57,7 @@ func main() {
 			Path:   "/",
 			MaxAge: -1,
 		})
-		w.Header().Set("Location", "/page1")
+		w.Header().Set("Location", "/login")
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	})
 
