@@ -9,6 +9,8 @@
     <link rel="icon" href="data:,">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap-4.3.1.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/gks-1.1.css" crossorigin="anonymous">
+
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- activate following line, if there is another version of jquery somewhere in the project-->
     <!--script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" onload="window.$ = window.jQuery;"-->
@@ -22,22 +24,23 @@
 </head>
 
 <body>
-    <div class="container border mt-2 p-2">
+    <div class="container mt-2 p-2">
         <div class="card mb-3">
-            <div class="card-header text-white bg-primary">Login</div>
+            <div class="card-header text-white gks-bg-logo">Login</div>
             <div class="card-body">
                 <form action="loginuser">
                     <div class="form-group">
                         <label for="exampleInputEmail1">User</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="text" class="form-control" id="exampleInputEmail1" name="userid"
+                            aria-describedby="emailHelp">
                         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
                             else.</small>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1">
+                        <input type="password" class="form-control" id="exampleInputPassword1" name="password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" class="btn text-white gks-bg-logo">Login</button>
                 </form>
             </div>
         </div>

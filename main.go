@@ -48,6 +48,7 @@ func main() {
 
 	http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.HandleFunc("/loginuser", loginHandler)
+	//MustAuth secures the following site to be authenticated (auth cookie web-skeleton)
 	http.Handle("/page1", MustAuth(&templateHandler{filename: "page1.html"}))
 	http.Handle("/page2", &templateHandler{filename: "page2.html"})
 	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {

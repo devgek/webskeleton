@@ -63,7 +63,8 @@ func MustAuth(handler http.Handler) http.Handler {
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	//todo do the login
-	contextData := &contextData{"123456"}
+	theUser := r.FormValue("userid")
+	contextData := &contextData{theUser}
 	cookieData := &cookieData{contextData}
 
 	authCookieValue := objx.New(cookieData).MustBase64()
