@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"kahrersoftware.at/webskeleton/config"
+
 	"github.com/stretchr/objx"
 )
 
@@ -61,20 +63,23 @@ func MustAuth(handler http.Handler) http.Handler {
 	return &authHandler{next: handler}
 }
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
-	//todo do the login
-	theUser := r.FormValue("userid")
-	contextData := &contextData{theUser}
-	cookieData := &cookieData{contextData}
+func handleLogin(env *config.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//todo do the login
+		theUser := r.FormValue("userid")
 
-	authCookieValue := objx.New(cookieData).MustBase64()
+		contextData := &contextData{theUser}
+		cookieData := &cookieData{contextData}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:  "webskeleton-auth",
-		Value: authCookieValue,
-		Path:  "/"})
+		authCookieValue := objx.New(cookieData).MustBase64()
 
-	w.Header().Set("Location", "/page1")
-	w.WriteHeader(http.StatusTemporaryRedirect)
+		http.SetCookie(w, &http.Cookie{
+			Name:  "webskeleton-auth",
+			Value: authCookieValue,
+			Path:  "/"})
+
+		w.Header().Set("Location", "/page1")
+		w.WriteHeader(http.StatusTemporaryRedirect)
+	})
 
 }

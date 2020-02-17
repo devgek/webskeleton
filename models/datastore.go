@@ -22,6 +22,8 @@ func NewDS(driver string, databaseName string) (*DS, error) {
 	}
 
 	db.AutoMigrate(&User{})
+	user := &User{Name: "admin", Email: "admin@webskeleton.com"}
+	db.FirstOrCreate(user, user)
 
 	return &DS{db}, nil
 }
