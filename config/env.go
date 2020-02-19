@@ -18,7 +18,7 @@ type Env struct {
 //InitEnv return new initialized environment
 func InitEnv() *Env {
 	//here we decide the database system
-	ds, err := models.NewDS("sqlite3", "webskeleton.db")
+	ds, err := models.NewDatastore("sqlite3", "webskeleton.db")
 	if err != nil {
 		log.Panic(err)
 	}
