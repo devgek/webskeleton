@@ -1,7 +1,7 @@
 package main
 
 import (
-	"context"
+	"bytes"
 	"net/http"
 
 	"kahrersoftware.at/webskeleton/config"
@@ -15,7 +15,7 @@ type CookieData interface {
 }
 
 type cookieData struct {
-	CData ContextData
+	CData config.ContextData
 }
 
 func (c cookieData) Data() interface{} {
@@ -48,12 +48,12 @@ func (h *authHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//set cookie data to context
-	cData, ok := FromCookie(cookie)
+	cData, ok := config.FromCookie(cookie)
 	if !ok {
 		http.Error(w, "illegal auth data", http.StatusInternalServerError)
 		return
 	}
-	ctx := context.WithValue(r.Context(), contextKeyContextData, cData)
+	ctx := config.ToContext(r.Context(), cData)
 	// success - call the next handler
 	h.next.ServeHTTP(w, r.WithContext(ctx))
 }
@@ -63,12 +63,27 @@ func MustAuth(handler http.Handler) http.Handler {
 	return &authHandler{next: handler}
 }
 
-func handleLogin(env *config.Env) http.Handler {
+func handleLoginUser(env *config.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//todo do the login
+		//do the login
 		theUser := r.FormValue("userid")
+		thePass := r.FormValue("password")
 
-		contextData := &contextData{theUser}
+		contextData := config.NewContextData()
+		ctx := config.ToContext(r.Context(), contextData)
+
+		user, err := env.DS.GetUser(theUser)
+		if err != nil || !bytes.Equal(user.Pass, []byte(thePass)) {
+			viewData := env.NewViewData(r)
+			viewData["LoginUser"] = theUser
+			viewData["LoginPass"] = thePass
+			viewData["ErrorMessage"] = "Login with this credentials not allowed!"
+			env.HandleView(w, r.WithContext(ctx), "login.html", viewData)
+			return
+		}
+
+		//login ok
+		contextData.SetUserID(theUser)
 		cookieData := &cookieData{contextData}
 
 		authCookieValue := objx.New(cookieData).MustBase64()

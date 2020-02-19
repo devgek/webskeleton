@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"context"
@@ -10,13 +10,23 @@ import (
 //ContextData the data hold in request context
 type ContextData interface {
 	UserID() string
+	SetUserID(userID string)
 }
 type contextData struct {
 	userID string
 }
 
+//NewContextData create ContextData
+func NewContextData() ContextData {
+	return &contextData{}
+}
+
 func (c contextData) UserID() string {
 	return c.userID
+}
+
+func (c *contextData) SetUserID(userID string) {
+	c.userID = userID
 }
 
 func (c contextData) MSI() map[string]interface{} {
@@ -34,13 +44,18 @@ type contextKey struct {
 
 var contextKeyContextData = &contextKey{"context-data"}
 
+//ToContext set ContextData to context
+func ToContext(ctx context.Context, cData ContextData) context.Context {
+	return context.WithValue(ctx, contextKeyContextData, cData)
+}
+
 //FromContext get ContextData out of context
 func FromContext(ctx context.Context) (ContextData, bool) {
-	key := ctx.Value(contextKeyContextData)
-	if key == nil {
-		return &contextData{""}, false
+	val := ctx.Value(contextKeyContextData)
+	if val == nil {
+		return &contextData{}, false
 	}
-	cData, ok := key.(ContextData)
+	cData, ok := val.(ContextData)
 	return cData, ok
 }
 
@@ -50,7 +65,7 @@ func FromCookie(cookie *http.Cookie) (ContextData, bool) {
 
 	val := c.Get("cookie-data.context-data.userID")
 	if val != nil {
-		return &contextData{val.Str()}, true
+		return &contextData{userID: val.Str()}, true
 	}
-	return &contextData{""}, false
+	return &contextData{}, false
 }

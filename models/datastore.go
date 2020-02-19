@@ -1,12 +1,14 @@
 package models
 
 import (
+	"errors"
+
 	"github.com/jinzhu/gorm"
 )
 
 //Datastore interface to datastore
 type Datastore interface {
-	GetUser(userID string) (User, error)
+	GetUser(userID string) (*User, error)
 }
 
 //DS the Datastore implementation
@@ -22,15 +24,22 @@ func NewDS(driver string, databaseName string) (*DS, error) {
 	}
 
 	db.AutoMigrate(&User{})
-	user := &User{Name: "admin", Email: "admin@webskeleton.com"}
+	user := &User{Name: "admin", Pass: []byte("xyz"), Email: "admin@webskeleton.com"}
 	db.FirstOrCreate(user, user)
 
 	return &DS{db}, nil
 }
 
 //GetUser return User data
-func (ds *DS) GetUser(userID string) (User, error) {
+func (ds *DS) GetUser(userID string) (*User, error) {
 	var user = &User{}
-	ds.Where("name = ?", userID).First(&user)
-	return *user, nil
+	if err := ds.Where("name = ?", userID).First(&user).Error; err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			return nil, errors.New("User nicht vorhanden")
+		}
+
+		return nil, err
+	}
+
+	return user, nil
 }
