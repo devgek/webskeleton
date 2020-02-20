@@ -1,12 +1,13 @@
 package cmd
 
 import (
-	"flag"
 	"log"
 	"net/http"
+	"time"
 
 	"kahrersoftware.at/webskeleton/auth"
 
+	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 	"kahrersoftware.at/webskeleton/config"
 )
@@ -14,15 +15,10 @@ import (
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "start web server and serve html",
+	Long:  `webskeleton serve; a typical go web app`,
 	Run: func(cmd *cobra.Command, args []string) {
-		runServe()
+		runServe(cmd)
 	},
 }
 
@@ -38,20 +34,19 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	serveCmd.Flags().String("port", "8080", "The port this app listens")
 }
 
-func runServe() {
-	var addr = flag.String("addr", ":8080", "The addr of the application.")
-	flag.Parse() // parse the flags
-
+func runServe(cmd *cobra.Command) {
 	env := config.InitEnv()
+	r := mux.NewRouter()
 
-	http.Handle("/", env.NewTemplateHandler("login.html"))
-	http.Handle("/loginuser", auth.HandleLoginUser(env))
+	r.Handle("/", env.NewTemplateHandler("login.html"))
+	r.Handle("/loginuser", auth.HandleLoginUser(env))
 	//MustAuth secures the following site to be authenticated (auth cookie web-skeleton)
-	http.Handle("/page1", auth.MustAuth(env.NewTemplateHandler("page1.html")))
-	http.Handle("/page2", env.NewTemplateHandler("page2.html"))
-	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
+	r.Handle("/page1", auth.MustAuth(env.NewTemplateHandler("page1.html")))
+	r.Handle("/page2", env.NewTemplateHandler("page2.html"))
+	r.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &http.Cookie{
 			Name:   "webskeleton-auth",
 			Value:  "",
@@ -62,12 +57,19 @@ func runServe() {
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	})
 
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
+	r.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
 
 	// start the web server
-	log.Println("Starting webskeleton on", *addr)
-	if err := http.ListenAndServe(*addr, nil); err != nil {
-		log.Fatal("ListenAndServe:", err)
+	port, _ := cmd.Flags().GetString("port")
+	log.Println("Starting webskeleton on port ", port)
+
+	srv := &http.Server{
+		Handler: r,
+		Addr:    "127.0.0.1:" + port,
+		// Good practice: enforce timeouts for servers you create!
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
 	}
 
+	log.Fatal(srv.ListenAndServe())
 }
