@@ -6,19 +6,19 @@ import (
 	"text/template"
 
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
-	"kahrersoftware.at/webskeleton/models"
+	"kahrersoftware.at/webskeleton/data"
 )
 
 //Env the environment
 type Env struct {
-	DS                 models.Datastore
+	DS                 data.Datastore
 	TemplateHandlerMap map[string]*TemplateHandler
 }
 
 //InitEnv return new initialized environment
 func InitEnv() *Env {
 	//here we decide the database system
-	ds, err := models.NewDatastore("sqlite3", "webskeleton.db")
+	ds, err := data.NewDatastore("sqlite3", "webskeleton.db")
 	if err != nil {
 		log.Panic(err)
 	}

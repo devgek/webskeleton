@@ -57,7 +57,8 @@ func runServe(cmd *cobra.Command) {
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	})
 
-	r.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
+	// r.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
+	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
 
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")
