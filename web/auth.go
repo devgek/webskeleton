@@ -1,10 +1,9 @@
-package auth
+package web
 
 import (
-	"bytes"
 	"net/http"
 
-	"kahrersoftware.at/webskeleton/config"
+	"kahrersoftware.at/bmdexport/logs"
 
 	"github.com/stretchr/objx"
 )
@@ -15,7 +14,7 @@ type CookieData interface {
 }
 
 type cookieData struct {
-	CData config.ContextData
+	CData ContextData
 }
 
 func (c cookieData) Data() interface{} {
@@ -48,12 +47,12 @@ func (h *authHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//set cookie data to context
-	cData, ok := config.FromCookie(cookie)
+	cData, ok := FromCookie(cookie)
 	if !ok {
 		http.Error(w, "illegal auth data", http.StatusInternalServerError)
 		return
 	}
-	ctx := config.ToContext(r.Context(), cData)
+	ctx := ToContext(r.Context(), cData)
 	// success - call the next handler
 	h.next.ServeHTTP(w, r.WithContext(ctx))
 }
@@ -64,26 +63,27 @@ func MustAuth(handler http.Handler) http.Handler {
 }
 
 //HandleLoginUser wrap handler func for login user
-func HandleLoginUser(env *config.Env) http.Handler {
+func HandleLoginUser(c *Controller) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//do the login
 		theUser := r.FormValue("userid")
 		thePass := r.FormValue("password")
 
-		contextData := config.NewContextData()
-		ctx := config.ToContext(r.Context(), contextData)
+		contextData := NewContextData()
+		ctx := ToContext(r.Context(), contextData)
 
-		user, err := env.DS.GetUser(theUser)
-		if err != nil || !bytes.Equal(user.Pass, []byte(thePass)) {
-			viewData := env.NewViewData(r)
+		user, err := c.Services.LoginUser(theUser, thePass)
+		if err != nil {
+			viewData := c.NewViewData(r)
 			viewData["LoginUser"] = theUser
 			viewData["LoginPass"] = thePass
 			viewData["ErrorMessage"] = "Login with this credentials not allowed!"
-			env.HandleView(w, r.WithContext(ctx), "login.html", viewData)
+			c.HandleView(w, r.WithContext(ctx), "login.html", viewData)
 			return
 		}
 
 		//login ok
+		logs.Debug("User ", user.Name, " logged in")
 		contextData.SetUserID(theUser)
 		cookieData := &cookieData{contextData}
 

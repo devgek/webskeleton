@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"kahrersoftware.at/webskeleton/auth"
+	"kahrersoftware.at/webskeleton/services"
+
+	"kahrersoftware.at/webskeleton/web"
 
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
@@ -39,26 +41,10 @@ func init() {
 
 func runServe(cmd *cobra.Command) {
 	env := config.InitEnv()
+	services := services.NewServices(env.DS)
 	r := mux.NewRouter()
 
-	r.Handle("/", env.NewTemplateHandler("login.html"))
-	r.Handle("/loginuser", auth.HandleLoginUser(env))
-	//MustAuth secures the following site to be authenticated (auth cookie web-skeleton)
-	r.Handle("/page1", auth.MustAuth(env.NewTemplateHandler("page1.html")))
-	r.Handle("/page2", env.NewTemplateHandler("page2.html"))
-	r.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
-		http.SetCookie(w, &http.Cookie{
-			Name:   "webskeleton-auth",
-			Value:  "",
-			Path:   "/",
-			MaxAge: -1,
-		})
-		w.Header().Set("Location", "/login")
-		w.WriteHeader(http.StatusTemporaryRedirect)
-	})
-
-	// r.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
-	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
+	web.NewController(services)
 
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")

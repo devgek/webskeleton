@@ -1,4 +1,4 @@
-package business
+package services
 
 import (
 	"errors"
@@ -11,8 +11,8 @@ import (
 )
 
 //LoginUser check user and pwd
-func (ctx Context) LoginUser(username string, password string) (*models.User, error) {
-	user, err := ctx.DS.GetUser(username)
+func (s Services) LoginUser(username string, password string) (*models.User, error) {
+	user, err := s.DS.GetUser(username)
 	if err == nil {
 		if err = bcrypt.CompareHashAndPassword(user.Pass, []byte(password)); err == nil {
 			return user, nil
@@ -24,14 +24,14 @@ func (ctx Context) LoginUser(username string, password string) (*models.User, er
 }
 
 //CreateUser create new user
-func (ctx Context) CreateUser(username string, password string, email string) (*models.User, error) {
+func (s Services) CreateUser(username string, password string, email string) (*models.User, error) {
 	user := &models.User{}
 	user.Name = username
 	user.Email = email
 	var err error
 	user.Pass, err = bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err == nil {
-		user, err = ctx.DS.CreateUser(user)
+		user, err = s.DS.CreateUser(user)
 		if err == nil {
 			return user, err
 		}
