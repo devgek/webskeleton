@@ -30,7 +30,7 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 	pass, _ := bcrypt.GenerateFromPassword([]byte("xyz"), bcrypt.MinCost)
 	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com"}
 
-	err = db.FirstOrCreate(admin, admin).Error
+	err = db.FirstOrCreate(admin, &models.User{Name: "admin"}).Error
 
 	return &DatastoreImpl{db}, err
 }

@@ -44,7 +44,8 @@ func runServe(cmd *cobra.Command) {
 	services := services.NewServices(env.DS)
 	r := mux.NewRouter()
 
-	web.NewController(services)
+	c := web.NewController(services)
+	c.InitRoutes(r)
 
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")
