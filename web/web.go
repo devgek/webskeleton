@@ -3,7 +3,6 @@ package web
 import (
 	"encoding/json"
 	"net/http"
-	"text/template"
 
 	"log"
 
@@ -23,17 +22,17 @@ func NewController(services *services.Services) *Controller {
 	return &Controller{Services: services, TemplateHandlerMap: make(map[string]*TemplateHandler)}
 }
 
-//InitRoutes ...
-func (c *Controller) InitRoutes(r *mux.Router) {
-	loginPageHandler := c.NewTemplateHandler("login.html")
+//InitWeb ...
+func (c *Controller) InitWeb(r *mux.Router) {
+	loginPageHandler := NewTemplateHandler("login.html")
 	r.Handle("/health", c.HandleHealth())
 
 	r.Handle("/", loginPageHandler)
 	r.Handle("/login", loginPageHandler)
 	r.Handle("/loginuser", c.HandleLoginUser())
 
-	r.Handle("/page1", c.NewTemplateHandler("page1.html"))
-	r.Handle("/page2", c.NewTemplateHandler("page2.html"))
+	r.Handle("/page1", NewTemplateHandler("page1.html"))
+	r.Handle("/page2", NewTemplateHandler("page2.html"))
 
 	r.Handle("/logout", c.HandleLogout())
 
@@ -44,20 +43,6 @@ func (c *Controller) InitRoutes(r *mux.Router) {
 	r.Use(authMiddleware)
 }
 
-//NewTemplateHandler create templateHandler and parse template
-func (c *Controller) NewTemplateHandler(fileName string) *TemplateHandler {
-	th := &TemplateHandler{filename: fileName}
-	c.TemplateHandlerMap[fileName] = th
-
-	if th.filename == "login.html" {
-		th.templ = template.Must(template.ParseFiles("./templates/" + fileName))
-	} else {
-		th.templ = template.Must(template.ParseFiles("./templates/layout.html", "./templates/menu.html", "./templates/"+fileName))
-	}
-
-	return th
-}
-
 //HandleView ...
 func (c *Controller) HandleView(w http.ResponseWriter, r *http.Request, templateName string, viewData interface{}) {
 	th := c.TemplateHandlerMap[templateName]
@@ -65,22 +50,10 @@ func (c *Controller) HandleView(w http.ResponseWriter, r *http.Request, template
 	th.templ.Execute(w, viewData)
 }
 
-//NewViewData return view data map
-func (c *Controller) NewViewData(r *http.Request) map[string]interface{} {
-	vd := make(map[string]interface{})
-	vd["Host"] = r.Host
-	vd["VersionInfo"] = "V1.0"
-	if contextData, ok := FromContext(r.Context()); ok {
-		vd["UserID"] = contextData.UserID()
-	}
-
-	return vd
-}
-
 //HandleHealth ...
 func (c *Controller) HandleHealth() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		vd := c.NewViewData(r)
+		vd := NewViewData(r)
 		vd["status"] = "ok"
 		json.NewEncoder(w).Encode(vd)
 	})
@@ -98,7 +71,7 @@ func (c *Controller) HandleLoginUser() http.Handler {
 
 		user, err := c.Services.LoginUser(theUser, thePass)
 		if err != nil {
-			viewData := c.NewViewData(r)
+			viewData := NewViewData(r)
 			viewData["LoginUser"] = theUser
 			viewData["LoginPass"] = thePass
 			viewData["ErrorMessage"] = "Login with this credentials not allowed!"

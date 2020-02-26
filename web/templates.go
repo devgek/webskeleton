@@ -24,3 +24,16 @@ func (t *TemplateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.templ.Execute(w, data)
 
 }
+
+//NewTemplateHandler create templateHandler and parse template
+func NewTemplateHandler(fileName string) *TemplateHandler {
+	th := &TemplateHandler{filename: fileName}
+
+	if th.filename == "login.html" {
+		th.templ = template.Must(template.ParseFiles("./templates/" + fileName))
+	} else {
+		th.templ = template.Must(template.ParseFiles("./templates/layout.html", "./templates/menu.html", "./templates/"+fileName))
+	}
+
+	return th
+}

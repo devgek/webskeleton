@@ -2,14 +2,11 @@ package cmd
 
 import (
 	"log"
-	"net/http"
-	"time"
 
-	"kahrersoftware.at/webskeleton/services"
+	"github.com/labstack/echo"
 
 	"kahrersoftware.at/webskeleton/web"
 
-	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 	"kahrersoftware.at/webskeleton/config"
 )
@@ -41,23 +38,26 @@ func init() {
 
 func runServe(cmd *cobra.Command) {
 	env := config.InitEnv()
-	services := services.NewServices(env.DS)
-	r := mux.NewRouter()
+	// r := mux.NewRouter()
+	// c := web.NewController(env.Services)
+	// c.InitWeb(r)
 
-	c := web.NewController(services)
-	c.InitRoutes(r)
+	echo := echo.New()
+	c := web.NewEchoController(env)
+	c.InitWeb(echo)
 
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")
 	log.Println("Starting webskeleton on port ", port)
 
-	srv := &http.Server{
-		Handler: r,
-		Addr:    "127.0.0.1:" + port,
-		// Good practice: enforce timeouts for servers you create!
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
-	}
+	// srv := &http.Server{
+	// 	Handler: r,
+	// 	Addr:    "127.0.0.1:" + port,
+	// 	// Good practice: enforce timeouts for servers you create!
+	// 	WriteTimeout: 15 * time.Second,
+	// 	ReadTimeout:  15 * time.Second,
+	// }
 
-	log.Fatal(srv.ListenAndServe())
+	// log.Fatal(srv.ListenAndServe())
+	log.Fatal(echo.Start(":" + port))
 }
