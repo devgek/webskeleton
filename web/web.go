@@ -26,20 +26,21 @@ func NewController(services *services.Services) *Controller {
 //InitRoutes ...
 func (c *Controller) InitRoutes(r *mux.Router) {
 	loginPageHandler := c.NewTemplateHandler("login.html")
+	r.Handle("/health", c.HandleHealth())
+
 	r.Handle("/", loginPageHandler)
 	r.Handle("/login", loginPageHandler)
 	r.Handle("/loginuser", c.HandleLoginUser())
-	//MustAuth secures the following site to be authenticated (auth cookie web-skeleton)
+
 	r.Handle("/page1", c.NewTemplateHandler("page1.html"))
 	r.Handle("/page2", c.NewTemplateHandler("page2.html"))
 
 	r.Handle("/logout", c.HandleLogout())
-	r.Handle("/health", c.HandleHealth())
 
 	// r.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
 
-	r.Use(loggingMiddleware)
+	r.Use(c.loggingMiddleware)
 	r.Use(authMiddleware)
 }
 
@@ -115,7 +116,7 @@ func (c *Controller) HandleLoginUser() http.Handler {
 		authCookieValue := objx.New(cookieData).MustBase64()
 
 		http.SetCookie(w, &http.Cookie{
-			Name:  "webskeleton-auth",
+			Name:  AuthCookieName,
 			Value: authCookieValue,
 			Path:  "/"})
 
@@ -129,7 +130,7 @@ func (c *Controller) HandleLoginUser() http.Handler {
 func (c *Controller) HandleLogout() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &http.Cookie{
-			Name:   "webskeleton-auth",
+			Name:   AuthCookieName,
 			Value:  "",
 			Path:   "/",
 			MaxAge: -1,
@@ -139,55 +140,11 @@ func (c *Controller) HandleLogout() http.Handler {
 	})
 }
 
-func loggingMiddleware(next http.Handler) http.Handler {
+func (c *Controller) loggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Do stuff here
 		log.Println("r:", r.RequestURI)
 		// Call the next handler, which can be another middleware in the chain, or the final handler.
 		next.ServeHTTP(w, r)
-	})
-}
-
-func xMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Do stuff here
-		log.Println("x:", r.Referer())
-		// Call the next handler, which can be another middleware in the chain, or the final handler.
-		next.ServeHTTP(w, r)
-	})
-}
-
-func yMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Do stuff here
-		log.Println("y:", r.RemoteAddr)
-		// Call the next handler, which can be another middleware in the chain, or the final handler.
-		next.ServeHTTP(w, r)
-	})
-}
-
-func authMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("webskeleton-auth")
-		if err == http.ErrNoCookie {
-			// not authenticated
-			w.Header().Set("Location", "/login")
-			w.WriteHeader(http.StatusTemporaryRedirect)
-			return
-		}
-		if err != nil {
-			// some other error
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		//set cookie data to context
-		cData, ok := FromCookie(cookie)
-		if !ok {
-			http.Error(w, "illegal auth data", http.StatusInternalServerError)
-			return
-		}
-		ctx := ToContext(r.Context(), cData)
-		// success - call the next handler
-		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
