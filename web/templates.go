@@ -5,15 +5,22 @@ import (
 	"text/template"
 )
 
+//TemplateHandlerMap ...
+var TemplateHandlerMap map[string]*TemplateHandler = make(map[string]*TemplateHandler)
+
+//TemplateRoot rootdir for template files
+var TemplateRoot = "./web/templates/"
+
 // TemplateHandler ...
 type TemplateHandler struct {
+	theMap   *map[string]*TemplateHandler
 	filename string
 	templ    *template.Template
 }
 
 // ServeHTTP handles the HTTP request.
 func (t *TemplateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	cData, _ := FromContext(r.Context())
+	cData := FromContext(r.Context())
 
 	data := map[string]interface{}{
 		"Host":        r.Host,
@@ -27,12 +34,13 @@ func (t *TemplateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 //NewTemplateHandler create templateHandler and parse template
 func NewTemplateHandler(fileName string) *TemplateHandler {
-	th := &TemplateHandler{filename: fileName}
+	th := &TemplateHandler{theMap: &TemplateHandlerMap, filename: fileName}
+	TemplateHandlerMap[fileName] = th
 
 	if th.filename == "login.html" {
-		th.templ = template.Must(template.ParseFiles("./templates/" + fileName))
+		th.templ = template.Must(template.ParseFiles(TemplateRoot + fileName))
 	} else {
-		th.templ = template.Must(template.ParseFiles("./templates/layout.html", "./templates/menu.html", "./templates/"+fileName))
+		th.templ = template.Must(template.ParseFiles(TemplateRoot+"layout.html", TemplateRoot+"menu.html", TemplateRoot+fileName))
 	}
 
 	return th

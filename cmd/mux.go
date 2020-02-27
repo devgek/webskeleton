@@ -2,27 +2,28 @@ package cmd
 
 import (
 	"log"
-
-	"github.com/labstack/echo"
+	"net/http"
+	"time"
 
 	"kahrersoftware.at/webskeleton/web"
 
+	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 	"kahrersoftware.at/webskeleton/config"
 )
 
-// serveCmd represents the serve command
-var serveCmd = &cobra.Command{
-	Use:   "serve",
-	Short: "start web server and serve html",
+// muxcmd represents the serve command
+var muxCmd = &cobra.Command{
+	Use:   "mux",
+	Short: "start web server and serve html with mux router",
 	Long:  `webskeleton serve; a typical go web app`,
 	Run: func(cmd *cobra.Command, args []string) {
-		runServe(cmd)
+		runMux(cmd)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(serveCmd)
+	rootCmd.AddCommand(muxCmd)
 
 	// Here you will define your flags and configuration settings.
 
@@ -33,31 +34,26 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	serveCmd.Flags().String("port", "8080", "The port this app listens")
+	muxCmd.Flags().String("port", "8080", "The port this app listens")
 }
 
-func runServe(cmd *cobra.Command) {
-	env := config.InitEnv()
-	// r := mux.NewRouter()
-	// c := web.NewController(env.Services)
-	// c.InitWeb(r)
-
-	echo := echo.New()
-	c := web.NewEchoController(env)
-	c.InitWeb(echo)
-
+func runMux(cmd *cobra.Command) {
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")
 	log.Println("Starting webskeleton on port ", port)
 
-	// srv := &http.Server{
-	// 	Handler: r,
-	// 	Addr:    "127.0.0.1:" + port,
-	// 	// Good practice: enforce timeouts for servers you create!
-	// 	WriteTimeout: 15 * time.Second,
-	// 	ReadTimeout:  15 * time.Second,
-	// }
+	env := config.InitEnv()
+	// with mux
+	r := mux.NewRouter()
+	c := web.NewController(env.Services)
+	c.InitWeb(r)
 
-	// log.Fatal(srv.ListenAndServe())
-	log.Fatal(echo.Start(":" + port))
+	srv := &http.Server{
+		Handler: r,
+		Addr:    "127.0.0.1:" + port,
+		// Good practice: enforce timeouts for servers you create!
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+	log.Fatal(srv.ListenAndServe())
 }

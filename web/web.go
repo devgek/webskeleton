@@ -11,15 +11,20 @@ import (
 	"kahrersoftware.at/webskeleton/services"
 )
 
+//AssetPattern the pattern for the static file rout
+var AssetPattern = "/assets"
+
+//AssetRoot the root dir of the static asset files
+var AssetRoot = "web/assets"
+
 //Controller ...
 type Controller struct {
-	Services           *services.Services
-	TemplateHandlerMap map[string]*TemplateHandler
+	Services *services.Services
 }
 
 //NewController ...
 func NewController(services *services.Services) *Controller {
-	return &Controller{Services: services, TemplateHandlerMap: make(map[string]*TemplateHandler)}
+	return &Controller{Services: services}
 }
 
 //InitWeb ...
@@ -36,16 +41,15 @@ func (c *Controller) InitWeb(r *mux.Router) {
 
 	r.Handle("/logout", c.HandleLogout())
 
-	// r.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
-	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
+	r.PathPrefix(AssetPattern).Handler(http.StripPrefix(AssetPattern, http.FileServer(http.Dir(AssetRoot))))
 
 	r.Use(c.loggingMiddleware)
 	r.Use(authMiddleware)
 }
 
-//HandleView ...
-func (c *Controller) HandleView(w http.ResponseWriter, r *http.Request, templateName string, viewData interface{}) {
-	th := c.TemplateHandlerMap[templateName]
+//RenderView ...
+func (c *Controller) RenderView(w http.ResponseWriter, r *http.Request, templateName string, viewData interface{}) {
+	th := TemplateHandlerMap[templateName]
 
 	th.templ.Execute(w, viewData)
 }
@@ -53,7 +57,7 @@ func (c *Controller) HandleView(w http.ResponseWriter, r *http.Request, template
 //HandleHealth ...
 func (c *Controller) HandleHealth() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		vd := NewViewData(r)
+		vd := NewViewData(FromContext(r.Context()))
 		vd["status"] = "ok"
 		json.NewEncoder(w).Encode(vd)
 	})
@@ -71,11 +75,11 @@ func (c *Controller) HandleLoginUser() http.Handler {
 
 		user, err := c.Services.LoginUser(theUser, thePass)
 		if err != nil {
-			viewData := NewViewData(r)
+			viewData := NewViewData(FromContext(r.Context()))
 			viewData["LoginUser"] = theUser
 			viewData["LoginPass"] = thePass
 			viewData["ErrorMessage"] = "Login with this credentials not allowed!"
-			c.HandleView(w, r.WithContext(ctx), "login.html", viewData)
+			c.RenderView(w, r.WithContext(ctx), "login.html", viewData)
 			return
 		}
 

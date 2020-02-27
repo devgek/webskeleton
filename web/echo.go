@@ -15,9 +15,19 @@ type TemplateRenderer struct {
 func (r *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	var t *template.Template
 	if name == "login.html" {
-		t = template.Must(template.ParseFiles("./templates/" + name))
+		t = template.Must(template.ParseFiles(TemplateRoot + name))
 	} else {
-		t = template.Must(template.ParseFiles("./templates/layout.html", "./templates/menu.html", "./templates/"+name))
+		t = template.Must(template.ParseFiles(TemplateRoot+"layout.html", TemplateRoot+"menu.html", TemplateRoot+name))
 	}
-	return t.ExecuteTemplate(w, name, data)
+	return t.Execute(w, data)
+}
+
+//GetEchoContextData ...
+func GetEchoContextData(c echo.Context) ContextData {
+	contextData := c.Get("contextData")
+	if contextData == nil {
+		return NewContextData()
+	}
+
+	return contextData.(ContextData)
 }

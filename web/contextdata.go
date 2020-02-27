@@ -11,17 +11,24 @@ import (
 type ContextData interface {
 	UserID() string
 	SetUserID(userID string)
+	Host() string
+	SetHost(host string)
 }
 type contextData struct {
 	userID string
+	host   string
 }
 
 //NewContextData create ContextData
 func NewContextData() ContextData {
-	return &contextData{}
+	return &contextData{"", ""}
 }
 
 func (c contextData) UserID() string {
+	return c.userID
+}
+
+func (c contextData) Host() string {
 	return c.userID
 }
 
@@ -29,9 +36,14 @@ func (c *contextData) SetUserID(userID string) {
 	c.userID = userID
 }
 
+func (c *contextData) SetHost(host string) {
+	c.host = host
+}
+
 func (c contextData) MSI() map[string]interface{} {
 	ctxMap := objx.New(map[string]interface{}{
 		"userID": c.UserID(),
+		"host":   c.Host(),
 	})
 	return objx.New(map[string]interface{}{
 		"context-data": ctxMap,
@@ -50,13 +62,12 @@ func ToContext(ctx context.Context, cData ContextData) context.Context {
 }
 
 //FromContext get ContextData out of context
-func FromContext(ctx context.Context) (ContextData, bool) {
+func FromContext(ctx context.Context) ContextData {
 	val := ctx.Value(contextKeyContextData)
 	if val == nil {
-		return &contextData{}, false
+		return NewContextData()
 	}
-	cData, ok := val.(ContextData)
-	return cData, ok
+	return val.(ContextData)
 }
 
 //FromCookie get ContextData from cookie value
