@@ -2,6 +2,7 @@ package webecho
 
 import (
 	"io"
+	"log"
 	"text/template"
 
 	"github.com/labstack/echo"
@@ -14,6 +15,7 @@ type TemplateRenderer struct {
 
 // Render renders a template document
 func (r *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	log.Println("render", name)
 	var t *template.Template
 	if name == "login.html" {
 		t = template.Must(template.ParseFiles(web.TemplateRoot + name))

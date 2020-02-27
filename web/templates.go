@@ -1,7 +1,9 @@
 package web
 
 import (
+	"log"
 	"net/http"
+	"sync"
 	"text/template"
 )
 
@@ -13,6 +15,7 @@ var TemplateRoot = "./web/templates/"
 
 // TemplateHandler ...
 type TemplateHandler struct {
+	sync.Mutex
 	theMap   *map[string]*TemplateHandler
 	filename string
 	Templ    *template.Template
@@ -35,7 +38,10 @@ func (t *TemplateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 //NewTemplateHandler create templateHandler and parse template
 func NewTemplateHandler(fileName string) *TemplateHandler {
 	th := &TemplateHandler{theMap: &TemplateHandlerMap, filename: fileName}
+	th.Lock()
+	defer th.Unlock()
 	TemplateHandlerMap[fileName] = th
+	log.Println("sync new template handler in map for", fileName)
 
 	if th.filename == "login.html" {
 		th.Templ = template.Must(template.ParseFiles(TemplateRoot + fileName))
