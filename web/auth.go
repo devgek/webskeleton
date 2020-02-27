@@ -14,15 +14,23 @@ type CookieData interface {
 	Data() interface{}
 }
 
-type cookieData struct {
+//NewCookieData ...
+func NewCookieData(data ContextData) CookieData {
+	return &CookieDataImpl{data}
+}
+
+//CookieDataImpl ...
+type CookieDataImpl struct {
 	CData ContextData
 }
 
-func (c cookieData) Data() interface{} {
+//Data ...
+func (c CookieDataImpl) Data() interface{} {
 	return c.CData
 }
 
-func (c cookieData) MSI() map[string]interface{} {
+//MSI ...
+func (c CookieDataImpl) MSI() map[string]interface{} {
 	ctxMap := objx.New(c.Data())
 
 	return objx.New(map[string]interface{}{
@@ -30,7 +38,8 @@ func (c cookieData) MSI() map[string]interface{} {
 	})
 }
 
-func authMiddleware(next http.Handler) http.Handler {
+//AuthMiddleware middleware handler for cookie authentication
+func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//don't check auth cookie with this requests
 		if r.URL.Path == "/login" || r.URL.Path == "/loginuser" || r.URL.Path == "/health" {
@@ -39,6 +48,7 @@ func authMiddleware(next http.Handler) http.Handler {
 		}
 
 		cookie, err := r.Cookie(AuthCookieName)
+
 		if err == http.ErrNoCookie {
 			// not authenticated
 			w.Header().Set("Location", "/login")
@@ -50,6 +60,7 @@ func authMiddleware(next http.Handler) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
 		//set cookie data to context
 		cData, ok := FromCookie(cookie)
 		if !ok {

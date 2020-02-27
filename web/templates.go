@@ -15,7 +15,7 @@ var TemplateRoot = "./web/templates/"
 type TemplateHandler struct {
 	theMap   *map[string]*TemplateHandler
 	filename string
-	templ    *template.Template
+	Templ    *template.Template
 }
 
 // ServeHTTP handles the HTTP request.
@@ -28,7 +28,7 @@ func (t *TemplateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		"UserID":      cData.UserID(),
 	}
 
-	t.templ.Execute(w, data)
+	t.Templ.Execute(w, data)
 
 }
 
@@ -38,9 +38,9 @@ func NewTemplateHandler(fileName string) *TemplateHandler {
 	TemplateHandlerMap[fileName] = th
 
 	if th.filename == "login.html" {
-		th.templ = template.Must(template.ParseFiles(TemplateRoot + fileName))
+		th.Templ = template.Must(template.ParseFiles(TemplateRoot + fileName))
 	} else {
-		th.templ = template.Must(template.ParseFiles(TemplateRoot+"layout.html", TemplateRoot+"menu.html", TemplateRoot+fileName))
+		th.Templ = template.Must(template.ParseFiles(TemplateRoot+"layout.html", TemplateRoot+"menu.html", TemplateRoot+fileName))
 	}
 
 	return th

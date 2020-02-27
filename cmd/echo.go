@@ -3,11 +3,10 @@ package cmd
 import (
 	"log"
 
-	"kahrersoftware.at/webskeleton/web"
-
 	"github.com/labstack/echo"
 	"github.com/spf13/cobra"
 	"kahrersoftware.at/webskeleton/config"
+	"kahrersoftware.at/webskeleton/webecho"
 )
 
 // serveCmd represents the serve command
@@ -42,9 +41,9 @@ func runEcho(cmd *cobra.Command) {
 
 	env := config.InitEnv()
 
-	echo := echo.New()
-	echo.HideBanner = true
-	c := web.NewEchoController(env)
-	c.InitWeb(echo)
-	log.Fatal(echo.Start(":" + port))
+	e := echo.New()
+	e.HideBanner = true
+	c := webecho.NewEchoController(env)
+	c.InitWeb(e)
+	log.Fatal(e.Start(":" + port))
 }

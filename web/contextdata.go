@@ -54,16 +54,17 @@ type contextKey struct {
 	name string
 }
 
-var contextKeyContextData = &contextKey{"context-data"}
+//ContextKeyContextData ...
+var ContextKeyContextData = &contextKey{"context-data"}
 
 //ToContext set ContextData to context
 func ToContext(ctx context.Context, cData ContextData) context.Context {
-	return context.WithValue(ctx, contextKeyContextData, cData)
+	return context.WithValue(ctx, ContextKeyContextData, cData)
 }
 
 //FromContext get ContextData out of context
 func FromContext(ctx context.Context) ContextData {
-	val := ctx.Value(contextKeyContextData)
+	val := ctx.Value(ContextKeyContextData)
 	if val == nil {
 		return NewContextData()
 	}

@@ -5,11 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"kahrersoftware.at/webskeleton/web"
-
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 	"kahrersoftware.at/webskeleton/config"
+	"kahrersoftware.at/webskeleton/webmux"
 )
 
 // muxcmd represents the serve command
@@ -45,7 +44,7 @@ func runMux(cmd *cobra.Command) {
 	env := config.InitEnv()
 	// with mux
 	r := mux.NewRouter()
-	c := web.NewController(env.Services)
+	c := webmux.NewController(env.Services)
 	c.InitWeb(r)
 
 	srv := &http.Server{
