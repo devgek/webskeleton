@@ -3,9 +3,9 @@ package services
 import (
 	"errors"
 
-	"golang.org/x/crypto/bcrypt"
+	"log"
 
-	"kahrersoftware.at/bmdexport/logs"
+	"golang.org/x/crypto/bcrypt"
 
 	"kahrersoftware.at/webskeleton/models"
 )
@@ -19,7 +19,7 @@ func (s Services) LoginUser(username string, password string) (*models.User, err
 		}
 	}
 
-	logs.Debug("LoginUser:", err.Error())
+	log.Debug("LoginUser:", err.Error())
 	return nil, errors.New("Login nicht erlaubt")
 }
 
@@ -37,6 +37,6 @@ func (s Services) CreateUser(username string, password string, email string) (*m
 		}
 	}
 
-	logs.Debug("CreateUser:", err.Error())
+	log.Debug("CreateUser:", err.Error())
 	return user, errors.New("User kann nicht angelegt werden")
 }
