@@ -44,7 +44,7 @@ func runMux(cmd *cobra.Command) {
 	env := config.InitEnv()
 	// with mux
 	r := mux.NewRouter()
-	c := webmux.NewController(env.Services)
+	c := webmux.NewController(env)
 	c.InitWeb(r)
 
 	srv := &http.Server{
