@@ -1,64 +1,52 @@
 package webecho
 
 import (
-	"io"
-	"log"
-	"net/http"
-
 	"github.com/labstack/echo"
 	"kahrersoftware.at/webskeleton/config"
 	"kahrersoftware.at/webskeleton/web"
 )
 
-//EchoController front controller using echo framework
-type EchoController struct {
-	Env *config.Env
-}
-
-//NewEchoController ...
-func NewEchoController(env *config.Env) *EchoController {
-	return &EchoController{env}
-}
-
 //InitWeb initialize the web framework
-func (c *EchoController) InitWeb(e *echo.Echo) {
-	e.Renderer = &TemplateRenderer{}
+func InitWeb(env *config.Env) *echo.Echo {
+	e := echo.New()
+	e.HideBanner = true
+
+	// e.Renderer = &TemplateRenderer{}
 
 	e.GET("/health", echo.WrapHandler(web.HandleHealth()))
 
-	e.Match([]string{"GET", "POST"}, "/:name", c.DefaultPageHandler())
-
-	e.POST("/loginuser", echo.WrapHandler(web.HandleLogin(c.Env)))
+	e.POST("/loginuser", echo.WrapHandler(web.HandleLogin(env)))
 
 	e.GET("/logout", echo.WrapHandler(web.HandleLogout()))
 
 	e.Static(web.AssetPattern, web.AssetRoot)
 
+	e.Match([]string{"GET", "POST"}, "/:page", DefaultPageHandler())
+
 	e.Use(echo.WrapMiddleware(web.LoggingMiddleware))
 	e.Use(echo.WrapMiddleware(web.AuthMiddleware))
+
+	return e
 }
 
 //DefaultPageHandler ...
-func (c *EchoController) DefaultPageHandler() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		pageName := c.Param("name")
-		c.Render(http.StatusOK, pageName+".html", web.NewViewData(EchoContextData(c)))
+func DefaultPageHandler() echo.HandlerFunc {
+	return func(ec echo.Context) error {
+		page := ec.Param("page")
+		web.RenderTemplate(ec.Response().Writer, ec.Request(), page+".html", nil)
+		// ec.Render(http.StatusOK, pageName+".html", web.NewTemplateData(EchoContextData(ec)))
 		return nil
 	}
 }
 
 // TemplateRenderer is a custom html/template renderer for Echo framework
-type TemplateRenderer struct {
-}
+// damit man echo.Context.Render aufrufen kann
+// type TemplateRenderer struct {
+// }
 
-// Render renders a template document
-func (r *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	log.Println("render", name)
-	th := web.NewTemplateHandler(name)
-	return th.Templ.Execute(w, data)
-}
-
-//EchoContextData get ContextData from context
-func EchoContextData(c echo.Context) web.ContextData {
-	return web.FromContext(c.Request().Context())
-}
+// // Render renders a template document
+// func (r *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+// 	log.Println("render", name)
+// 	th := web.NewTemplateHandler(name)
+// 	return th.Templ.Execute(w, data)
+// }

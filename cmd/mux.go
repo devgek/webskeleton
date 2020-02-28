@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 	"kahrersoftware.at/webskeleton/config"
 	"kahrersoftware.at/webskeleton/webmux"
@@ -39,16 +38,14 @@ func init() {
 func runMux(cmd *cobra.Command) {
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")
-	log.Println("Starting webskeleton on port ", port)
+	log.Println("Starting webskeleton with mux on port ", port)
 
+	//the app env, containes pointer to db and services
 	env := config.InitEnv()
-	// with mux
-	r := mux.NewRouter()
-	c := webmux.NewController(env)
-	c.InitWeb(r)
+	router := webmux.InitWeb(env)
 
 	srv := &http.Server{
-		Handler: r,
+		Handler: router,
 		Addr:    "127.0.0.1:" + port,
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,

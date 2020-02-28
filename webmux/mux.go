@@ -9,32 +9,33 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//Controller ...
-type Controller struct {
-	Env *config.Env
-}
-
-//NewController ...
-func NewController(env *config.Env) *Controller {
-	return &Controller{env}
-}
-
 //InitWeb ...
-func (c *Controller) InitWeb(r *mux.Router) {
-	loginPageHandler := web.NewTemplateHandler("login.html")
+func InitWeb(env *config.Env) *mux.Router {
+	r := mux.NewRouter()
 	r.Handle("/health", web.HandleHealth())
 
-	r.Handle("/", loginPageHandler)
-	r.Handle("/login", loginPageHandler)
-	r.Handle("/loginuser", web.HandleLogin(c.Env))
-
-	r.Handle("/page1", web.NewTemplateHandler("page1.html"))
-	r.Handle("/page2", web.NewTemplateHandler("page2.html"))
+	r.Handle("/loginuser", web.HandleLogin(env))
 
 	r.Handle("/logout", web.HandleLogout())
 
 	r.PathPrefix(web.AssetPattern).Handler(http.StripPrefix(web.AssetPattern, http.FileServer(http.Dir(web.AssetRoot))))
 
+	r.Handle("/{page}", DefaultPageHandler())
+
 	r.Use(web.LoggingMiddleware)
 	r.Use(web.AuthMiddleware)
+
+	return r
+}
+
+//DefaultPageHandler ...
+func DefaultPageHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		page := vars["page"]
+		if page == "" {
+			page = "login"
+		}
+		web.RenderTemplate(w, r, page+".html", nil)
+	})
 }

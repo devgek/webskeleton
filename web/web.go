@@ -15,9 +15,15 @@ var AssetPattern = "/assets"
 //AssetRoot the root dir of the static asset files
 var AssetRoot = "web/assets"
 
-//RenderView ...
-func RenderView(w http.ResponseWriter, r *http.Request, templateName string, viewData interface{}) {
+//RenderTemplate ...
+func RenderTemplate(w http.ResponseWriter, r *http.Request, templateName string, viewData interface{}) {
+	if viewData == nil {
+		viewData = NewTemplateData(FromContext(r.Context()))
+	}
 	th := TemplateHandlerMap[templateName]
+	if th == nil {
+		th = NewTemplateHandler(templateName)
+	}
 
 	th.Templ.Execute(w, viewData)
 }
@@ -25,7 +31,7 @@ func RenderView(w http.ResponseWriter, r *http.Request, templateName string, vie
 //HandleHealth ...
 func HandleHealth() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		vd := NewViewData(FromContext(r.Context()))
+		vd := NewTemplateData(FromContext(r.Context()))
 		vd["status"] = "ok"
 		json.NewEncoder(w).Encode(vd)
 	})
@@ -43,11 +49,11 @@ func HandleLogin(env *config.Env) http.Handler {
 
 		user, err := env.Services.LoginUser(theUser, thePass)
 		if err != nil {
-			viewData := NewViewData(FromContext(r.Context()))
+			viewData := NewTemplateData(FromContext(r.Context()))
 			viewData["LoginUser"] = theUser
 			viewData["LoginPass"] = thePass
 			viewData["ErrorMessage"] = "Login with this credentials not allowed!"
-			RenderView(w, r.WithContext(ctx), "login.html", viewData)
+			RenderTemplate(w, r.WithContext(ctx), "login.html", viewData)
 			return
 		}
 
@@ -82,5 +88,12 @@ func HandleLogout() http.Handler {
 		})
 		w.Header().Set("Location", "/login")
 		w.WriteHeader(http.StatusTemporaryRedirect)
+	})
+}
+
+//HandlePageDefault ...
+func HandlePageDefault(name string) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		RenderTemplate(w, r, name, nil)
 	})
 }

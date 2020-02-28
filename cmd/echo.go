@@ -3,7 +3,6 @@ package cmd
 import (
 	"log"
 
-	"github.com/labstack/echo"
 	"github.com/spf13/cobra"
 	"kahrersoftware.at/webskeleton/config"
 	"kahrersoftware.at/webskeleton/webecho"
@@ -37,13 +36,11 @@ func init() {
 func runEcho(cmd *cobra.Command) {
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")
-	log.Println("Starting webskeleton on port ", port)
+	log.Println("Starting webskeleton with echo on port ", port)
 
 	env := config.InitEnv()
 
-	e := echo.New()
-	e.HideBanner = true
-	c := webecho.NewEchoController(env)
-	c.InitWeb(e)
+	e := webecho.InitWeb(env)
+
 	log.Fatal(e.Start(":" + port))
 }
