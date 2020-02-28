@@ -5,3 +5,7 @@
 .gks-bg-light {
   background-color: #e3f2fd;
 }
+.gks-dropdown-right {
+  left: auto;
+  right: 0;
+}
