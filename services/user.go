@@ -19,7 +19,7 @@ func (s Services) LoginUser(username string, password string) (*models.User, err
 		}
 	}
 
-	log.Debug("LoginUser:", err.Error())
+	log.Println("LoginUser:", err.Error())
 	return nil, errors.New("Login nicht erlaubt")
 }
 
@@ -37,6 +37,6 @@ func (s Services) CreateUser(username string, password string, email string) (*m
 		}
 	}
 
-	log.Debug("CreateUser:", err.Error())
+	log.Println("CreateUser:", err.Error())
 	return user, errors.New("User kann nicht angelegt werden")
 }
