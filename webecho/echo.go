@@ -3,7 +3,6 @@ package webecho
 import (
 	"io"
 	"log"
-	"text/template"
 
 	"github.com/labstack/echo"
 	"kahrersoftware.at/webskeleton/web"
@@ -16,13 +15,8 @@ type TemplateRenderer struct {
 // Render renders a template document
 func (r *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	log.Println("render", name)
-	var t *template.Template
-	if name == "login.html" {
-		t = template.Must(template.ParseFiles(web.TemplateRoot + name))
-	} else {
-		t = template.Must(template.ParseFiles(web.TemplateRoot+"layout.html", web.TemplateRoot+"menu.html", web.TemplateRoot+name))
-	}
-	return t.Execute(w, data)
+	th := web.NewTemplateHandler(name)
+	return th.Templ.Execute(w, data)
 }
 
 //EchoContextData get ContextData from context
