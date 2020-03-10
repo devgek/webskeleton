@@ -2,6 +2,7 @@ package services_test
 
 import (
 	"errors"
+	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
 	"kahrersoftware.at/webskeleton/data"
@@ -10,10 +11,9 @@ import (
 	"testing"
 )
 
+//TestLoginUser test login service with mocking Datastore
 func TestLoginUser(t *testing.T) {
-	// assert.FailNow(t, "must be implemented")
-	// assert.Equal(t, 14, 15)
-	// create an instance of our test object
+	// create an instance of the mocked Datastore
 	mockedDB := &data.MockedDatastore{}
 	services := services.NewServices(mockedDB)
 
@@ -29,9 +29,28 @@ func TestLoginUser(t *testing.T) {
 
 	// assert that the expectations were met
 	mockedDB.AssertExpectations(t)
-
 }
 
+//TestLoginUserInMemory test login service with inmemory db
+func TestLoginUserInMemoryOK(t *testing.T) {
+	inMemoryDS, _ := data.NewInMemoryDatastore()
+	services := services.NewServices(inMemoryDS)
+
+	// happy test, user with correct password
+	user, err := services.LoginUser("Lionel", "secret")
+	assert.Nil(t, err, "Login user with error")
+	assert.NotNil(t, user, "User is nil")
+}
+
+func TestLoginUserInMemoryNOK(t *testing.T) {
+	inMemoryDS, _ := data.NewInMemoryDatastore()
+	services := services.NewServices(inMemoryDS)
+
+	// happy test, user with correct password
+	user, err := services.LoginUser("Lionel", "wrongsecret")
+	assert.Nil(t, user, "User expected nil")
+	assert.NotNil(t, err, "Error expected")
+}
 func TestDoTableBased(t *testing.T) {
 	tests := map[string]struct {
 		input1 int
@@ -48,7 +67,7 @@ func TestDoTableBased(t *testing.T) {
 		"invalid addition": {
 			input1: 2,
 			input2: 2,
-			output: 4,
+			output: -1,
 			err:    nil,
 		},
 		"getting error": {

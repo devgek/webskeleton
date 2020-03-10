@@ -28,10 +28,15 @@ func (m *MockedDatastore) CreateUser(user *models.User) (*models.User, error) {
 //NewInMemoryDatastore ...
 func NewInMemoryDatastore() (Datastore, error) {
 	ds, err := NewDatastore("sqlite3", ":memory:")
-
+	if err != nil {
+		panic(err)
+	}
 	impl := ds.(*DatastoreImpl)
 	passEncrypted, _ := bcrypt.GenerateFromPassword([]byte("secret"), bcrypt.MinCost)
-	impl.DB.Create(&models.User{Name: "Lionel", Pass: passEncrypted, Email: "lionel.messi@fcb.com"})
+	err = impl.DB.Create(&models.User{Name: "Lionel", Pass: passEncrypted, Email: "lionel.messi@fcb.com"}).Error
+	if err != nil {
+		panic(err)
+	}
 	// impl.DB.Create(&models.User{Name: "Gerald", Pass: passEncrypted, Email: "gerald.kahrer@gmail.com"})
 
 	return ds, err
