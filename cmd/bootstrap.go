@@ -1,8 +1,12 @@
 package cmd
 
 import (
+	"github.com/devgek/webskeleton/helper"
 	"github.com/spf13/cobra"
 	"log"
+	"os"
+	"os/exec"
+	"path/filepath"
 )
 
 // serveCmd represents the serve command
@@ -30,14 +34,79 @@ func init() {
 	bootstrapCmd.Flags().String("repository", "github.com", "The git repository for the new project")
 	bootstrapCmd.Flags().String("user", "theuser", "The git user for the new project")
 	bootstrapCmd.Flags().String("project", "theproject", "The project name for the new project")
+	bootstrapCmd.Flags().String("web", "echo", "The web framework to use [echo|mux]")
 }
 
 func runBootstrap(cmd *cobra.Command) {
 	// start the web server
-	repository, _ := cmd.Flags().GetString("repository")
-	user, _ := cmd.Flags().GetString("user")
-	project, _ := cmd.Flags().GetString("project")
+	repoName, _ := cmd.Flags().GetString("repository")
+	repoUser, _ := cmd.Flags().GetString("user")
+	projectName, _ := cmd.Flags().GetString("project")
+	webFramework, _ := cmd.Flags().GetString("web")
 
-	log.Println("Start bootstraping new project for", "'"+repository+"/"+user+"/"+project+"'")
+	packageName := repoName + "/" + repoUser + "/" + projectName
+	log.Println("Start bootstraping new project for", "'"+packageName+"' with webframework", webFramework)
 
+	// There can be more than one path, separated by colon.
+	gopaths := helper.GoPaths()
+	if len(gopaths) == 0 {
+		log.Fatalln("GOPATH is not set.")
+	}
+	// By default, we choose the last GOPATH.
+	gopath := gopaths[len(gopaths)-1]
+
+	fullpath := filepath.Join(gopath, "src", packageName)
+	dbName := projectName
+	projectTemplateDir := filepath.Join(gopath, "src", "github.com", "devgek", "webskeleton")
+
+	// 1. Create target directory
+	log.Print("Creating " + fullpath + "...")
+	err := os.MkdirAll(fullpath, 0755)
+	helper.ExitOnError(err, "")
+
+	// 2. Copy everything under project template directory to target directory.
+	log.Print("Copying project template directory to " + fullpath + "...")
+	currDir, err := os.Getwd()
+	helper.ExitOnError(err, "Can't get current path!")
+
+	err = os.Chdir(projectTemplateDir)
+	helper.ExitOnError(err, "")
+
+	var command *exec.Cmd
+	if helper.IsWindows() {
+		command = exec.Command("copy", "/Y", "*", fullpath)
+	} else {
+		command = exec.Command("cp", "-rf", ".", fullpath)
+	}
+	output, err := command.CombinedOutput()
+	helper.ExitOnError(err, string(output))
+
+	err = os.Chdir(currDir)
+	helper.ExitOnError(err, "")
+
+	// 3. Interpolate placeholder variables on the new project.
+	log.Print("Replacing placeholder variables on " + repoUser + "/" + projectName + "...")
+
+	replacers := make(map[string]string)
+	replacers["github.com/devgek/webskeleton"] = packageName
+	replacers["webskeleton.db"] = dbName + ".db"
+	err = helper.RecursiveSearchReplaceFiles(fullpath, replacers)
+	helper.ExitOnError(err, "")
+
+	// 4. Setup and bootstrap databases.
+	// nothing to do, yet
+
+	// 5. Get all application dependencies for the first time.
+	log.Print("Running go get ./...")
+	command = exec.Command("go", "get", "./...")
+	command.Dir = fullpath
+	output, err = command.CombinedOutput()
+	helper.ExitOnError(err, string(output))
+
+	// 6. Run tests on newly generated app.
+	log.Print("Running go test ./...")
+	command = exec.Command("go", "test", "./...")
+	command.Dir = fullpath
+	output, _ = command.CombinedOutput()
+	log.Print(string(output))
 }
