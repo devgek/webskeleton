@@ -3,8 +3,8 @@ package webmux
 import (
 	"net/http"
 
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/web"
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/web"
 
 	"github.com/gorilla/mux"
 )

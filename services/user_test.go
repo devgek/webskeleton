@@ -2,12 +2,12 @@ package services_test
 
 import (
 	"errors"
+	"github.com/devgek/webskeleton/data"
+	"github.com/devgek/webskeleton/models"
+	"github.com/devgek/webskeleton/services"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
-	"kahrersoftware.at/webskeleton/data"
-	"kahrersoftware.at/webskeleton/models"
-	"kahrersoftware.at/webskeleton/services"
 	"testing"
 )
 

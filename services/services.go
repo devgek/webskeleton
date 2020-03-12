@@ -1,6 +1,6 @@
 package services
 
-import "kahrersoftware.at/webskeleton/data"
+import "github.com/devgek/webskeleton/data"
 
 //Services the business serives
 type Services struct {

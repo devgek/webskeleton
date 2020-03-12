@@ -1,8 +1,8 @@
 package data
 
 import (
+	"github.com/devgek/webskeleton/models"
 	"golang.org/x/crypto/bcrypt"
-	"kahrersoftware.at/webskeleton/models"
 )
 
 //NewInMemoryDatastore ...

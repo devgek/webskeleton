@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"kahrersoftware.at/webskeleton/models"
+	"github.com/devgek/webskeleton/models"
 )
 
 //

@@ -3,9 +3,9 @@ package config
 import (
 	"log"
 
+	"github.com/devgek/webskeleton/data"
+	"github.com/devgek/webskeleton/services"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
-	"kahrersoftware.at/webskeleton/data"
-	"kahrersoftware.at/webskeleton/services"
 )
 
 //Env the environment

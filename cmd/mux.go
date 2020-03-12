@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/webmux"
 	"github.com/spf13/cobra"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/webmux"
 )
 
 // muxcmd represents the serve command

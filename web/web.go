@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/devgek/webskeleton/config"
 	"github.com/stretchr/objx"
-	"kahrersoftware.at/webskeleton/config"
 )
 
 //AssetPattern the pattern for the static file rout

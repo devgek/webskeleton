@@ -3,9 +3,9 @@ package data
 import (
 	"errors"
 
+	"github.com/devgek/webskeleton/models"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
-	"kahrersoftware.at/webskeleton/models"
 )
 
 //Datastore interface to datastore

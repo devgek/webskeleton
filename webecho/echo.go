@@ -1,9 +1,9 @@
 package webecho
 
 import (
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/web"
 	"github.com/labstack/echo"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/web"
 )
 
 //InitWeb initialize the web framework
