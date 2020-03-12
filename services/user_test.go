@@ -44,13 +44,26 @@ func TestLoginUserInMemoryOK(t *testing.T) {
 
 func TestLoginUserInMemoryNOK(t *testing.T) {
 	inMemoryDS, _ := data.NewInMemoryDatastore()
-	services := services.NewServices(inMemoryDS)
+	s := services.NewServices(inMemoryDS)
 
-	// happy test, user with correct password
-	user, err := services.LoginUser("Lionel", "wrongsecret")
+	// user with wrong password
+	user, err := s.LoginUser("Lionel", "wrongsecret")
 	assert.Nil(t, user, "User expected nil")
 	assert.NotNil(t, err, "Error expected")
+	assert.Equal(t, services.ErrorLoginNotAllowed, err, "Expected ErrorLoginNotAllowed")
 }
+
+func TestCreateUser(t *testing.T) {
+	inMemoryDS, _ := data.NewInMemoryDatastore()
+	s := services.NewServices(inMemoryDS)
+
+	_, err := s.CreateUser("Roger", "secret", "roger.federer@atp.com")
+	assert.Nil(t, err, "No error expected")
+
+	_, err = s.LoginUser("Roger", "secret")
+	assert.Nil(t, err, "No error expected")
+}
+
 func TestDoTableBased(t *testing.T) {
 	tests := map[string]struct {
 		input1 int

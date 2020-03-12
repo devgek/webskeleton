@@ -31,6 +31,7 @@ func NewInMemoryDatastore() (Datastore, error) {
 	if err != nil {
 		panic(err)
 	}
+	//init the db with test data
 	impl := ds.(*DatastoreImpl)
 	passEncrypted, _ := bcrypt.GenerateFromPassword([]byte("secret"), bcrypt.MinCost)
 	err = impl.DB.Create(&models.User{Name: "Lionel", Pass: passEncrypted, Email: "lionel.messi@fcb.com"}).Error

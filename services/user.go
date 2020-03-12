@@ -10,6 +10,12 @@ import (
 	"kahrersoftware.at/webskeleton/models"
 )
 
+//
+var (
+	ErrorLoginNotAllowed = errors.New("Login nicht erlaubt")
+	ErrorUserNotCreated  = errors.New("User kann nicht angelegt werden")
+)
+
 //Do ... just for test mocking
 func (s Services) Do(par1 int, par2 int) (int, error) {
 	sum := par1 + par2
@@ -34,7 +40,7 @@ func (s Services) LoginUser(username string, password string) (*models.User, err
 	}
 
 	log.Println("LoginUser:", err.Error())
-	return nil, errors.New("Login nicht erlaubt")
+	return nil, ErrorLoginNotAllowed
 }
 
 //CreateUser create new user
@@ -52,5 +58,5 @@ func (s Services) CreateUser(username string, password string, email string) (*m
 	}
 
 	log.Println("CreateUser:", err.Error())
-	return user, errors.New("User kann nicht angelegt werden")
+	return user, ErrorUserNotCreated
 }
