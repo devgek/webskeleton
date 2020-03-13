@@ -74,7 +74,7 @@ func runBootstrap(cmd *cobra.Command) {
 
 	var command *exec.Cmd
 	if helper.IsWindows() {
-		command = exec.Command("xcopy", "/hiev", ".", fullpath)
+		command = exec.Command("xcopy", ".", fullpath, "/S", "/E", "/H", "/Y")
 	} else {
 		command = exec.Command("cp", "-rf", ".", fullpath)
 	}
