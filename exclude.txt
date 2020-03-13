@@ -1,0 +1,5 @@
+.git
+.db
+exclude.txt
+webskeleton
+webstkeleton.exe
