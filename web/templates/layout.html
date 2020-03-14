@@ -9,6 +9,7 @@
     <link rel="icon" href="data:,">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap-4.3.1.min.css" crossorigin="anonymous" type="text/css">
+    <link rel="stylesheet" href="assets/css/sidebar.css" crossorigin="anonymous" type="text/css">
     <link rel="stylesheet" href="assets/css/gks-1.1.css" crossorigin="anonymous" type="text/css">
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -24,17 +25,57 @@
 </head>
 
 <body>
+    <div class="wrapper">
 
-    <div class="container-xl mt-2 ml-4 mr-4 p-2">
-        {{template "t_menu" .}}
-
-        <div class="container mt-2 p-2">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>{{.ProjectName}}</h3>
+            </div>
+    
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="#page1Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Page1</a>
+                    <ul class="collapse list-unstyled" id="page1Submenu">
+                        <li>
+                            <a href="/page1">Page1-1</a>
+                        </li>
+                        <li>
+                            <a href="/page1">Page1-2</a>
+                        </li>
+                        <li>
+                            <a href="/page1">Page1-3</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/page2">Page 2</a>
+                </li>
+            </ul>
+        </nav>
+    
+        <!-- Page Content -->
+        <div id="content">
+            <!-- App Header -->
+            <nav class="navbar navbar-light gks-bg-light gks-navbar-app">
+                <span class="navbar-brand mb-0 h1">&nbsp;</span>
+                <ul class="nav justify-content-end">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                            aria-expanded="false">{{.UserID}}</a>
+                        <div class="dropdown-menu gks-dropdown-right">
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        
             {{template "t_content" .}}
+        
         </div>
-
-    </div>
+    
+    </div>  
 
 </body>
 
 </html>
-{{ define "t_menu" }}{{ end }}

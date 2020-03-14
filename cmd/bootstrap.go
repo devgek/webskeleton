@@ -91,6 +91,7 @@ func runBootstrap(cmd *cobra.Command) {
 	replacers["github.com/devgek/webskeleton"] = packageName
 	replacers["webskeleton.db"] = dbName + ".db"
 	replacers["webskeleton-auth"] = projectName + "-auth"
+	replacers["go-webskeleton"] = projectName
 	err = helper.RecursiveSearchReplaceFiles(fullpath, replacers)
 	helper.ExitOnError(err, "")
 

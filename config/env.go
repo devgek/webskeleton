@@ -8,6 +8,11 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 )
 
+//
+var (
+	ProjectName = "go-webskeleton"
+)
+
 //Env the environment
 type Env struct {
 	DS       data.Datastore

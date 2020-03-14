@@ -11,8 +11,8 @@
       "mode": "auto",
       "program": "${fileDirname}",
       "env": {},
-      // "args": ["echo", "--port=8080"]
-      "args": ["bootstrap", "--user=gek", "--project=mygo2"]
+      "args": ["echo", "--port=8080"]
+      // "args": ["bootstrap", "--user=gek", "--project=mygo2"]
     }
   ]
 }

@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/devgek/webskeleton/config"
 	"log"
 	"net/http"
 	"sync"
@@ -52,6 +53,7 @@ func NewTemplateHandler(fileName string) *TemplateHandler {
 func NewTemplateData(contextData ContextData) map[string]interface{} {
 	vd := make(map[string]interface{})
 	vd["Host"] = contextData.Host()
+	vd["ProjectName"] = config.ProjectName
 	vd["VersionInfo"] = "V1.0"
 	vd["UserID"] = contextData.UserID()
 
