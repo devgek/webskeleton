@@ -2,6 +2,7 @@ package web
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/stretchr/objx"
 )
@@ -42,7 +43,7 @@ func (c CookieDataImpl) MSI() map[string]interface{} {
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//don't check auth cookie with this requests
-		if r.URL.Path == "/login" || r.URL.Path == "/loginuser" || r.URL.Path == "/health" {
+		if r.URL.Path == "/login" || r.URL.Path == "/loginuser" || r.URL.Path == "/health" || strings.Contains(r.URL.Path, AssetPattern) {
 			next.ServeHTTP(w, r)
 			return
 		}

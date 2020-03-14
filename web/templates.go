@@ -8,7 +8,7 @@ import (
 )
 
 //TemplateHandlerMap ...
-var TemplateHandlerMap map[string]*TemplateHandler = make(map[string]*TemplateHandler)
+var TemplateHandlerMap = make(map[string]*TemplateHandler)
 
 //TemplateRoot rootdir for template files
 var TemplateRoot = "./web/templates/"
