@@ -10,7 +10,8 @@ import (
 
 //
 var (
-	ProjectName = "go-webskeleton"
+	ProjectName  = "webskeleton"
+	ProjectTitle = "go-webskeleton"
 )
 
 //Env the environment

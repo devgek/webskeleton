@@ -11,9 +11,9 @@ import (
 
 // serveCmd represents the serve command
 var bootstrapCmd = &cobra.Command{
-	Use:   "bootstrap -repository ",
+	Use:   "bootstrap",
 	Short: "bootstrap a new go web project",
-	Long:  `webskeleton bootstrap; a typical go web app`,
+	Long:  `webskeleton bootstrap; Bootstraps a typical go web app using sqlite database, a layout template + login form`,
 	Run: func(cmd *cobra.Command, args []string) {
 		runBootstrap(cmd)
 	},
@@ -22,19 +22,10 @@ var bootstrapCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(bootstrapCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// serveCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	bootstrapCmd.Flags().String("repository", "github.com", "The git repository for the new project")
 	bootstrapCmd.Flags().String("user", "theuser", "The git user for the new project")
 	bootstrapCmd.Flags().String("project", "theproject", "The project name for the new project")
-	bootstrapCmd.Flags().String("web", "echo", "The web framework to use [echo|mux]")
+	bootstrapCmd.Flags().String("title", "", "The title for this project, default is project name")
 }
 
 func runBootstrap(cmd *cobra.Command) {
@@ -42,10 +33,13 @@ func runBootstrap(cmd *cobra.Command) {
 	repoName, _ := cmd.Flags().GetString("repository")
 	repoUser, _ := cmd.Flags().GetString("user")
 	projectName, _ := cmd.Flags().GetString("project")
-	webFramework, _ := cmd.Flags().GetString("web")
+	projectTitle, _ := cmd.Flags().GetString("title")
+	if projectTitle == "" {
+		projectTitle = projectName
+	}
 
 	packageName := repoName + "/" + repoUser + "/" + projectName
-	log.Println("Start bootstraping new project for", "'"+packageName+"' with webframework", webFramework)
+	log.Println("Start bootstraping new project for", "'"+packageName+"' with title", projectTitle)
 
 	// There can be more than one path, separated by colon.
 	gopaths := helper.GoPaths()
@@ -91,7 +85,8 @@ func runBootstrap(cmd *cobra.Command) {
 	replacers["github.com/devgek/webskeleton"] = packageName
 	replacers["webskeleton.db"] = dbName + ".db"
 	replacers["webskeleton-auth"] = projectName + "-auth"
-	replacers["go-webskeleton"] = projectName
+	replacers["go-webskeleton"] = projectTitle
+	replacers[".webskeleton.yaml"] = "." + projectName + ".yaml"
 	err = helper.RecursiveSearchReplaceFiles(fullpath, replacers)
 	helper.ExitOnError(err, "")
 

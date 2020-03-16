@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/devgek/webskeleton/config"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -25,7 +26,7 @@ to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("hello from webskeleton root command")
+		fmt.Printf("hello from %s root command", config.ProjectName)
 	},
 }
 
@@ -54,6 +55,7 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	fmt.Println("initConfig ...")
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
@@ -67,13 +69,15 @@ func initConfig() {
 
 		// Search config in home directory with name ".webskeleton" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".webskeleton")
+		viper.SetConfigName(".webskeleton.yaml")
 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+	// viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	} else {
+		fmt.Println("No config file provided.")
 	}
 }
