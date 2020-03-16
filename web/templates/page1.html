@@ -2,12 +2,26 @@
 
 <!-- Page Header-->
 <div class="gks-page-header">
-    <span class="navbar-brand">Page1</span>
+    <span class="navbar-brand">{{.Messages.GetString "form.page1.header"}}</span>
 </div>
 <!-- Page Content -->
 <div class="m-2 p-2">
-    <div>Page1 content goes here!</div>
-    <div>UserID: {{.UserID}}</div>
+    <table class="table gk-table" id="userTable">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Users}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td>{{.Email}}</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
 </div>
 
 {{end}}

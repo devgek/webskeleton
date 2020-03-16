@@ -12,8 +12,8 @@ import (
 
 //
 var (
-	ErrorLoginNotAllowed = errors.New("Login nicht erlaubt")
-	ErrorUserNotCreated  = errors.New("User kann nicht angelegt werden")
+	ErrorLoginNotAllowed = &ServiceError{"msg.m0001"}
+	ErrorUserNotCreated  = &ServiceError{"msg.m0002"}
 )
 
 //Do ... just for test mocking
@@ -59,4 +59,15 @@ func (s Services) CreateUser(username string, password string, email string) (*m
 
 	log.Println("CreateUser:", err.Error())
 	return user, ErrorUserNotCreated
+}
+
+//GetAllUsers ...
+func (s Services) GetAllUsers() ([]models.User, error) {
+	users, err := s.DS.GetAllUser()
+	if err == nil {
+		return users, err
+	}
+
+	log.Println("GetAllUses:", err.Error())
+	return users, err
 }

@@ -10,6 +10,7 @@ import (
 
 //Datastore interface to datastore
 type Datastore interface {
+	GetAllUser() ([]models.User, error)
 	GetUser(userID string) (*models.User, error)
 	CreateUser(user *models.User) (*models.User, error)
 }
@@ -40,7 +41,7 @@ func (ds *DatastoreImpl) GetUser(username string) (*models.User, error) {
 	var user = &models.User{}
 	if err := ds.Where("name = ?", username).First(&user).Error; err != nil {
 		if gorm.IsRecordNotFoundError(err) {
-			return nil, errors.New("User nicht vorhanden")
+			return nil, errors.New("User not found")
 		}
 
 		return nil, err
@@ -54,4 +55,12 @@ func (ds *DatastoreImpl) CreateUser(user *models.User) (*models.User, error) {
 	ret := *user
 	err := ds.Create(user).Error
 	return &ret, err
+}
+
+//GetAllUser select * from user
+func (ds *DatastoreImpl) GetAllUser() ([]models.User, error) {
+	var users = []models.User{}
+	ds.Find(&users)
+
+	return users, ds.Error
 }

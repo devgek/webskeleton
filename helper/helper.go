@@ -22,6 +22,13 @@ func ExitOnError(err error, msg string) {
 	}
 }
 
+// PanicOnError logs error message in fatal mode.
+func PanicOnError(err error) {
+	if err != nil {
+		log.Panic(err)
+	}
+}
+
 //IsWindows detect os windows
 func IsWindows() bool {
 	return runtime.GOOS == "windows"

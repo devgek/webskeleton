@@ -52,7 +52,7 @@ func HandleLogin(env *config.Env) http.Handler {
 			viewData := NewTemplateData(FromContext(r.Context()))
 			viewData["LoginUser"] = theUser
 			viewData["LoginPass"] = thePass
-			viewData["ErrorMessage"] = "Login with this credentials not allowed!"
+			viewData["ErrorMessage"] = err.Error()
 			RenderTemplate(w, r.WithContext(ctx), "login.html", viewData)
 			return
 		}
@@ -89,6 +89,25 @@ func HandleLogout() http.Handler {
 		w.Header().Set("Location", "/login")
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	})
+}
+
+//HandleUsers ...
+func HandleUsers(env *config.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		//show user list
+		contextData := NewContextData()
+		ctx := ToContext(r.Context(), contextData)
+
+		users, err := env.Services.GetAllUsers()
+		viewData := NewTemplateData(FromContext(r.Context()))
+		viewData["Users"] = users
+		if err != nil {
+			viewData["ErrorMessage"] = err.Error()
+		}
+		RenderTemplate(w, r.WithContext(ctx), "page1.html", viewData)
+		return
+	})
+
 }
 
 //HandlePageDefault ...

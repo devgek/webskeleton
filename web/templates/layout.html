@@ -35,7 +35,7 @@
     
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="#page1Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Page1</a>
+                    <a href="#page1Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{{.Messages.GetString "form.page1.header"}}</a>
                     <ul class="collapse list-unstyled" id="page1Submenu">
                         <li>
                             <a href="/page1">Page1-1</a>
@@ -49,7 +49,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="/page2">Page 2</a>
+                    <a href="/page2">{{.Messages.GetString "form.page2.header"}}</a>
                 </li>
             </ul>
         </nav>
