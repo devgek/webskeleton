@@ -48,6 +48,7 @@
     padding: 10px;
     font-size: 1.1em;
     display: block;
+    text-decoration: none
 }
 
 #sidebar ul li a:hover {
@@ -55,10 +56,9 @@
     background: #fff;
 }
 
-#sidebar ul li.active>a,
-a[aria-expanded="true"] {
+#sidebar ul li.active>a {
     color: #fff;
-    background: #ff9800;
+    background: #cfd8dc;
 }
 
 a[data-toggle="collapse"] {

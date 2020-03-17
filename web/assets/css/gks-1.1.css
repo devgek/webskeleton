@@ -1,3 +1,36 @@
+body {
+  background-color: #f1f1f1;
+  font-family: "Open Sans", sans-serif;
+  font-size: 13px;
+  color: #111;
+}
+
+.gks-app-header {
+  background-color: #fff;
+  border-bottom: 1px solid #546e7a;
+}
+
+.gks-page-header {
+  padding: .5rem 1rem;
+  color: #546e7a;
+  background-color: #fff;
+}
+
+.gks-btn {
+  padding: 0 20px 1px;
+  border-radius: 2px;
+  line-height: 31px;
+  border: 1px solid transparent;
+}
+
+.gks-btn-important {
+  border-color: #ff9800;
+  background-color: #ff9800;
+  color: #fff;
+}
+.gks-btn-important:hover {
+  color: #fff;
+}
 .gks-bg-logo {
   background-color: #ff9800; /*kahrer logo color */
   /*background-color: #ff0015;  red */
@@ -15,23 +48,16 @@
   right: 0;
 }
 
-.gks-navbar-app {
-  border-bottom: 1px solid #546e7a;
+.gks-btn-logo {
+  background-color: #ff9800; /*kahrer logo color */
+  color: #fff; /*kahrer logo color */
+  border-color: #ff9800;
+  /*background-color: #ff0015;  red */
 }
 
 a.nav-link {
-  color: #fff;
+  color: #546e7a;
   text-decoration: none;
 }
 
-a.nav-link:hover {
-  color: #fff;
-  background-color: #546e7a;
-  text-decoration: none;
-}
 
-.gks-page-header {
-  padding: .5rem 1rem;
-  color: #ff9800;
-  background-color: #cfd8dc;
-}

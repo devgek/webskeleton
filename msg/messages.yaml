@@ -12,5 +12,6 @@ form:
     content: "Das ist der Inhalt von Seite 1"
   users:
     header: "Benutzer"
-    content: "Das ist der Inhalt von Seite 2"
+    button: 
+      new: "Neuer Benutzer"
 ...
