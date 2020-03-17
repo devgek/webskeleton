@@ -104,7 +104,7 @@ func HandleUsers(env *config.Env) http.Handler {
 		if err != nil {
 			viewData["ErrorMessage"] = err.Error()
 		}
-		RenderTemplate(w, r.WithContext(ctx), "page1.html", viewData)
+		RenderTemplate(w, r.WithContext(ctx), "users.html", viewData)
 		return
 	})
 

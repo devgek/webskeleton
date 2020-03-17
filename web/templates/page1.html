@@ -6,22 +6,7 @@
 </div>
 <!-- Page Content -->
 <div class="m-2 p-2">
-    <table class="table gk-table" id="userTable">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{range .Users}}
-            <tr>
-                <td>{{.Name}}</td>
-                <td>{{.Email}}</td>
-            </tr>
-            {{end}}
-        </tbody>
-    </table>
+    <div>{{.Messages.GetString "form.page1.content"}}</div>
 </div>
 
 {{end}}

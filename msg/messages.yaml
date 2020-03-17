@@ -10,7 +10,7 @@ form:
   page1:
     header: "Seite 1"
     content: "Das ist der Inhalt von Seite 1"
-  page2:
-    header: "Seite 2"
+  users:
+    header: "Benutzer"
     content: "Das ist der Inhalt von Seite 2"
 ...

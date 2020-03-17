@@ -28,8 +28,9 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 	}
 
 	db.AutoMigrate(&models.User{})
+
 	pass, _ := bcrypt.GenerateFromPassword([]byte("xyz"), bcrypt.MinCost)
-	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com"}
+	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com", Admin: true}
 
 	err = db.FirstOrCreate(admin, &models.User{Name: "admin"}).Error
 

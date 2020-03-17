@@ -10,4 +10,5 @@ type User struct {
 	Name  string `gorm:"type:varchar(50);not null;unique"`
 	Pass  []byte
 	Email string `gorm:"type:varchar(100);not null"`
+	Admin bool   `gorm:"not null"`
 }

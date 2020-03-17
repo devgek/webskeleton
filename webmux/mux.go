@@ -16,6 +16,8 @@ func InitWeb(env *config.Env) *mux.Router {
 
 	r.Handle("/loginuser", web.HandleLogin(env))
 
+	r.Handle("/users", web.HandleUsers(env))
+
 	r.Handle("/logout", web.HandleLogout())
 
 	r.PathPrefix(web.AssetPattern).Handler(http.StripPrefix(web.AssetPattern, http.FileServer(http.Dir(web.AssetRoot))))

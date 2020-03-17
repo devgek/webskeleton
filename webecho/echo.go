@@ -21,7 +21,7 @@ func InitWeb(env *config.Env) *echo.Echo {
 
 	e.Static(web.AssetPattern, web.AssetRoot)
 
-	e.Match([]string{"GET", "POST"}, "/page1", echo.WrapHandler(web.HandleUsers(env)))
+	e.Match([]string{"GET", "POST"}, "/users", echo.WrapHandler(web.HandleUsers(env)))
 
 	e.Match([]string{"GET", "POST"}, "/:page", DefaultPageHandler())
 

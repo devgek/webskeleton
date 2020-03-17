@@ -29,7 +29,7 @@ func InitEnv() *Env {
 	//load messages
 	ml := msg.NewMessageLocator()
 
-	//here we decide the database system
+	//here we create the datastore
 	ds, err := data.NewDatastore("sqlite3", DatabaseName)
 	if err != nil {
 		log.Panic(err)

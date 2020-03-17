@@ -1,0 +1,35 @@
+{{define "t_content"}}
+
+<!-- Page Header-->
+<div class="gks-page-header">
+    <span class="navbar-brand">{{.Messages.GetString "form.users.header"}}</span>
+</div>
+<!-- Page Content -->
+<div class="m-2 p-2">
+    <table class="table gk-table" id="userTable">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Administrator</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Users}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td>{{.Email}}</td>
+                <td>
+                    {{if .Admin}}
+                        <input type="checkbox" checked="checked" disabled="disabled">
+                        {{else}}
+                        <input type="checkbox" disabled="disabled">
+                        {{end}}
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</div>
+
+{{end}}
