@@ -21,7 +21,8 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, templateName string,
 		viewData = NewTemplateData(FromContext(r.Context()))
 	}
 	th := TemplateHandlerMap[templateName]
-	if th == nil {
+	//reload template in debug mode
+	if config.Debug || th == nil {
 		th = NewTemplateHandler(templateName)
 	}
 

@@ -31,12 +31,17 @@ func init() {
 	// is called directly, e.g.:
 	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	echoCmd.Flags().String("port", "8080", "The port this app listens")
+	echoCmd.Flags().Bool("debug", false, "debug mode on/off")
 }
 
 func runEcho(cmd *cobra.Command) {
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")
+	config.Debug, _ = cmd.Flags().GetBool("debug")
 	log.Println("Starting webskeleton with echo on port ", port)
+	if config.Debug {
+		log.Println("Debug mode is on")
+	}
 
 	env := config.InitEnv()
 

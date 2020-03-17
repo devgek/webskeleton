@@ -15,6 +15,7 @@ var (
 	ProjectTitle   = "go-webskeleton"
 	ProjectVersion = "V1.0"
 	DatabaseName   = "webskeleton.db"
+	Debug          = false
 )
 
 //Env the environment

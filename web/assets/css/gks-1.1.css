@@ -16,6 +16,13 @@ body {
   background-color: #fff;
 }
 
+.gks-page-content {
+  margin: 20px;
+  background-color: #fff;
+  border: 1px solid #cfd8dc;
+  border-radius: 2px;
+}
+
 .gks-btn {
   padding: 0 20px 1px;
   border-radius: 2px;
@@ -60,4 +67,21 @@ a.nav-link {
   text-decoration: none;
 }
 
+.gks-i-edit {
+  width: 18px;
+  height: 18px;
+  color: #ff9800;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("/assets/svg/edit.svg");
+}
+
+svg {
+  color: #546e7a;
+}
+
+svg:hover {
+  color: #ff9800;
+}
 
