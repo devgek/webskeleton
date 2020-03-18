@@ -1,0 +1,57 @@
+{{define "t_user-edit"}}
+{{$userIsAdmin := .Admin}}
+
+<!-- Modal Dialog-->
+<div class="modal fade" id="userEditModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="userEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userEditModalLabel">{{.Messages.GetString "form.useredit.header"}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="userEditName" class="col-form-label">{{.Messages.GetString "form.useredit.label.name"}}</label>
+                    <input name="userEditName" class="form-control" id="userEditName" value="" autocomplete="new-password"/>
+                </div>
+                <div class="form-group">
+                    <label for="userEditPass" class="col-form-label">{{.Messages.GetString "form.useredit.label.pass"}}</label>
+                    <input type="password" name="userEditPass" class="form-control" id="userEditPass" value="" autocomplete="new-password"/>
+                </div>
+                <div class="form-group">
+                    <label for="userEditEmail" class="col-form-label">{{.Messages.GetString "form.useredit.label.email"}}</label>
+                    <input name="userEditEmail" class="form-control" id="userEditEmail" value="" autocomplete="new-password"/>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="userEditAdmin">
+                    <label class="form-check-label" for="userEditAdmin">{{.Messages.GetString "form.useredit.label.admin"}}</label>
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn gks-btn btn-back-app" data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
+                <button type="button" class="btn gks-btn gks-btn-important btn-save-app">{{.Messages.GetString "form.all.btn.save"}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#userEditModal').on('show.bs.modal', function (event) {
+        var trigger = $(event.relatedTarget); // Link that triggered the modal
+        var theRow = userTable.getRowFromParent(trigger);
+        var data = userTable.getRowData(theRow);
+        $("#userEditName").val(data[0]);
+        $("#userEditPass").val(data[1]);
+        $("#userEditEmail").val(data[2]);
+        var adminData = data[3];
+        if (adminData.trim() == "ja") {
+            $("#userEditAdmin").prop("checked", true);
+        }
+        else {
+            $("#userEditAdmin").prop("checked", false);
+        }
+    });
+</script>
+{{end}}

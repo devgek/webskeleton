@@ -25,9 +25,12 @@ body {
 
 .gks-btn {
   padding: 0 20px 1px;
-  border-radius: 2px;
+  border-radius: 0px;
   line-height: 31px;
-  border: 1px solid transparent;
+  border: 1px solid #546e7a;
+  background-color: #cfd8dc;
+  color: #546e7a;
+  font-size: 0.813rem;
 }
 
 .gks-btn-important {
@@ -98,10 +101,22 @@ a.nav-link {
   width: 100px;
 }
 
+.gks-icon-box a, .gks-icon-box a:hover {
+  text-decoration: none;
+}
+
 .w-10 {
   width: 10%;
 }
 
 .w-5 {
   width: 5%;
+}
+
+.modal-content {
+  border-radius: 0;
+}
+.form-control {
+  border-radius: 0;
+  font-size: 0.813rem;
 }

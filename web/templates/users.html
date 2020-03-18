@@ -15,29 +15,33 @@
         <thead>
             <tr>
                 <th scope="col">Name</th>
+                <th scope="col">Passwort</th>
                 <th scope="col">Email</th>
-                <th scope="col" >Administrator</th>
-                <th scope="col" ></th>
+                <th scope="col">Administrator</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             {{range .Users}}
             <tr>
                 <td>{{.Name}}</td>
+                <td>********</td>
                 <td>{{.Email}}</td>
                 <td>
                     {{if .Admin}}
-                    <input type="checkbox" checked="checked" disabled="disabled">
+                    <span>ja</span>
                     {{else}}
-                    <input type="checkbox" disabled="disabled">
+                    <span>nein</span>
                     {{end}}
                 </td>
                 <td class="w-5">
                     {{if $userIsAdmin}}
-                    <div class="gks-icon-box"> 
-                        <svg class="gks-icon">
-                            <use xlink:href="/assets/svg/gks-icons.svg#i-edit"></use>
-                        </svg>
+                    <div class="gks-icon-box">
+                        <a href="#" data-toggle="modal" data-target="#userEditModal">
+                            <svg class="gks-icon">
+                                <use xlink:href="/assets/svg/gks-icons.svg#i-edit"></use>
+                            </svg>
+                        </a>
                         <svg class="gks-icon">
                             <use xlink:href="/assets/svg/gks-icons.svg#i-trash"></use>
                         </svg>
@@ -53,5 +57,13 @@
         </tbody>
     </table>
 </div>
+<script>
+    //create GKTable without inline editing
+    var userTable = new GKTable("userTable", false);
+
+</script>
+
+<!-- user-edit -->
+{{template "t_user-edit" .}}
 
 {{end}}
