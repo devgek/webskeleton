@@ -13,15 +13,18 @@ type ContextData interface {
 	SetUserID(userID string)
 	Host() string
 	SetHost(host string)
+	Admin() bool
+	SetAdmin(admin bool)
 }
 type contextData struct {
 	userID string
 	host   string
+	admin  bool
 }
 
 //NewContextData create ContextData
 func NewContextData() ContextData {
-	return &contextData{"", ""}
+	return &contextData{"", "", false}
 }
 
 func (c contextData) UserID() string {
@@ -32,6 +35,10 @@ func (c contextData) Host() string {
 	return c.userID
 }
 
+func (c contextData) Admin() bool {
+	return c.admin
+}
+
 func (c *contextData) SetUserID(userID string) {
 	c.userID = userID
 }
@@ -40,10 +47,15 @@ func (c *contextData) SetHost(host string) {
 	c.host = host
 }
 
+func (c *contextData) SetAdmin(admin bool) {
+	c.admin = admin
+}
+
 func (c contextData) MSI() map[string]interface{} {
 	ctxMap := objx.New(map[string]interface{}{
 		"userID": c.UserID(),
 		"host":   c.Host(),
+		"admin":  c.Admin(),
 	})
 	return objx.New(map[string]interface{}{
 		"context-data": ctxMap,
@@ -75,9 +87,20 @@ func FromContext(ctx context.Context) ContextData {
 func FromCookie(cookie *http.Cookie) (ContextData, bool) {
 	c := objx.MustFromBase64(cookie.Value)
 
+	cData := NewContextData()
 	val := c.Get("cookie-data.context-data.userID")
 	if val != nil {
-		return &contextData{userID: val.Str()}, true
+		cData.SetUserID(val.Str())
+		val = c.Get("cookie-data.context-data.host")
+		if val != nil {
+			cData.SetHost(val.Str())
+			val = c.Get("cookie-data.context-data.admin")
+			if val != nil {
+				cData.SetAdmin(val.Bool())
+				return cData, true
+			}
+		}
 	}
+
 	return &contextData{}, false
 }

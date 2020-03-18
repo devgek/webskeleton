@@ -61,6 +61,7 @@ func HandleLogin(env *config.Env) http.Handler {
 		//login ok
 		log.Println("User", user.Name, "logged in")
 		contextData.SetUserID(theUser)
+		contextData.SetAdmin(user.Admin)
 		ToContext(r.Context(), contextData)
 
 		cookieData := NewCookieData(contextData)

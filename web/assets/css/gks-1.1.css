@@ -77,11 +77,31 @@ a.nav-link {
   background-image: url("/assets/svg/edit.svg");
 }
 
-svg {
+.gks-icon {
+  width: 18px;
+  height: 18px;
   color: #546e7a;
+  margin-right: 5px;
 }
 
-svg:hover {
+.gks-icon:hover {
   color: #ff9800;
 }
 
+.gks-icon-box {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top:7px;
+  padding-bottom: 4px;
+  text-align: center;
+  height: 31px;
+  width: 100px;
+}
+
+.w-10 {
+  width: 10%;
+}
+
+.w-5 {
+  width: 5%;
+}

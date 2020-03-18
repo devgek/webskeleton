@@ -58,6 +58,7 @@ func NewTemplateData(contextData ContextData) map[string]interface{} {
 	vd["ProjectName"] = config.ProjectName
 	vd["VersionInfo"] = config.ProjectVersion
 	vd["UserID"] = contextData.UserID()
+	vd["Admin"] = contextData.Admin()
 
 	return vd
 }
