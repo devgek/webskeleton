@@ -1,10 +1,10 @@
 package msg
 
 import (
+	"bytes"
 	"github.com/devgek/webskeleton/helper"
 	"github.com/spf13/viper"
-	"os"
-	"path/filepath"
+	"sync"
 )
 
 //MessageLocator the message locator
@@ -12,19 +12,21 @@ type MessageLocator struct {
 	*viper.Viper
 }
 
-//Messages the app messages
-var Messages = NewMessageLocator()
+var once sync.Once
+
+//Messages singleton instance for the app messages
+var Messages *MessageLocator
 
 //NewMessageLocator create MessageLocator and load the message file
-func NewMessageLocator() *MessageLocator {
-	currDir, err := os.Getwd()
-	helper.PanicOnError(err)
-	ml := &MessageLocator{viper.New()}
-	//load locale specific message file, if not default
-	// Messages.SetConfigFile(filepath.Join(currDir, "msg", "messages-en.yaml"))
-	ml.SetConfigFile(filepath.Join(currDir, "msg", "messages.yaml"))
-	err = ml.ReadInConfig()
-	helper.PanicOnError(err)
+func NewMessageLocator(messages []byte) *MessageLocator {
+	once.Do(func() {
+		msgReader := bytes.NewReader(messages)
+		ml := &MessageLocator{viper.New()}
+		ml.SetConfigType("yaml")
+		err := ml.ReadConfig(msgReader)
+		helper.PanicOnError(err)
+		Messages = ml
+	})
 
-	return ml
+	return Messages
 }

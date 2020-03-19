@@ -1,8 +1,14 @@
 package config
 
 import (
+	"github.com/devgek/webskeleton/helper"
 	"github.com/devgek/webskeleton/msg"
+	"github.com/devgek/webskeleton/packrfix"
+	"github.com/gobuffalo/packr/v2"
 	"log"
+	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/devgek/webskeleton/data"
 	"github.com/devgek/webskeleton/services"
@@ -20,6 +26,7 @@ var (
 
 //Env the environment
 type Env struct {
+	Assets         http.FileSystem
 	DS             data.Datastore
 	Services       *services.Services
 	MessageLocator *msg.MessageLocator
@@ -27,8 +34,18 @@ type Env struct {
 
 //InitEnv return new initialized environment
 func InitEnv() *Env {
+	//init asset FileSystem
+	root, err := os.Getwd()
+	helper.PanicOnError(err)
+	path := filepath.Join(root, "web", "assets")
+	origninalAssetBox := packr.New("assets", path)
+	assetBox := packrfix.New(origninalAssetBox)
+	//load locale specific message file, if not default
+	// messages, err := assetBox.Find("msg/messages-en.yaml")
+	messages, err := assetBox.Find("msg/messages.yaml")
+
 	//load messages
-	ml := msg.NewMessageLocator()
+	ml := msg.NewMessageLocator(messages)
 
 	//here we create the datastore
 	ds, err := data.NewDatastore("sqlite3", DatabaseName)
@@ -38,5 +55,5 @@ func InitEnv() *Env {
 
 	services := services.NewServices(ds)
 
-	return &Env{DS: ds, Services: services, MessageLocator: ml}
+	return &Env{Assets: assetBox, DS: ds, Services: services, MessageLocator: ml}
 }
