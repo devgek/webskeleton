@@ -17,7 +17,6 @@ var Messages = NewMessageLocator()
 
 //NewMessageLocator create MessageLocator and load the message file
 func NewMessageLocator() *MessageLocator {
-	runtime.Caller()
 	currDir, err := os.Getwd()
 	helper.PanicOnError(err)
 	ml := &MessageLocator{viper.New()}
