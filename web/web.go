@@ -112,6 +112,29 @@ func HandleUsers(env *config.Env) http.Handler {
 
 }
 
+//HandleUserEdit ...
+func HandleUserEdit(env *config.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// uName := r.FormValue("gkvName")
+		// uPass := r.FormValue("gkvPass")
+		// uEmail := r.FormValue("gkvEmail")
+		// uAdmin := r.FormValue("gkvAdmin")
+
+		contextData := NewContextData()
+		ctx := ToContext(r.Context(), contextData)
+
+		users, err := env.Services.GetAllUsers()
+		viewData := NewTemplateData(FromContext(r.Context()))
+		viewData["Users"] = users
+		if err != nil {
+			viewData["ErrorMessage"] = err.Error()
+		}
+		RenderTemplate(w, r.WithContext(ctx), "users.html", viewData)
+		return
+	})
+
+}
+
 //HandlePageDefault ...
 func HandlePageDefault(name string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -1,7 +1,8 @@
 ---
 msg: 
   m0001: "Login nicht erlaubt"
-  m0002: "User kann nicht angelegt werden"
+  m0002: "Benutzer kann nicht angelegt werden"
+  m0003: "Benutzer kann nicht gespeichert werden"
 form:
   all:
     btn:

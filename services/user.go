@@ -2,10 +2,9 @@ package services
 
 import (
 	"errors"
+	"github.com/devgek/webskeleton/helper"
 
 	"log"
-
-	"golang.org/x/crypto/bcrypt"
 
 	"github.com/devgek/webskeleton/models"
 )
@@ -14,6 +13,7 @@ import (
 var (
 	ErrorLoginNotAllowed = &ServiceError{"msg.m0001"}
 	ErrorUserNotCreated  = &ServiceError{"msg.m0002"}
+	ErrorUserNotSaved    = &ServiceError{"msg.m0003"}
 )
 
 //Do ... just for test mocking
@@ -34,7 +34,7 @@ func (s Services) Do(par1 int, par2 int) (int, error) {
 func (s Services) LoginUser(username string, password string) (*models.User, error) {
 	user, err := s.DS.GetUser(username)
 	if err == nil {
-		if err = bcrypt.CompareHashAndPassword(user.Pass, []byte(password)); err == nil {
+		if err = helper.ComparePassword(user.Pass, []byte(password)); err == nil {
 			return user, nil
 		}
 	}
@@ -49,7 +49,7 @@ func (s Services) CreateUser(username string, password string, email string) (*m
 	user.Name = username
 	user.Email = email
 	var err error
-	user.Pass, err = bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+	user.Pass, err = helper.EncryptPassword(password)
 	if err == nil {
 		user, err = s.DS.CreateUser(user)
 		if err == nil {
@@ -59,6 +59,32 @@ func (s Services) CreateUser(username string, password string, email string) (*m
 
 	log.Println("CreateUser:", err.Error())
 	return user, ErrorUserNotCreated
+}
+
+//UpdateUser update user data
+func (s Services) UpdateUser(username string, password string, email string, admin bool) (*models.User, error) {
+	oldUser, err := s.DS.GetUser(username)
+	if err != nil {
+		log.Println("UpdateUser:", err.Error())
+		return &models.User{}, ErrorUserNotSaved
+	}
+
+	oldUser.Email = email
+	oldUser.Admin = admin
+
+	sPass := string(oldUser.Pass)
+	if sPass != password {
+		oldUser.Pass, err = helper.EncryptPassword(password)
+		if err == nil {
+			newUser, err := s.DS.SaveUser(oldUser)
+			if err == nil {
+				return newUser, err
+			}
+		}
+	}
+
+	log.Println("UpdateUser:", err.Error())
+	return &models.User{}, ErrorUserNotSaved
 }
 
 //GetAllUsers ...

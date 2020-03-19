@@ -2,6 +2,7 @@ package helper
 
 import (
 	"bytes"
+	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -61,4 +62,14 @@ func RecursiveSearchReplaceFiles(fullpath string, replacers map[string]string) e
 		}
 	}
 	return nil
+}
+
+//EncryptPassword create hashed password
+func EncryptPassword(password string) ([]byte, error) {
+	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+}
+
+//ComparePassword compare hashed password and possible plaintext equivalent
+func ComparePassword(hashedPassword, password []byte) error {
+	return bcrypt.CompareHashAndPassword(hashedPassword, password)
 }

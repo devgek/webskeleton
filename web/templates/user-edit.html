@@ -8,31 +8,49 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="userEditModalLabel">{{.Messages.GetString "form.useredit.header"}}</h5>
+                <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000"
+                    data-tableId="userTable">
+                    <div class="toast-header">
+                        <span class="gk-toast-text">Toast Text</span>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="userEditName" class="col-form-label">{{.Messages.GetString "form.useredit.label.name"}}</label>
-                    <input name="userEditName" class="form-control" id="userEditName" value="" autocomplete="new-password"/>
+                    <label for="userEditName"
+                        class="col-form-label">{{.Messages.GetString "form.useredit.label.name"}}</label>
+                    <input name="userEditName" class="form-control" id="userEditName" value=""
+                        autocomplete="new-password" />
                 </div>
                 <div class="form-group">
-                    <label for="userEditPass" class="col-form-label">{{.Messages.GetString "form.useredit.label.pass"}}</label>
-                    <input type="password" name="userEditPass" class="form-control" id="userEditPass" value="" autocomplete="new-password"/>
+                    <label for="userEditPass"
+                        class="col-form-label">{{.Messages.GetString "form.useredit.label.pass"}}</label>
+                    <input type="password" name="userEditPass" class="form-control" id="userEditPass" value=""
+                        autocomplete="new-password" />
                 </div>
                 <div class="form-group">
-                    <label for="userEditEmail" class="col-form-label">{{.Messages.GetString "form.useredit.label.email"}}</label>
-                    <input name="userEditEmail" class="form-control" id="userEditEmail" value="" autocomplete="new-password"/>
+                    <label for="userEditEmail"
+                        class="col-form-label">{{.Messages.GetString "form.useredit.label.email"}}</label>
+                    <input name="userEditEmail" class="form-control" id="userEditEmail" value=""
+                        autocomplete="new-password" />
                 </div>
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="userEditAdmin">
-                    <label class="form-check-label" for="userEditAdmin">{{.Messages.GetString "form.useredit.label.admin"}}</label>
-                  </div>
+                    <label class="form-check-label"
+                        for="userEditAdmin">{{.Messages.GetString "form.useredit.label.admin"}}</label>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn gks-btn btn-back-app" data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
-                <button type="button" class="btn gks-btn gks-btn-important btn-save-app">{{.Messages.GetString "form.all.btn.save"}}</button>
+                <button type="button" class="btn gks-btn btn-back-app"
+                    data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
+                <button type="button"
+                    class="btn gks-btn gks-btn-important btn-save-app">{{.Messages.GetString "form.all.btn.save"}}</button>
             </div>
         </div>
     </div>
@@ -53,5 +71,31 @@
             $("#userEditAdmin").prop("checked", false);
         }
     });
+
+    $('.btn-save-app').click(function () {
+        var url = "/useredit";
+        var vName = $("#userEditName").val()
+        var vPass = $("#userEditPass").val()
+        var vEmail = $("#userEditEmail").val()
+        var vAdmin = $("#userEditAdmin").prop("checked")
+
+        var posting = $.post(url, { gkvName: vName, gkvPass: vPass, gkvEmail: vEmail, gkvAdmin: vAdmin });
+
+        posting.done(function (data) {
+            var isError = data.Errorflag
+            if (isError) {
+                userTable.showMessage(data.Message)
+            }
+            else {
+                userTable.showMessage("Benutzer wurde gespeichert")
+                userTable.setPersisted(theRow);
+            }
+        });
+
+        posting.fail(function (xhr, status, error) {
+            userTable.showMessage("Technischer Fehler: " + xhr.status + ":" + xhr.statusText)
+        });
+    });
+
 </script>
 {{end}}

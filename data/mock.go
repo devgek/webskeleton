@@ -24,6 +24,13 @@ func (m *MockedDatastore) CreateUser(user *models.User) (*models.User, error) {
 	return args.Get(0).(*models.User), nil
 }
 
+//SaveUser ...
+func (m *MockedDatastore) SaveUser(user *models.User) (*models.User, error) {
+	args := m.Called(user)
+
+	return args.Get(0).(*models.User), nil
+}
+
 //GetAllUser ...
 func (m *MockedDatastore) GetAllUser() ([]models.User, error) {
 	// args := m.Called()

@@ -2,14 +2,23 @@ package services_test
 
 import (
 	"errors"
+	"fmt"
 	"github.com/devgek/webskeleton/data"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/services"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
+	"os"
 	"testing"
 )
+
+func init() {
+	fmt.Println("test init")
+	fmt.Println(os.Getwd())
+	os.Chdir("..")
+	fmt.Println(os.Getwd())
+}
 
 //TestLoginUser test login service with mocking Datastore
 func TestLoginUser(t *testing.T) {
@@ -54,6 +63,17 @@ func TestLoginUserInMemoryNOK(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
+	inMemoryDS, _ := data.NewInMemoryDatastore()
+	s := services.NewServices(inMemoryDS)
+
+	_, err := s.CreateUser("Roger", "secret", "roger.federer@atp.com")
+	assert.Nil(t, err, "No error expected")
+
+	_, err = s.LoginUser("Roger", "secret")
+	assert.Nil(t, err, "No error expected")
+}
+
+func TestUpdateUser(t *testing.T) {
 	inMemoryDS, _ := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 

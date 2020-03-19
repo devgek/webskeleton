@@ -2,10 +2,10 @@ package data
 
 import (
 	"errors"
+	"github.com/devgek/webskeleton/helper"
 
 	"github.com/devgek/webskeleton/models"
 	"github.com/jinzhu/gorm"
-	"golang.org/x/crypto/bcrypt"
 )
 
 //Datastore interface to datastore
@@ -13,6 +13,7 @@ type Datastore interface {
 	GetAllUser() ([]models.User, error)
 	GetUser(userID string) (*models.User, error)
 	CreateUser(user *models.User) (*models.User, error)
+	SaveUser(user *models.User) (*models.User, error)
 }
 
 //DatastoreImpl the Datastore implementation
@@ -29,7 +30,7 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 
 	db.AutoMigrate(&models.User{})
 
-	pass, _ := bcrypt.GenerateFromPassword([]byte("xyz"), bcrypt.MinCost)
+	pass, _ := helper.EncryptPassword("xyz")
 	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com", Admin: true}
 
 	err = db.FirstOrCreate(admin, &models.User{Name: "admin"}).Error
@@ -64,4 +65,9 @@ func (ds *DatastoreImpl) GetAllUser() ([]models.User, error) {
 	ds.Find(&users)
 
 	return users, ds.Error
+}
+
+//SaveUser update user data
+func (ds *DatastoreImpl) SaveUser(user *models.User) (*models.User, error) {
+	return user, ds.Save(user).Error
 }
