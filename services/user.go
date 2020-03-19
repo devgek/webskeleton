@@ -62,7 +62,7 @@ func (s Services) CreateUser(username string, password string, email string) (*m
 }
 
 //UpdateUser update user data
-func (s Services) UpdateUser(username string, password string, email string, admin bool) (*models.User, error) {
+func (s Services) UpdateUser(username string, email string, admin bool) (*models.User, error) {
 	oldUser, err := s.DS.GetUser(username)
 	if err != nil {
 		log.Println("UpdateUser:", err.Error())
@@ -72,15 +72,9 @@ func (s Services) UpdateUser(username string, password string, email string, adm
 	oldUser.Email = email
 	oldUser.Admin = admin
 
-	sPass := string(oldUser.Pass)
-	if sPass != password {
-		oldUser.Pass, err = helper.EncryptPassword(password)
-		if err == nil {
-			newUser, err := s.DS.SaveUser(oldUser)
-			if err == nil {
-				return newUser, err
-			}
-		}
+	newUser, err := s.DS.SaveUser(oldUser)
+	if err == nil {
+		return newUser, err
 	}
 
 	log.Println("UpdateUser:", err.Error())
