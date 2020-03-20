@@ -25,9 +25,7 @@ type TemplateHandler struct {
 
 // ServeHTTP handles the HTTP request.
 func (t *TemplateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	cData := FromContext(r.Context())
-
-	data := NewTemplateData(cData)
+	data := NewViewDataWithContextData(FromContext(r.Context()))
 
 	t.Templ.Execute(w, data)
 
@@ -50,9 +48,10 @@ func NewTemplateHandler(fileName string) *TemplateHandler {
 	return th
 }
 
-//NewTemplateData return view data map
-func NewTemplateData(contextData ContextData) map[string]interface{} {
-	vd := make(map[string]interface{})
+//NewViewDataWithContextData return view data map filled with context data
+func NewViewDataWithContextData(contextData ContextData) map[string]interface{} {
+	vd := NewViewData()
+
 	vd["Host"] = contextData.Host()
 	vd["Messages"] = msg.Messages
 	vd["ProjectName"] = config.ProjectName
@@ -61,4 +60,9 @@ func NewTemplateData(contextData ContextData) map[string]interface{} {
 	vd["Admin"] = contextData.Admin()
 
 	return vd
+}
+
+//NewViewData ...
+func NewViewData() map[string]interface{} {
+	return make(map[string]interface{})
 }

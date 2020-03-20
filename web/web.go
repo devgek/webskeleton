@@ -2,6 +2,7 @@ package web
 
 import (
 	"encoding/json"
+	"github.com/devgek/webskeleton/web/viewmodel"
 	"log"
 	"net/http"
 
@@ -18,7 +19,7 @@ var AssetRoot = "web/assets"
 //RenderTemplate ...
 func RenderTemplate(w http.ResponseWriter, r *http.Request, templateName string, viewData interface{}) {
 	if viewData == nil {
-		viewData = NewTemplateData(FromContext(r.Context()))
+		viewData = NewViewDataWithContextData(FromContext(r.Context()))
 	}
 	th := TemplateHandlerMap[templateName]
 	//reload template in debug mode
@@ -32,8 +33,12 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, templateName string,
 //HandleHealth ...
 func HandleHealth() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		vd := NewTemplateData(FromContext(r.Context()))
-		vd["status"] = "ok"
+		vd := NewViewData()
+		vd["Host"] = r.Host
+		vd["ProjectName"] = config.ProjectName
+		vd["VersionInfo"] = config.ProjectVersion
+		vd["health"] = "ok"
+
 		json.NewEncoder(w).Encode(vd)
 	})
 }
@@ -50,7 +55,7 @@ func HandleLogin(env *config.Env) http.Handler {
 
 		user, err := env.Services.LoginUser(theUser, thePass)
 		if err != nil {
-			viewData := NewTemplateData(FromContext(r.Context()))
+			viewData := NewViewDataWithContextData(FromContext(r.Context()))
 			viewData["LoginUser"] = theUser
 			viewData["LoginPass"] = thePass
 			viewData["ErrorMessage"] = err.Error()
@@ -101,7 +106,7 @@ func HandleUsers(env *config.Env) http.Handler {
 		ctx := ToContext(r.Context(), contextData)
 
 		users, err := env.Services.GetAllUsers()
-		viewData := NewTemplateData(FromContext(r.Context()))
+		viewData := NewViewDataWithContextData(FromContext(r.Context()))
 		viewData["Users"] = users
 		if err != nil {
 			viewData["ErrorMessage"] = err.Error()
@@ -115,21 +120,32 @@ func HandleUsers(env *config.Env) http.Handler {
 //HandleUserEdit ...
 func HandleUserEdit(env *config.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// uName := r.FormValue("gkvName")
-		// uPass := r.FormValue("gkvPass")
-		// uEmail := r.FormValue("gkvEmail")
-		// uAdmin := r.FormValue("gkvAdmin")
+		oName := r.FormValue("gkvName")
+		oEmail := r.FormValue("gkvEmail")
+		oAdmin := r.FormValue("gkvAdmin")
+		log.Println(oAdmin)
 
 		contextData := NewContextData()
-		ctx := ToContext(r.Context(), contextData)
+		ToContext(r.Context(), contextData)
 
-		users, err := env.Services.GetAllUsers()
-		viewData := NewTemplateData(FromContext(r.Context()))
-		viewData["Users"] = users
+		u, err := env.Services.UpdateUser(oName, oEmail, oAdmin == "true")
+
+		vd := NewViewDataWithContextData(FromContext(r.Context()))
+		userEditResponse := viewmodel.NewUserEditResponse()
 		if err != nil {
-			viewData["ErrorMessage"] = err.Error()
+			userEditResponse.IsError = true
+			userEditResponse.Message = err.Error()
+			userEditResponse.Name = oName
+			userEditResponse.Email = oEmail
+			userEditResponse.Admin = (oAdmin == "true")
+		} else {
+			userEditResponse.Name = u.Name
+			userEditResponse.Email = u.Email
+			userEditResponse.Admin = u.Admin
 		}
-		RenderTemplate(w, r.WithContext(ctx), "users.html", viewData)
+
+		vd["Response"] = userEditResponse
+		json.NewEncoder(w).Encode(vd)
 		return
 	})
 

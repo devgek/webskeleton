@@ -32,7 +32,7 @@
                     <label for="userEditPass"
                         class="col-form-label">{{.Messages.GetString "form.useredit.label.pass"}}</label>
                     <input type="password" name="userEditPass" class="form-control" id="userEditPass" value=""
-                        autocomplete="new-password" />
+                        autocomplete="new-password" readonly/>
                 </div>
                 <div class="form-group">
                     <label for="userEditEmail"
@@ -61,7 +61,7 @@
         var theRow = userTable.getRowFromParent(trigger);
         var data = userTable.getRowData(theRow);
         $("#userEditName").val(data[0]);
-        $("#userEditPass").val(data[1]);
+        //$("#userEditPass").val(data[1]);
         $("#userEditEmail").val(data[2]);
         var adminData = data[3];
         if (adminData.trim() == "ja") {
@@ -75,14 +75,13 @@
     $('.btn-save-app').click(function () {
         var url = "/useredit";
         var vName = $("#userEditName").val()
-        var vPass = $("#userEditPass").val()
         var vEmail = $("#userEditEmail").val()
         var vAdmin = $("#userEditAdmin").prop("checked")
 
-        var posting = $.post(url, { gkvName: vName, gkvPass: vPass, gkvEmail: vEmail, gkvAdmin: vAdmin });
+        var posting = $.post(url, { gkvName: vName, gkvEmail: vEmail, gkvAdmin: vAdmin });
 
         posting.done(function (data) {
-            var isError = data.Errorflag
+            var isError = data.IsError
             if (isError) {
                 userTable.showMessage(data.Message)
             }
