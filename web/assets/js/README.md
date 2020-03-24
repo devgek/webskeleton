@@ -10,15 +10,25 @@ Zur Verwendung in einer Seite muss:
 <table class="gk-table" id="inoutTable"></table>
 ```
 
-2.) Die Konstruktor-Funktion "GKTable" muss mit den Parametern tableId, saveFunc und deleteFunc aufgerufen werden, Bsp:
+2.) Die Konstruktor-Funktion "GKTable" muss mit den Parametern tableId, isInlineEditing, saveFunc und deleteFunc aufgerufen werden, Bsp:
 
 ```javascript
 var inoutTable = new GKTable(
   "inoutTable",
+  true,
   inoutSaveRowRequest,
   inoutDeleteRowRequest
 );
 ```
+oder
+```javascript
+var inoutTable = new GKTable(
+  "inoutTable",
+  false
+);
+```
+isInlineEditing = false bedeutet, dass die Tabelle nicht inline editiert wird, sondern für Ändern, Neuanlage und Löschen ein modaler Dialog aufgerufen wird.
+Bei diesem Aufruf werden saveFunc und deleteFunc einfach weggelassen.
 
 Durch eine eindeutige tableId ist es möglich, dass auch mehr als eine GKTable auf einer Seite vorhanden ist.
 

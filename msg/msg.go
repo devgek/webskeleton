@@ -2,6 +2,7 @@ package msg
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/devgek/webskeleton/helper"
 	"github.com/spf13/viper"
 	"sync"
@@ -29,4 +30,10 @@ func NewMessageLocator(messages []byte) *MessageLocator {
 	})
 
 	return Messages
+}
+
+//GetMessageF get the formatted message
+func (ml *MessageLocator) GetMessageF(msgKey string, a ...interface{}) string {
+	format := ml.GetString(msgKey)
+	return fmt.Sprintf(format, a...)
 }

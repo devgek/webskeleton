@@ -5,6 +5,7 @@ import (
 	"github.com/devgek/webskeleton/web/viewmodel"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/devgek/webskeleton/config"
 	"github.com/stretchr/objx"
@@ -130,7 +131,7 @@ func HandleUserEdit(env *config.Env) http.Handler {
 
 		u, err := env.Services.UpdateUser(oName, oEmail, oAdmin == "true")
 
-		vd := NewViewDataWithContextData(FromContext(r.Context()))
+		vd := NewViewData()
 		userEditResponse := viewmodel.NewUserEditResponse()
 		if err != nil {
 			userEditResponse.IsError = true
@@ -145,6 +146,31 @@ func HandleUserEdit(env *config.Env) http.Handler {
 		}
 
 		vd["Response"] = userEditResponse
+		json.NewEncoder(w).Encode(vd)
+		return
+	})
+
+}
+
+//HandleUserDelete ...
+func HandleUserDelete(env *config.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		oID := r.FormValue("gkvObjId")
+		ioID, _ := strconv.Atoi(oID)
+
+		contextData := NewContextData()
+		ToContext(r.Context(), contextData)
+
+		err := env.Services.DeleteUser(uint(ioID))
+
+		vd := NewViewData()
+		baseResponse := &viewmodel.BaseResponse{}
+		if err != nil {
+			baseResponse.IsError = true
+			baseResponse.Message = err.Error()
+		}
+
+		vd["Response"] = baseResponse
 		json.NewEncoder(w).Encode(vd)
 		return
 	})

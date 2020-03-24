@@ -1,3 +1,4 @@
+//GKTable 1.2
 //GKTableObjects container holding all GKTable-objects of current site
 var GKTableObjects = [];
 //buttonColTemplate code template for creating the edit button column in each table row
@@ -28,6 +29,8 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
   this.isInlineEditing = isInlineEditing
   this.rowData = [];
   this.selectedRow = -1;
+  this.deleteUrl = "";
+  this.deleteObjId = -1;
 
   if (saveFunc === undefined) {
     this.saveFunc = this.defaultSaveFunction;
@@ -226,6 +229,20 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
     this.enableActions();
   };
 
+  this.selectRow = function (theRow) {
+    this.selectedRow = theRow
+  };
+
+  this.changeRowData = function(theRow, data) {
+    const $cols = $(this.root).find(
+      ".gk-row-edit[data-linenr=" + theRow + "] td.gk-col-edit"
+    );
+    var theArray = data;
+    $cols.each(function (index, element) {
+      $(element).text(theArray[index]);
+    });
+  };
+
   this.setPersisted = function (theRow) {
     $(this.root)
       .find(".gk-row-edit[data-linenr=" + theRow + "]")
@@ -237,6 +254,26 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
       .find(".gk-row-edit[data-linenr=" + theRow + "]")
       .attr("data-persisted");
     return persisted == "true";
+  };
+
+  this.getSelectedRow = function () {
+    return this.selectedRow;
+  };
+
+  this.getDeleteUrl = function () {
+    return this.deleteUrl;
+  };
+
+  this.setDeleteUrl = function (url) {
+    this.deleteUrl = url;
+  };
+
+  this.getDeleteObjId = function () {
+    return this.deleteObjId;
+  };
+
+  this.setDeleteObjId = function (objId) {
+    this.deleteObjId = objId;
   };
 
   this.reindexRows = function () {

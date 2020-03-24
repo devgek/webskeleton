@@ -42,9 +42,11 @@
                                 <use xlink:href="/assets/svg/gks-icons.svg#i-edit"></use>
                             </svg>
                         </a>
-                        <svg class="gks-icon">
-                            <use xlink:href="/assets/svg/gks-icons.svg#i-trash"></use>
-                        </svg>
+                        <a href="#" data-toggle="modal" data-target="#confirmDeleteModal" data-cfdurl="/userdelete" data-cfdobjid="{{.ID}}">
+                            <svg class="gks-icon">
+                                <use xlink:href="/assets/svg/gks-icons.svg#i-trash"></use>
+                            </svg>
+                        </a>
                     </div>
                     {{else}}
                     <div class="d-none">
@@ -65,5 +67,6 @@
 
 <!-- user-edit -->
 {{template "t_user-edit" .}}
+{{template "t_confirm-delete" .}}
 
 {{end}}

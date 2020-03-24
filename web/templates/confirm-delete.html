@@ -1,0 +1,71 @@
+{{define "t_confirm-delete"}}
+{{$DeleteObject := .Admin}}
+
+<!-- Modal Dialog-->
+<div class="modal fade" id="confirmDeleteModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">{{.Messages.GetMessageF "form.confirmdelete.header" "Benutzer"}}</h5>
+                <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000"
+                    data-tableId="userTable">
+                    <div class="toast-header">
+                        <span class="gk-toast-text">Toast Text</span>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>{{.Messages.GetMessageF "form.confirmdelete.body" "den Benutzer"}}</diV>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn gks-btn btn-back-app"
+                    data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
+                <button type="button"
+                    class="btn gks-btn gks-btn-important btn-delete-app">{{.Messages.GetString "form.all.btn.delete"}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#confirmDeleteModal').on('show.bs.modal', function (event) {
+        var trigger = $(event.relatedTarget); // Link that triggered the modal
+        var theRow = userTable.getRowFromParent(trigger);
+        var data = userTable.getRowData(theRow);
+        userTable.selectRow(theRow)
+        var url = trigger.data("cfdurl") // the url to delete the object
+        var objId = trigger.data("cfdobjid") // the object id of the object to delete
+        userTable.setDeleteUrl(url)
+        userTable.setDeleteObjId(objId)
+    });
+
+    $('.btn-delete-app').click(function () {
+
+        var posting = $.post(userTable.getDeleteUrl(), { gkvObjId: userTable.getDeleteObjId() });
+
+        posting.done(function (data) {
+            var d = JSON.parse(data)
+            var isError = d.Response.IsError
+            if (isError) {
+                userTable.showMessage(d.Response.Message)
+            }
+            else {
+                var theRow = userTable.getSelectedRow()
+                userTable.deleteRow(theRow)
+                userTable.showMessage("Benutzer wurde gelöscht")
+            }
+        });
+
+        posting.fail(function (xhr, status, error) {
+            userTable.showMessage("Technischer Fehler: " + xhr.status + ":" + xhr.statusText)
+        });
+    });
+
+</script>
+{{end}}

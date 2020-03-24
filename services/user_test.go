@@ -5,6 +5,7 @@ import (
 	"github.com/devgek/webskeleton/data"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/services"
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
@@ -84,6 +85,24 @@ func TestUpdateUser(t *testing.T) {
 	assert.Equal(t, messi.Email, messi2.Email, "Email not expected")
 }
 
+func TestDeleteUser(t *testing.T) {
+	inMemoryDS, _ := data.NewInMemoryDatastore()
+	s := services.NewServices(inMemoryDS)
+
+	user, err := s.CreateUser("Rafa", "secret", "rafael.nadal@atp.com")
+	assert.Nil(t, err, "No error expected")
+	err = s.DS.DeleteEntityByID(user)
+	assert.Nil(t, err, "No error expected")
+}
+
+func TestDeleteUserError(t *testing.T) {
+	inMemoryDS, _ := data.NewInMemoryDatastore()
+	s := services.NewServices(inMemoryDS)
+
+	user := &models.User{Model: gorm.Model{ID: 99}}
+	err := s.DS.DeleteEntityByID(user)
+	assert.Equal(t, data.ErrorEntityNotDeleted, err, "Expected error not returned")
+}
 func TestDoTableBased(t *testing.T) {
 	tests := map[string]struct {
 		input1 int

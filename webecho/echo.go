@@ -23,6 +23,7 @@ func InitWeb(env *config.Env) *echo.Echo {
 
 	e.Match([]string{"GET", "POST"}, "/users", echo.WrapHandler(web.HandleUsers(env)))
 	e.POST("/useredit", echo.WrapHandler(web.HandleUserEdit(env)))
+	e.POST("/userdelete", echo.WrapHandler(web.HandleUserDelete(env)))
 
 	e.Match([]string{"GET", "POST"}, "/:page", DefaultPageHandler())
 

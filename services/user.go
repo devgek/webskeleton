@@ -14,6 +14,7 @@ var (
 	ErrorLoginNotAllowed = &ServiceError{"msg.m0001"}
 	ErrorUserNotCreated  = &ServiceError{"msg.m0002"}
 	ErrorUserNotSaved    = &ServiceError{"msg.m0003"}
+	ErrorUserNotDeleted  = &ServiceError{"msg.m0004"}
 )
 
 //Do ... just for test mocking
@@ -79,6 +80,19 @@ func (s Services) UpdateUser(username string, email string, admin bool) (*models
 
 	log.Println("UpdateUser:", err.Error())
 	return &models.User{}, ErrorUserNotSaved
+}
+
+//DeleteUser delete user
+func (s Services) DeleteUser(id uint) error {
+	user := &models.User{}
+	user.ID = id
+	err := s.DS.DeleteEntityByID(user)
+	if err == nil {
+		return err
+	}
+
+	log.Println("DeleteUser:", err.Error())
+	return ErrorUserNotDeleted
 }
 
 //GetAllUsers ...

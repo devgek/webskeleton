@@ -11,10 +11,16 @@ import (
 //Datastore interface to datastore
 type Datastore interface {
 	GetAllUser() ([]models.User, error)
-	GetUser(userID string) (*models.User, error)
+	GetUser(name string) (*models.User, error)
 	CreateUser(user *models.User) (*models.User, error)
 	SaveUser(user *models.User) (*models.User, error)
+	DeleteEntityByID(entity interface{}) error
 }
+
+//
+var (
+	ErrorEntityNotDeleted = errors.New("Entity not deleted")
+)
 
 //DatastoreImpl the Datastore implementation
 type DatastoreImpl struct {
@@ -28,6 +34,7 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 		return nil, err
 	}
 
+	db.LogMode(true)
 	db.AutoMigrate(&models.User{})
 
 	pass, _ := helper.EncryptPassword("xyz")
@@ -54,9 +61,8 @@ func (ds *DatastoreImpl) GetUser(username string) (*models.User, error) {
 
 //CreateUser create new user
 func (ds *DatastoreImpl) CreateUser(user *models.User) (*models.User, error) {
-	ret := *user
 	err := ds.Create(user).Error
-	return &ret, err
+	return user, err
 }
 
 //GetAllUser select * from user
@@ -70,4 +76,35 @@ func (ds *DatastoreImpl) GetAllUser() ([]models.User, error) {
 //SaveUser update user data
 func (ds *DatastoreImpl) SaveUser(user *models.User) (*models.User, error) {
 	return user, ds.Save(user).Error
+}
+
+//DeleteUser delete user object
+func (ds *DatastoreImpl) DeleteUser(id uint) error {
+	user := &models.User{Model: gorm.Model{ID: id}}
+	err := ds.Unscoped().Delete(user).Error
+	if err != nil {
+		return err
+	}
+
+	if ds.RowsAffected < 1 {
+		return errors.New("No user deleted")
+	}
+
+	return nil
+}
+
+//DeleteEntityByID delete entity by id (primary key)
+//ID must be provided
+func (ds *DatastoreImpl) DeleteEntityByID(entity interface{}) error {
+	db := ds.Unscoped().Delete(entity)
+
+	if db.Error != nil {
+		return db.Error
+	}
+
+	if db.RowsAffected != 1 {
+		return ErrorEntityNotDeleted
+	}
+
+	return nil
 }

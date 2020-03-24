@@ -31,6 +31,13 @@ func (m *MockedDatastore) SaveUser(user *models.User) (*models.User, error) {
 	return args.Get(0).(*models.User), nil
 }
 
+//DeleteEntityByID ...
+func (m *MockedDatastore) DeleteEntityByID(entity interface{}) error {
+
+	args := m.Called(entity)
+	return args.Error(1)
+}
+
 //GetAllUser ...
 func (m *MockedDatastore) GetAllUser() ([]models.User, error) {
 	// args := m.Called()

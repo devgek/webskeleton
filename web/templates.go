@@ -42,7 +42,7 @@ func NewTemplateHandler(fileName string) *TemplateHandler {
 	if th.filename == "login.html" {
 		th.Templ = template.Must(template.ParseFiles(TemplateRoot + fileName))
 	} else {
-		th.Templ = template.Must(template.ParseFiles(TemplateRoot+"layout.html", TemplateRoot+fileName, TemplateRoot+"user-edit.html"))
+		th.Templ = template.Must(template.ParseFiles(TemplateRoot+"layout.html", TemplateRoot+fileName, TemplateRoot+"user-edit.html", TemplateRoot+"confirm-delete.html"))
 	}
 
 	return th

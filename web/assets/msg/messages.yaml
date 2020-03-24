@@ -3,11 +3,16 @@ msg:
   m0001: "Login nicht erlaubt"
   m0002: "Benutzer kann nicht angelegt werden"
   m0003: "Benutzer kann nicht gespeichert werden"
+  m0004: "Benutzer kann nicht gelöscht werden"
 form:
   all:
     btn:
       abort: "Abbrechen"
       save: "Speichern"
+      delete: "Löschen"
+  confirmdelete:
+    header: "%s löschen"
+    body: "Wolllen Sie %s wirklich löschen?"
   login:
     label:
       user: "Benutzer"
