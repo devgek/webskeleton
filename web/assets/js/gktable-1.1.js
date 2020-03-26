@@ -195,7 +195,7 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
 
   this.addRow = function (theRow) {
     const $lastRow = $(this.root).find("tbody tr.gk-row-edit:last");
-    var clonedRow = $lastRow.clone();
+    var clonedRow = $lastRow.clone(true);
     clonedRow.attr("data-linenr", theRow);
     clonedRow.attr("data-persisted", "false");
     clonedRow.find("td.gk-col-edit").empty();
@@ -284,7 +284,7 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
   this.setEditNew = function (isEditNew) {
     this.editNew = isEditNew;
   }
-  
+
   this.reindexRows = function () {
     const $rows = $(this.root).find("tbody tr.gk-row-edit");
     $rows.each(function (index, element) {
@@ -300,8 +300,12 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
 
   this.handleNew = function () {
     var rows = $(this.root).find(".gk-row-edit").length;
-    this.addRow(rows + 1);
-    this.activateRowEditing(rows + 1);
+    var newRow = rows + 1;
+    this.addRow(newRow);
+    this.selectRow(newRow)
+    if (this.isInlineEditing) {
+      this.activateRowEditing(newRow);
+    }
   };
 
   this.handleEdit = function (obj) {

@@ -110,6 +110,9 @@
                 userTable.showMessage(d.Response.Message)
             }
             else {
+                if (userTable.isEditNew()) {
+                    userTable.handleNew();
+                }
                 var rowData = []
                 rowData.push(d.Response.Name, "********", d.Response.Email, (d.Response.Admin ? "ja" : "nein"))
                 var theRow = userTable.getSelectedRow()
