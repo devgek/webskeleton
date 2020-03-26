@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sync"
 
 	"github.com/devgek/webskeleton/data"
 	"github.com/devgek/webskeleton/services"
@@ -32,28 +33,37 @@ type Env struct {
 	MessageLocator *msg.MessageLocator
 }
 
-//InitEnv return new initialized environment
-func InitEnv() *Env {
-	//init asset FileSystem
-	root, err := os.Getwd()
-	helper.PanicOnError(err)
-	path := filepath.Join(root, "web", "assets")
-	origninalAssetBox := packr.New("assets", path)
-	assetBox := packrfix.New(origninalAssetBox)
-	//load locale specific message file, if not default
-	// messages, err := assetBox.Find("msg/messages-en.yaml")
-	messages, err := assetBox.Find("msg/messages.yaml")
+var once sync.Once
 
-	//load messages
-	ml := msg.NewMessageLocator(messages)
+//WebEnv singleton instance for the app env
+var webEnv *Env
 
-	//here we create the datastore
-	ds, err := data.NewDatastore("sqlite3", DatabaseName)
-	if err != nil {
-		log.Panic(err)
-	}
+//GetWebEnv return new initialized environment
+func GetWebEnv() *Env {
+	once.Do(func() {
+		//init asset FileSystem
+		root, err := os.Getwd()
+		helper.PanicOnError(err)
+		path := filepath.Join(root, "web", "assets")
+		origninalAssetBox := packr.New("assets", path)
+		assetBox := packrfix.New(origninalAssetBox)
+		//load locale specific message file, if not default
+		// messages, err := assetBox.Find("msg/messages-en.yaml")
+		messages, err := assetBox.Find("msg/messages.yaml")
 
-	services := services.NewServices(ds)
+		//load messages
+		ml := msg.NewMessageLocator(messages)
 
-	return &Env{Assets: assetBox, DS: ds, Services: services, MessageLocator: ml}
+		//here we create the datastore
+		ds, err := data.NewDatastore("sqlite3", DatabaseName)
+		if err != nil {
+			log.Panic(err)
+		}
+
+		services := services.NewServices(ds)
+
+		webEnv = &Env{Assets: assetBox, DS: ds, Services: services, MessageLocator: ml}
+	})
+
+	return webEnv
 }

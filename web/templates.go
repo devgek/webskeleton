@@ -2,7 +2,6 @@ package web
 
 import (
 	"github.com/devgek/webskeleton/config"
-	"github.com/devgek/webskeleton/msg"
 	"log"
 	"net/http"
 	"sync"
@@ -53,7 +52,7 @@ func NewViewDataWithContextData(contextData ContextData) map[string]interface{} 
 	vd := NewViewData()
 
 	vd["Host"] = contextData.Host()
-	vd["Messages"] = msg.Messages
+	vd["Messages"] = config.GetWebEnv().MessageLocator
 	vd["ProjectName"] = config.ProjectName
 	vd["VersionInfo"] = config.ProjectVersion
 	vd["UserID"] = contextData.UserID()
@@ -66,3 +65,26 @@ func NewViewDataWithContextData(contextData ContextData) map[string]interface{} 
 func NewViewData() map[string]interface{} {
 	return make(map[string]interface{})
 }
+
+/*
+func withPars(values ...interface{}) (map[string]interface{}, error) {
+	if len(values)%2 != 0 {
+		return nil, errors.New("invalid withPars call")
+	}
+	pars := make(map[string]interface{}, len(values)/2)
+	for i := 0; i < len(values); i += 2 {
+		key, ok := values[i].(string)
+		if !ok {
+			return nil, errors.New("pars keys must be strings")
+		}
+		pars[key] = values[i+1]
+	}
+	return pars, nil
+}
+
+func addFuncMap(t *template.Template) {
+	funcMap := template.FuncMap{}
+	funcMap["withPars"] = withPars
+	t.Funcs(funcMap)
+}
+*/

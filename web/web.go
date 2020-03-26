@@ -59,7 +59,7 @@ func HandleLogin(env *config.Env) http.Handler {
 			viewData := NewViewDataWithContextData(FromContext(r.Context()))
 			viewData["LoginUser"] = theUser
 			viewData["LoginPass"] = thePass
-			viewData["ErrorMessage"] = err.Error()
+			viewData["ErrorMessage"] = env.MessageLocator.GetString("msg.error.login")
 			RenderTemplate(w, r.WithContext(ctx), "login.html", viewData)
 			return
 		}
@@ -99,6 +99,13 @@ func HandleLogout() http.Handler {
 	})
 }
 
+//HandleFavicon ...
+func HandleFavicon() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, AssetRoot+"/favicon_kahrersoftware.png")
+	})
+}
+
 //HandleUsers ...
 func HandleUsers(env *config.Env) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -109,6 +116,7 @@ func HandleUsers(env *config.Env) http.Handler {
 		users, err := env.Services.GetAllUsers()
 		viewData := NewViewDataWithContextData(FromContext(r.Context()))
 		viewData["Users"] = users
+		viewData["EditEntityType"] = env.MessageLocator.GetString("entity.user")
 		if err != nil {
 			viewData["ErrorMessage"] = err.Error()
 		}
@@ -135,12 +143,51 @@ func HandleUserEdit(env *config.Env) http.Handler {
 		userEditResponse := viewmodel.NewUserEditResponse()
 		if err != nil {
 			userEditResponse.IsError = true
-			userEditResponse.Message = err.Error()
+			userEditResponse.Message = env.MessageLocator.GetString("msg.error.user.edit")
 			userEditResponse.Name = oName
 			userEditResponse.Email = oEmail
 			userEditResponse.Admin = (oAdmin == "true")
 		} else {
+			userEditResponse.Message = env.MessageLocator.GetString("msg.success.user.edit")
 			userEditResponse.Name = u.Name
+			userEditResponse.Email = u.Email
+			userEditResponse.Admin = u.Admin
+		}
+
+		vd["Response"] = userEditResponse
+		json.NewEncoder(w).Encode(vd)
+		return
+	})
+
+}
+
+//HandleUserNew ...
+func HandleUserNew(env *config.Env) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		oName := r.FormValue("gkvName")
+		oPass := r.FormValue("gkvPass")
+		oEmail := r.FormValue("gkvEmail")
+		oAdmin := r.FormValue("gkvAdmin")
+		log.Println(oAdmin)
+
+		contextData := NewContextData()
+		ToContext(r.Context(), contextData)
+
+		u, err := env.Services.CreateUser(oName, oPass, oEmail, oAdmin == "true")
+
+		vd := NewViewData()
+		userEditResponse := viewmodel.NewUserEditResponse()
+		if err != nil {
+			userEditResponse.IsError = true
+			userEditResponse.Message = env.MessageLocator.GetString("msg.error.user.create")
+			userEditResponse.Name = oName
+			userEditResponse.Pass = oPass
+			userEditResponse.Email = oEmail
+			userEditResponse.Admin = (oAdmin == "true")
+		} else {
+			userEditResponse.Message = env.MessageLocator.GetString("msg.success.user.create")
+			userEditResponse.Name = u.Name
+			userEditResponse.Pass = string(u.Pass)
 			userEditResponse.Email = u.Email
 			userEditResponse.Admin = u.Admin
 		}
@@ -167,7 +214,9 @@ func HandleUserDelete(env *config.Env) http.Handler {
 		baseResponse := &viewmodel.BaseResponse{}
 		if err != nil {
 			baseResponse.IsError = true
-			baseResponse.Message = err.Error()
+			baseResponse.Message = env.MessageLocator.GetString("msg.error.user.delete")
+		} else {
+			baseResponse.Message = env.MessageLocator.GetString("msg.success.user.delete")
 		}
 
 		vd["Response"] = baseResponse

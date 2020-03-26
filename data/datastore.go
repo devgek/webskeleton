@@ -95,6 +95,7 @@ func (ds *DatastoreImpl) DeleteUser(id uint) error {
 
 //DeleteEntityByID delete entity by id (primary key)
 //ID must be provided
+//Attention ds is not the same as db!
 func (ds *DatastoreImpl) DeleteEntityByID(entity interface{}) error {
 	db := ds.Unscoped().Delete(entity)
 

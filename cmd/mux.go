@@ -41,7 +41,7 @@ func runMux(cmd *cobra.Command) {
 	log.Println("Starting webskeleton with mux on port ", port)
 
 	//the app env, containes pointer to db and services
-	env := config.InitEnv()
+	env := config.GetWebEnv()
 	router := webmux.InitWeb(env)
 
 	srv := &http.Server{

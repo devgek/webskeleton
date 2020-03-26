@@ -1,9 +1,19 @@
 ---
-msg: 
-  m0001: "Login nicht erlaubt"
-  m0002: "Benutzer kann nicht angelegt werden"
-  m0003: "Benutzer kann nicht gespeichert werden"
-  m0004: "Benutzer kann nicht gelöscht werden"
+msg:
+  success:
+    user:
+      create: "Benutzer wurde angelegt"
+      edit: "Benutzer wurde geändert"
+      delete: "Benutzer wurde gelöscht"
+  error:
+    ajax: "Technischer Fehler:"
+    login:  "Login nicht erlaubt"
+    user:
+      create: "Benutzer kann nicht angelegt werden"
+      edit: "Benutzer kann nicht gändert werden"
+      delete: "Benutzer kann nicht gelöscht werden"
+entity:
+  user: "Benutzer"
 form:
   all:
     btn:
@@ -12,7 +22,7 @@ form:
       delete: "Löschen"
   confirmdelete:
     header: "%s löschen"
-    body: "Wolllen Sie %s wirklich löschen?"
+    body: "%s wirklich löschen?"
   login:
     label:
       user: "Benutzer"
@@ -26,6 +36,7 @@ form:
       new: "Neuer Benutzer"
   useredit:
     header: "Benutzer bearbeiten"
+    headernew: "Benutzer neu anlegen"
     label:
       name: "Name:"
       pass: "Passwort:"

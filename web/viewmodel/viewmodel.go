@@ -10,11 +10,12 @@ type BaseResponse struct {
 type UserEditResponse struct {
 	*BaseResponse
 	Name  string
+	Pass  string
 	Email string
 	Admin bool
 }
 
 //NewUserEditResponse ...
 func NewUserEditResponse() *UserEditResponse {
-	return &UserEditResponse{&BaseResponse{false, ""}, "", "", false}
+	return &UserEditResponse{&BaseResponse{false, ""}, "", "", "", false}
 }

@@ -19,10 +19,13 @@ func InitWeb(env *config.Env) *echo.Echo {
 
 	e.GET("/logout", echo.WrapHandler(web.HandleLogout()))
 
+	e.GET("/favicon.ico", echo.WrapHandler(web.HandleFavicon()))
+
 	e.Static(web.AssetPattern, web.AssetRoot)
 
 	e.Match([]string{"GET", "POST"}, "/users", echo.WrapHandler(web.HandleUsers(env)))
 	e.POST("/useredit", echo.WrapHandler(web.HandleUserEdit(env)))
+	e.POST("/usernew", echo.WrapHandler(web.HandleUserNew(env)))
 	e.POST("/userdelete", echo.WrapHandler(web.HandleUserDelete(env)))
 
 	e.Match([]string{"GET", "POST"}, "/:page", DefaultPageHandler())

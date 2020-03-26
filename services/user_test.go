@@ -67,7 +67,7 @@ func TestCreateUser(t *testing.T) {
 	inMemoryDS, _ := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 
-	_, err := s.CreateUser("Roger", "secret", "roger.federer@atp.com")
+	_, err := s.CreateUser("Roger", "secret", "roger.federer@atp.com", false)
 	assert.Nil(t, err, "No error expected")
 
 	_, err = s.LoginUser("Roger", "secret")
@@ -89,7 +89,7 @@ func TestDeleteUser(t *testing.T) {
 	inMemoryDS, _ := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 
-	user, err := s.CreateUser("Rafa", "secret", "rafael.nadal@atp.com")
+	user, err := s.CreateUser("Rafa", "secret", "rafael.nadal@atp.com", false)
 	assert.Nil(t, err, "No error expected")
 	err = s.DS.DeleteEntityByID(user)
 	assert.Nil(t, err, "No error expected")

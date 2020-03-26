@@ -1,13 +1,11 @@
-{{define "t_confirm-delete"}}
-{{$DeleteObject := .Admin}}
-
+{{define "t_confirm-delete" }}
 <!-- Modal Dialog-->
 <div class="modal fade" id="confirmDeleteModal" data-backdrop="static" tabindex="-1" role="dialog"
     aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">{{.Messages.GetMessageF "form.confirmdelete.header" "Benutzer"}}</h5>
+                <h5 class="modal-title" id="confirmDeleteModalLabel">{{.Messages.GetMessageF "form.confirmdelete.header" .EditEntityType}}</h5>
                 <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000"
                     data-tableId="userTable">
                     <div class="toast-header">
@@ -22,7 +20,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div>{{.Messages.GetMessageF "form.confirmdelete.body" "den Benutzer"}}</diV>
+                <div>{{.Messages.GetMessageF "form.confirmdelete.body" .EditEntityType}}</diV>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn gks-btn btn-back-app"
@@ -58,7 +56,7 @@
             else {
                 var theRow = userTable.getSelectedRow()
                 userTable.deleteRow(theRow)
-                userTable.showMessage("Benutzer wurde gelöscht")
+                userTable.showMessage(d.Response.Message)
             }
         });
 

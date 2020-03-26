@@ -1,13 +1,14 @@
 {{define "t_user-edit"}}
 {{$userIsAdmin := .Admin}}
-
+{{$headerEdit := .Messages.GetString "form.useredit.header"}}
+{{$headerNew := .Messages.GetString "form.useredit.headernew"}}
 <!-- Modal Dialog-->
 <div class="modal fade" id="userEditModal" data-backdrop="static" tabindex="-1" role="dialog"
     aria-labelledby="userEditModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="userEditModalLabel">{{.Messages.GetString "form.useredit.header"}}</h5>
+                <h5 class="modal-title" id="userEditModalLabel"></h5>
                 <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000"
                     data-tableId="userTable">
                     <div class="toast-header">
@@ -26,13 +27,13 @@
                     <label for="userEditName"
                         class="col-form-label">{{.Messages.GetString "form.useredit.label.name"}}</label>
                     <input name="userEditName" class="form-control" id="userEditName" value=""
-                        autocomplete="new-password" readonly />
+                        autocomplete="new-password" />
                 </div>
                 <div class="form-group">
                     <label for="userEditPass"
                         class="col-form-label">{{.Messages.GetString "form.useredit.label.pass"}}</label>
                     <input type="password" name="userEditPass" class="form-control" id="userEditPass" value=""
-                        autocomplete="new-password" readonly />
+                        autocomplete="new-password" />
                 </div>
                 <div class="form-group">
                     <label for="userEditEmail"
@@ -58,11 +59,28 @@
 <script>
     $('#userEditModal').on('show.bs.modal', function (event) {
         var trigger = $(event.relatedTarget); // Link that triggered the modal
-        var theRow = userTable.getRowFromParent(trigger);
-        var data = userTable.getRowData(theRow);
-        userTable.selectRow(theRow)
+        var isEditNew = $(trigger).hasClass("gks-edit-new");
+        userTable.setEditNew(isEditNew)
+        var data = []
+        if (isEditNew) {
+            $("#userEditModalLabel").html("{{$headerNew}}");
+            $("#userEditName").prop("readonly", false);
+            $("#userEditPass").prop("readonly", false);
+            data[0] = "";
+            data[1] = "";
+            data[2] = "";
+            data[3] = "nein";
+        }
+        else {
+            $("#userEditModalLabel").html("{{$headerEdit}}")
+            $("#userEditName").prop("readonly", true);
+            $("#userEditPass").prop("readonly", true);
+            var theRow = userTable.getRowFromParent(trigger);
+            data = userTable.getRowData(theRow);
+            userTable.selectRow(theRow)
+        }
         $("#userEditName").val(data[0]);
-        //$("#userEditPass").val(data[1]);
+        $("#userEditPass").val(data[1]);
         $("#userEditEmail").val(data[2]);
         var adminData = data[3];
         if (adminData.trim() == "ja") {
@@ -75,11 +93,15 @@
 
     $('.btn-save-app').click(function () {
         var url = "/useredit";
+        if (userTable.isEditNew()) {
+            url = "/usernew"
+        }
         var vName = $("#userEditName").val()
+        var vPass = $("#userEditPass").val()
         var vEmail = $("#userEditEmail").val()
         var vAdmin = $("#userEditAdmin").prop("checked")
 
-        var posting = $.post(url, { gkvName: vName, gkvEmail: vEmail, gkvAdmin: vAdmin });
+        var posting = $.post(url, { gkvName: vName, gkvPass: vPass, gkvEmail: vEmail, gkvAdmin: vAdmin });
 
         posting.done(function (data) {
             var d = JSON.parse(data)
@@ -93,12 +115,12 @@
                 var theRow = userTable.getSelectedRow()
                 userTable.changeRowData(theRow, rowData)
                 userTable.setPersisted(theRow);
-                userTable.showMessage("Benutzer wurde gespeichert")
+                userTable.showMessage(d.Response.Message)
             }
         });
 
         posting.fail(function (xhr, status, error) {
-            userTable.showMessage("Technischer Fehler: " + xhr.status + ":" + xhr.statusText)
+            userTable.showMessage('{{.Messages.GetString "msg.error.ajax"}}' + xhr.status + ':' + xhr.statusText)
         });
     });
 

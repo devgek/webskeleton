@@ -31,6 +31,7 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
   this.selectedRow = -1;
   this.deleteUrl = "";
   this.deleteObjId = -1;
+  this.editNew = false;
 
   if (saveFunc === undefined) {
     this.saveFunc = this.defaultSaveFunction;
@@ -276,6 +277,14 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
     this.deleteObjId = objId;
   };
 
+  this.isEditNew = function () {
+    return this.editNew;
+  }
+
+  this.setEditNew = function (isEditNew) {
+    this.editNew = isEditNew;
+  }
+  
   this.reindexRows = function () {
     const $rows = $(this.root).find("tbody tr.gk-row-edit");
     $rows.each(function (index, element) {

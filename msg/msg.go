@@ -16,20 +16,16 @@ type MessageLocator struct {
 var once sync.Once
 
 //Messages singleton instance for the app messages
-var Messages *MessageLocator
+// var Messages *MessageLocator
 
 //NewMessageLocator create MessageLocator and load the message file
 func NewMessageLocator(messages []byte) *MessageLocator {
-	once.Do(func() {
-		msgReader := bytes.NewReader(messages)
-		ml := &MessageLocator{viper.New()}
-		ml.SetConfigType("yaml")
-		err := ml.ReadConfig(msgReader)
-		helper.PanicOnError(err)
-		Messages = ml
-	})
-
-	return Messages
+	msgReader := bytes.NewReader(messages)
+	ml := &MessageLocator{viper.New()}
+	ml.SetConfigType("yaml")
+	err := ml.ReadConfig(msgReader)
+	helper.PanicOnError(err)
+	return ml
 }
 
 //GetMessageF get the formatted message

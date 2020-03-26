@@ -15,9 +15,9 @@ func TestGetString(t *testing.T) {
 }
 
 func TestGetMessageF(t *testing.T) {
-	messages := []byte("test01: Dieser Text beinhaltet %s")
+	messages := []byte("test02: Dieser Texxt beinhaltet %s")
 	ml := msg.NewMessageLocator(messages)
 
-	theMsg := ml.GetMessageF("test01", "blub")
-	assert.Equal(t, "Dieser Text beinhaltet blub", theMsg, "Text was not expected")
+	theMsg := ml.GetMessageF("test02", "blub")
+	assert.Equal(t, "Dieser Texxt beinhaltet blub", theMsg, "Text was not expected")
 }

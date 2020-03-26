@@ -43,7 +43,7 @@ func runEcho(cmd *cobra.Command) {
 		log.Println("Debug mode is on")
 	}
 
-	env := config.InitEnv()
+	env := config.GetWebEnv()
 
 	e := webecho.InitWeb(env)
 

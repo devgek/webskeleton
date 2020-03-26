@@ -11,10 +11,10 @@ import (
 
 //
 var (
-	ErrorLoginNotAllowed = &ServiceError{"msg.m0001"}
-	ErrorUserNotCreated  = &ServiceError{"msg.m0002"}
-	ErrorUserNotSaved    = &ServiceError{"msg.m0003"}
-	ErrorUserNotDeleted  = &ServiceError{"msg.m0004"}
+	ErrorLoginNotAllowed = &ServiceError{"msg.error.login"}
+	ErrorUserNotCreated  = &ServiceError{"msg.error.user.create"}
+	ErrorUserNotSaved    = &ServiceError{"msg.error.user.edit"}
+	ErrorUserNotDeleted  = &ServiceError{"msg.error.user.delete"}
 )
 
 //Do ... just for test mocking
@@ -45,10 +45,11 @@ func (s Services) LoginUser(username string, password string) (*models.User, err
 }
 
 //CreateUser create new user
-func (s Services) CreateUser(username string, password string, email string) (*models.User, error) {
+func (s Services) CreateUser(username string, password string, email string, admin bool) (*models.User, error) {
 	user := &models.User{}
 	user.Name = username
 	user.Email = email
+	user.Admin = admin
 	var err error
 	user.Pass, err = helper.EncryptPassword(password)
 	if err == nil {

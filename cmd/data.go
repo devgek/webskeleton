@@ -21,10 +21,10 @@ func init() {
 }
 
 func runData(cmd *cobra.Command) {
-	env := config.InitEnv()
-	env.Services.CreateUser("user1", "secret", "user1@webskeleton.com")
-	env.Services.CreateUser("user2", "secret", "user2@webskeleton.com")
-	env.Services.CreateUser("user3", "secret", "user3@webskeleton.com")
-	env.Services.CreateUser("user4", "secret", "user4@webskeleton.com")
-	env.Services.CreateUser("user5", "secret", "user5@webskeleton.com")
+	env := config.GetWebEnv()
+	env.Services.CreateUser("user1", "secret", "user1@webskeleton.com", false)
+	env.Services.CreateUser("user2", "secret", "user2@webskeleton.com", false)
+	env.Services.CreateUser("user3", "secret", "user3@webskeleton.com", false)
+	env.Services.CreateUser("user4", "secret", "user4@webskeleton.com", false)
+	env.Services.CreateUser("user5", "secret", "user5@webskeleton.com", false)
 }
