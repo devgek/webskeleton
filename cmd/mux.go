@@ -33,12 +33,17 @@ func init() {
 	// is called directly, e.g.:
 	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	muxCmd.Flags().String("port", "8080", "The port this app listens")
+	muxCmd.Flags().Bool("debug", false, "debug mode on/off")
 }
 
 func runMux(cmd *cobra.Command) {
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")
+	config.Debug, _ = cmd.Flags().GetBool("debug")
 	log.Println("Starting webskeleton with mux on port ", port)
+	if config.Debug {
+		log.Println("Debug mode is on")
+	}
 
 	//the app env, containes pointer to db and services
 	env := config.GetWebEnv()

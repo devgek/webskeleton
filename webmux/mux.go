@@ -18,6 +18,9 @@ func InitWeb(env *config.Env) *mux.Router {
 	r.Handle("/loginuser", handler.HandleLogin(env))
 
 	r.Handle("/users", handler.HandleUsers(env))
+	r.Handle("/useredit", handler.HandleUserEdit(env))
+	r.Handle("/usernew", handler.HandleUserNew(env))
+	r.Handle("/userdelete", handler.HandleUserDelete(env))
 
 	r.Handle("/logout", handler.HandleLogout())
 
