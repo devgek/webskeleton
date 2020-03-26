@@ -12,6 +12,9 @@ msg:
       create: "Benutzer kann nicht angelegt werden"
       edit: "Benutzer kann nicht gändert werden"
       delete: "Benutzer kann nicht gelöscht werden"
+ckbox:
+  true: "ja"
+  false: "nein"
 entity:
   user: "Benutzer"
 form:

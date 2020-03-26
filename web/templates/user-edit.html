@@ -114,7 +114,7 @@
                     userTable.handleNew();
                 }
                 var rowData = []
-                rowData.push(d.Response.Name, "********", d.Response.Email, (d.Response.Admin ? "ja" : "nein"))
+                rowData.push(d.Response.Name, "********", d.Response.Email, (d.Response.Admin ? '{{.Messages.GetString "ckbox.true"}}' : '{{.Messages.GetString "ckbox.false"}}'))
                 var theRow = userTable.getSelectedRow()
                 userTable.changeRowData(theRow, rowData)
                 userTable.setPersisted(theRow);

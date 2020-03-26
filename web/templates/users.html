@@ -1,5 +1,7 @@
 {{define "t_content"}}
 {{$userIsAdmin := .Admin}}
+{{$yes := .Messages.GetString "ckbox.true"}}
+{{$no := .Messages.GetString "ckbox.false"}}
 
 <!-- Page Header-->
 <div class="gks-page-header">
@@ -29,9 +31,9 @@
                 <td>{{.Email}}</td>
                 <td>
                     {{if .Admin}}
-                    <span>ja</span>
+                    <span>{{$yes}}</span>
                     {{else}}
-                    <span>nein</span>
+                    <span>{{$no}}</span>
                     {{end}}
                 </td>
                 <td class="w-5">

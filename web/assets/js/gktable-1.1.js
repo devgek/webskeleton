@@ -198,7 +198,7 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
     var clonedRow = $lastRow.clone(true);
     clonedRow.attr("data-linenr", theRow);
     clonedRow.attr("data-persisted", "false");
-    clonedRow.find("td.gk-col-edit").empty();
+    clonedRow.find("td.gk-col-edit:not(:last)").empty();
     $(this.root)
       .find("tbody")
       .append(clonedRow);
