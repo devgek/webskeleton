@@ -1,6 +1,7 @@
 package webmux
 
 import (
+	"github.com/devgek/webskeleton/web/handler"
 	"net/http"
 
 	"github.com/devgek/webskeleton/config"
@@ -12,20 +13,20 @@ import (
 //InitWeb ...
 func InitWeb(env *config.Env) *mux.Router {
 	r := mux.NewRouter()
-	r.Handle("/health", web.HandleHealth())
+	r.Handle("/health", handler.HandleHealth())
 
-	r.Handle("/loginuser", web.HandleLogin(env))
+	r.Handle("/loginuser", handler.HandleLogin(env))
 
-	r.Handle("/users", web.HandleUsers(env))
+	r.Handle("/users", handler.HandleUsers(env))
 
-	r.Handle("/logout", web.HandleLogout())
+	r.Handle("/logout", handler.HandleLogout())
 
 	r.PathPrefix(web.AssetPattern).Handler(http.StripPrefix(web.AssetPattern, http.FileServer(http.Dir(web.AssetRoot))))
 
 	r.Handle("/{page}", DefaultPageHandler())
 
-	r.Use(web.LoggingMiddleware)
-	r.Use(web.AuthMiddleware)
+	r.Use(handler.RequestLoggingMiddleware)
+	r.Use(handler.AuthMiddleware)
 
 	return r
 }
