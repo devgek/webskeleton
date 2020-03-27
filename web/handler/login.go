@@ -3,48 +3,44 @@ package handler
 import (
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/web"
+	"github.com/labstack/echo"
 	"github.com/stretchr/objx"
 	"log"
 	"net/http"
 )
 
 //HandleLogin ...
-func HandleLogin(env *config.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//do the login
-		theUser := r.FormValue("userid")
-		thePass := r.FormValue("password")
+func HandleLogin(c echo.Context) error {
+	//do the login
+	theUser := c.FormValue("userid")
+	thePass := c.FormValue("password")
 
-		contextData := web.NewContextData()
-		ctx := web.ToContext(r.Context(), contextData)
+	ec := c.(*config.EnvContext)
+	user, err := ec.Env.Services.LoginUser(theUser, thePass)
+	if err != nil {
+		viewData := web.NewViewData()
+		viewData["LoginUser"] = theUser
+		viewData["LoginPass"] = thePass
+		viewData["ErrorMessage"] = ec.Env.MessageLocator.GetString("msg.error.login")
+		return c.Render(http.StatusOK, "login.html", viewData)
+	}
 
-		user, err := env.Services.LoginUser(theUser, thePass)
-		if err != nil {
-			viewData := web.NewViewDataWithContextData(web.FromContext(r.Context()))
-			viewData["LoginUser"] = theUser
-			viewData["LoginPass"] = thePass
-			viewData["ErrorMessage"] = env.MessageLocator.GetString("msg.error.login")
-			web.RenderTemplate(w, r.WithContext(ctx), "login.html", viewData)
-			return
-		}
+	//login ok
+	log.Println("User", user.Name, "logged in")
 
-		//login ok
-		log.Println("User", user.Name, "logged in")
-		contextData.SetUserID(theUser)
-		contextData.SetAdmin(user.Admin)
-		web.ToContext(r.Context(), contextData)
+	//hold userID and admin flag in request data
+	requestData := config.NewRequestData()
+	requestData.SetUserID(theUser)
+	requestData.SetAdmin(user.Admin)
 
-		cookieData := web.NewCookieData(contextData)
+	cookieData := web.NewCookieData(requestData)
 
-		authCookieValue := objx.New(cookieData).MustBase64()
+	authCookieValue := objx.New(cookieData).MustBase64()
 
-		http.SetCookie(w, &http.Cookie{
-			Name:  web.AuthCookieName,
-			Value: authCookieValue,
-			Path:  "/"})
+	c.SetCookie(&http.Cookie{
+		Name:  web.AuthCookieName,
+		Value: authCookieValue,
+		Path:  "/"})
 
-		w.Header().Set("Location", "/page1")
-		w.WriteHeader(http.StatusTemporaryRedirect)
-	})
-
+	return c.Redirect(http.StatusTemporaryRedirect, "/page1")
 }

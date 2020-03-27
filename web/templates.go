@@ -3,7 +3,6 @@ package web
 import (
 	"github.com/devgek/webskeleton/config"
 	"log"
-	"net/http"
 	"sync"
 	"text/template"
 )
@@ -20,14 +19,6 @@ type TemplateHandler struct {
 	theMap   *map[string]*TemplateHandler
 	filename string
 	Templ    *template.Template
-}
-
-// ServeHTTP handles the HTTP request.
-func (t *TemplateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	data := NewViewDataWithContextData(FromContext(r.Context()))
-
-	t.Templ.Execute(w, data)
-
 }
 
 //NewTemplateHandler create templateHandler and parse template
@@ -47,23 +38,24 @@ func NewTemplateHandler(fileName string) *TemplateHandler {
 	return th
 }
 
-//NewViewDataWithContextData return view data map filled with context data
-func NewViewDataWithContextData(contextData ContextData) map[string]interface{} {
+//NewViewDataWithRequestData return view data map filled with context data
+func NewViewDataWithRequestData(requestData config.RequestData) map[string]interface{} {
 	vd := NewViewData()
 
-	vd["Host"] = contextData.Host()
-	vd["Messages"] = config.GetWebEnv().MessageLocator
-	vd["ProjectName"] = config.ProjectName
-	vd["VersionInfo"] = config.ProjectVersion
-	vd["UserID"] = contextData.UserID()
-	vd["Admin"] = contextData.Admin()
+	vd["UserID"] = requestData.UserID()
+	vd["Admin"] = requestData.Admin()
 
 	return vd
 }
 
 //NewViewData ...
 func NewViewData() map[string]interface{} {
-	return make(map[string]interface{})
+	vd := make(map[string]interface{})
+	vd["Messages"] = config.GetWebEnv().MessageLocator
+	vd["ProjectName"] = config.ProjectName
+	vd["VersionInfo"] = config.ProjectVersion
+
+	return vd
 }
 
 /*

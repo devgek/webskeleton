@@ -1,52 +1,51 @@
 package handler
 
 import (
+	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/web"
+	"github.com/labstack/echo"
 	"log"
 	"net/http"
 	"strings"
 )
 
 //RequestLoggingMiddleware ...
-func RequestLoggingMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println("r:", r.RequestURI)
+func RequestLoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		log.Println("r:", c.Request().RequestURI)
 		// Call the next handler, which can be another middleware in the chain, or the final handler.
-		next.ServeHTTP(w, r)
-	})
+		return next(c)
+	}
 }
 
 //AuthMiddleware middleware handler for cookie authentication
-func AuthMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		r := c.Request()
 		//don't check auth cookie with this requests
 		if r.URL.Path == "/login" || r.URL.Path == "/loginuser" || r.URL.Path == "/health" || strings.Contains(r.URL.Path, web.AssetPattern) {
-			next.ServeHTTP(w, r)
-			return
+			return next(c)
 		}
 
 		cookie, err := r.Cookie(web.AuthCookieName)
 
 		if err == http.ErrNoCookie {
 			// not authenticated
-			w.Header().Set("Location", "/login")
-			w.WriteHeader(http.StatusTemporaryRedirect)
-			return
+			return c.Redirect(http.StatusTemporaryRedirect, "/login")
 		}
 		if err != nil {
 			// some other error
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			return echo.NewHTTPError(http.StatusUnauthorized)
 		}
 
-		//set cookie data to context
-		cData, ok := web.FromCookie(cookie)
+		//get request data from cookie and save to context
+		rData, ok := config.FromCookie(cookie)
 		if !ok {
-			http.Error(w, "illegal auth data", http.StatusInternalServerError)
-			return
+			return echo.NewHTTPError(http.StatusUnauthorized, "illegal auth data")
 		}
-		ctx := web.ToContext(r.Context(), cData)
-		// success - call the next handler
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+
+		c.Set(config.ContextKeyRequestData, rData)
+
+		return next(c)
+	}
 }

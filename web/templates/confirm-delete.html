@@ -48,15 +48,14 @@
         var posting = $.post(userTable.getDeleteUrl(), { gkvObjId: userTable.getDeleteObjId() });
 
         posting.done(function (data) {
-            var d = JSON.parse(data)
-            var isError = d.Response.IsError
+            var isError = data.IsError
             if (isError) {
-                userTable.showMessage(d.Response.Message)
+                userTable.showMessage(data.Message)
             }
             else {
                 var theRow = userTable.getSelectedRow()
                 userTable.deleteRow(theRow)
-                userTable.showMessage(d.Response.Message)
+                userTable.showMessage(data.Message)
             }
         });
 

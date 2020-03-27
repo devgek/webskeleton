@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/devgek/webskeleton/config"
 	"github.com/stretchr/objx"
 )
 
@@ -13,13 +14,13 @@ type CookieData interface {
 }
 
 //NewCookieData ...
-func NewCookieData(data ContextData) CookieData {
+func NewCookieData(data config.RequestData) CookieData {
 	return &CookieDataImpl{data}
 }
 
 //CookieDataImpl ...
 type CookieDataImpl struct {
-	CData ContextData
+	CData config.RequestData
 }
 
 //Data ...

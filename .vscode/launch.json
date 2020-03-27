@@ -11,7 +11,7 @@
       "mode": "auto",
       "program": "${fileDirname}",
       "env": {},
-      "args": ["mux", "--port=8080", "--debug=true"]
+      "args": ["echo", "--port=8080", "--debug=true"]
       // "args": ["bootstrap", "--user=gek", "--project=mygo2"]
     }
   ]

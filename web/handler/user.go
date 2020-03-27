@@ -1,131 +1,99 @@
 package handler
 
 import (
-	"encoding/json"
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/web"
 	"github.com/devgek/webskeleton/web/viewmodel"
-	"log"
+	"github.com/labstack/echo"
 	"net/http"
 	"strconv"
 )
 
 //HandleUsers ...
-func HandleUsers(env *config.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//show user list
-		contextData := web.NewContextData()
-		ctx := web.ToContext(r.Context(), contextData)
-
-		users, err := env.Services.GetAllUsers()
-		viewData := web.NewViewDataWithContextData(web.FromContext(r.Context()))
-		viewData["Users"] = users
-		viewData["EditEntityType"] = env.MessageLocator.GetString("entity.user")
-		if err != nil {
-			viewData["ErrorMessage"] = err.Error()
-		}
-		web.RenderTemplate(w, r.WithContext(ctx), "users.html", viewData)
-		return
-	})
-
+func HandleUsers(c echo.Context) error {
+	//show user list
+	ec := c.(*config.EnvContext)
+	users, err := ec.Env.Services.GetAllUsers()
+	viewData := web.NewViewDataWithRequestData(ec.RequestData())
+	viewData["Users"] = users
+	viewData["EditEntityType"] = ec.Env.MessageLocator.GetString("entity.user")
+	if err != nil {
+		viewData["ErrorMessage"] = err.Error()
+	}
+	return c.Render(http.StatusOK, "users.html", viewData)
 }
 
 //HandleUserEdit ...
-func HandleUserEdit(env *config.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		oName := r.FormValue("gkvName")
-		oEmail := r.FormValue("gkvEmail")
-		oAdmin := r.FormValue("gkvAdmin")
-		log.Println(oAdmin)
+func HandleUserEdit(c echo.Context) error {
+	oName := c.FormValue("gkvName")
+	oEmail := c.FormValue("gkvEmail")
+	oAdmin := c.FormValue("gkvAdmin")
 
-		contextData := web.NewContextData()
-		web.ToContext(r.Context(), contextData)
+	ec := c.(*config.EnvContext)
+	u, err := ec.Env.Services.UpdateUser(oName, oEmail, oAdmin == "true")
 
-		u, err := env.Services.UpdateUser(oName, oEmail, oAdmin == "true")
+	userEditResponse := viewmodel.NewUserEditResponse()
+	if err != nil {
+		userEditResponse.IsError = true
+		userEditResponse.Message = ec.Env.MessageLocator.GetString("msg.error.user.edit")
+		userEditResponse.Name = oName
+		userEditResponse.Email = oEmail
+		userEditResponse.Admin = (oAdmin == "true")
+	} else {
+		userEditResponse.Message = ec.Env.MessageLocator.GetString("msg.success.user.edit")
+		userEditResponse.Name = u.Name
+		userEditResponse.Email = u.Email
+		userEditResponse.Admin = u.Admin
+	}
 
-		vd := web.NewViewData()
-		userEditResponse := viewmodel.NewUserEditResponse()
-		if err != nil {
-			userEditResponse.IsError = true
-			userEditResponse.Message = env.MessageLocator.GetString("msg.error.user.edit")
-			userEditResponse.Name = oName
-			userEditResponse.Email = oEmail
-			userEditResponse.Admin = (oAdmin == "true")
-		} else {
-			userEditResponse.Message = env.MessageLocator.GetString("msg.success.user.edit")
-			userEditResponse.Name = u.Name
-			userEditResponse.Email = u.Email
-			userEditResponse.Admin = u.Admin
-		}
-
-		vd["Response"] = userEditResponse
-		json.NewEncoder(w).Encode(vd)
-		return
-	})
-
+	//on client userEditResponse is received as javascript object, no JSON.parse is needed
+	return c.JSON(http.StatusOK, userEditResponse)
 }
 
 //HandleUserNew ...
-func HandleUserNew(env *config.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		oName := r.FormValue("gkvName")
-		oPass := r.FormValue("gkvPass")
-		oEmail := r.FormValue("gkvEmail")
-		oAdmin := r.FormValue("gkvAdmin")
-		log.Println(oAdmin)
+func HandleUserNew(c echo.Context) error {
+	oName := c.FormValue("gkvName")
+	oPass := c.FormValue("gkvPass")
+	oEmail := c.FormValue("gkvEmail")
+	oAdmin := c.FormValue("gkvAdmin")
 
-		contextData := web.NewContextData()
-		web.ToContext(r.Context(), contextData)
+	ec := c.(*config.EnvContext)
+	u, err := ec.Env.Services.CreateUser(oName, oPass, oEmail, oAdmin == "true")
 
-		u, err := env.Services.CreateUser(oName, oPass, oEmail, oAdmin == "true")
+	userEditResponse := viewmodel.NewUserEditResponse()
+	if err != nil {
+		userEditResponse.IsError = true
+		userEditResponse.Message = ec.Env.MessageLocator.GetString("msg.error.user.create")
+		userEditResponse.Name = oName
+		userEditResponse.Pass = oPass
+		userEditResponse.Email = oEmail
+		userEditResponse.Admin = (oAdmin == "true")
+	} else {
+		userEditResponse.Message = ec.Env.MessageLocator.GetString("msg.success.user.create")
+		userEditResponse.Name = u.Name
+		userEditResponse.Pass = string(u.Pass)
+		userEditResponse.Email = u.Email
+		userEditResponse.Admin = u.Admin
+	}
 
-		vd := web.NewViewData()
-		userEditResponse := viewmodel.NewUserEditResponse()
-		if err != nil {
-			userEditResponse.IsError = true
-			userEditResponse.Message = env.MessageLocator.GetString("msg.error.user.create")
-			userEditResponse.Name = oName
-			userEditResponse.Pass = oPass
-			userEditResponse.Email = oEmail
-			userEditResponse.Admin = (oAdmin == "true")
-		} else {
-			userEditResponse.Message = env.MessageLocator.GetString("msg.success.user.create")
-			userEditResponse.Name = u.Name
-			userEditResponse.Pass = string(u.Pass)
-			userEditResponse.Email = u.Email
-			userEditResponse.Admin = u.Admin
-		}
-
-		vd["Response"] = userEditResponse
-		json.NewEncoder(w).Encode(vd)
-		return
-	})
-
+	return c.JSON(http.StatusOK, userEditResponse)
 }
 
 //HandleUserDelete ...
-func HandleUserDelete(env *config.Env) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		oID := r.FormValue("gkvObjId")
-		ioID, _ := strconv.Atoi(oID)
+func HandleUserDelete(c echo.Context) error {
+	oID := c.FormValue("gkvObjId")
+	ioID, _ := strconv.Atoi(oID)
 
-		contextData := web.NewContextData()
-		web.ToContext(r.Context(), contextData)
+	ec := c.(*config.EnvContext)
+	err := ec.Env.Services.DeleteUser(uint(ioID))
 
-		err := env.Services.DeleteUser(uint(ioID))
+	baseResponse := &viewmodel.BaseResponse{}
+	if err != nil {
+		baseResponse.IsError = true
+		baseResponse.Message = ec.Env.MessageLocator.GetString("msg.error.user.delete")
+	} else {
+		baseResponse.Message = ec.Env.MessageLocator.GetString("msg.success.user.delete")
+	}
 
-		vd := web.NewViewData()
-		baseResponse := &viewmodel.BaseResponse{}
-		if err != nil {
-			baseResponse.IsError = true
-			baseResponse.Message = env.MessageLocator.GetString("msg.error.user.delete")
-		} else {
-			baseResponse.Message = env.MessageLocator.GetString("msg.success.user.delete")
-		}
-
-		vd["Response"] = baseResponse
-		json.NewEncoder(w).Encode(vd)
-		return
-	})
-
+	return c.JSON(http.StatusOK, baseResponse)
 }

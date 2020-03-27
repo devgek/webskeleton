@@ -104,21 +104,20 @@
         var posting = $.post(url, { gkvName: vName, gkvPass: vPass, gkvEmail: vEmail, gkvAdmin: vAdmin });
 
         posting.done(function (data) {
-            var d = JSON.parse(data)
-            var isError = d.Response.IsError
+            var isError = data.IsError
             if (isError) {
-                userTable.showMessage(d.Response.Message)
+                userTable.showMessage(data.Message)
             }
             else {
                 if (userTable.isEditNew()) {
                     userTable.handleNew();
                 }
                 var rowData = []
-                rowData.push(d.Response.Name, "********", d.Response.Email, (d.Response.Admin ? '{{.Messages.GetString "ckbox.true"}}' : '{{.Messages.GetString "ckbox.false"}}'))
+                rowData.push(data.Name, "********", data.Email, (data.Admin ? '{{.Messages.GetString "ckbox.true"}}' : '{{.Messages.GetString "ckbox.false"}}'))
                 var theRow = userTable.getSelectedRow()
                 userTable.changeRowData(theRow, rowData)
                 userTable.setPersisted(theRow);
-                userTable.showMessage(d.Response.Message)
+                userTable.showMessage(data.Message)
             }
         });
 
