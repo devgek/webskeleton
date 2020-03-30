@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/devgek/webskeleton/web/request"
 	"github.com/labstack/echo"
 )
 
@@ -11,6 +12,6 @@ type EnvContext struct {
 }
 
 //RequestData get RequestData from context
-func (ec *EnvContext) RequestData() RequestData {
-	return ec.Get(ContextKeyRequestData).(RequestData)
+func (ec *EnvContext) RequestData() request.RData {
+	return ec.Get(request.ContextKeyRequestData).(request.RData)
 }

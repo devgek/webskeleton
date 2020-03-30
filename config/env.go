@@ -1,9 +1,11 @@
 package config
 
 import (
+	"github.com/devgek/webskeleton/global"
 	"github.com/devgek/webskeleton/helper"
 	"github.com/devgek/webskeleton/msg"
 	"github.com/devgek/webskeleton/packrfix"
+	"github.com/devgek/webskeleton/web/template"
 	"github.com/gobuffalo/packr/v2"
 	"log"
 	"net/http"
@@ -16,17 +18,10 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 )
 
-//
-var (
-	ProjectName    = "webskeleton"
-	ProjectTitle   = "go-webskeleton"
-	ProjectVersion = "V1.0"
-	DatabaseName   = "webskeleton.db"
-	Debug          = false
-)
-
 //Env the environment
 type Env struct {
+	TStore         template.TStore
+	Templates      *packr.Box
 	Assets         http.FileSystem
 	DS             data.Datastore
 	Services       *services.Services
@@ -41,12 +36,21 @@ var webEnv *Env
 //GetWebEnv return new initialized environment
 func GetWebEnv() *Env {
 	once.Do(func() {
-		//init asset FileSystem
 		root, err := os.Getwd()
 		helper.PanicOnError(err)
+		//init template FileSystem
+		templatePath := filepath.Join(root, "web", "templates")
+		origninalTemplateBox := packr.New("templates", templatePath)
+		templateBox := packrfix.New(origninalTemplateBox)
+
+		//init TStore
+		tStore := template.NewBoxBasedTemplateStore(templateBox)
+
+		//init asset FileSystem
 		path := filepath.Join(root, "web", "assets")
 		origninalAssetBox := packr.New("assets", path)
 		assetBox := packrfix.New(origninalAssetBox)
+
 		//load locale specific message file, if not default
 		// messages, err := assetBox.Find("msg/messages-en.yaml")
 		messages, err := assetBox.Find("msg/messages.yaml")
@@ -55,14 +59,14 @@ func GetWebEnv() *Env {
 		ml := msg.NewMessageLocator(messages)
 
 		//here we create the datastore
-		ds, err := data.NewDatastore("sqlite3", DatabaseName)
+		ds, err := data.NewDatastore("sqlite3", global.DatabaseName)
 		if err != nil {
 			log.Panic(err)
 		}
 
 		services := services.NewServices(ds)
 
-		webEnv = &Env{Assets: assetBox, DS: ds, Services: services, MessageLocator: ml}
+		webEnv = &Env{TStore: tStore, Templates: origninalTemplateBox, Assets: assetBox, DS: ds, Services: services, MessageLocator: ml}
 	})
 
 	return webEnv

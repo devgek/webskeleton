@@ -3,11 +3,21 @@ package handler
 import (
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/web"
+	"github.com/devgek/webskeleton/web/request"
 	"github.com/labstack/echo"
 	"log"
 	"net/http"
 	"strings"
 )
+
+//EnvContextMiddleware this is a custom echo context, representing the environment context
+//it must be the first middleware, which is registered
+func EnvContextMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		cc := &config.EnvContext{Context: c, Env: config.GetWebEnv()}
+		return next(cc)
+	}
+}
 
 //RequestLoggingMiddleware ...
 func RequestLoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
@@ -39,12 +49,12 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		//get request data from cookie and save to context
-		rData, ok := config.FromCookie(cookie)
+		rData, ok := request.FromCookie(cookie)
 		if !ok {
 			return echo.NewHTTPError(http.StatusUnauthorized, "illegal auth data")
 		}
 
-		c.Set(config.ContextKeyRequestData, rData)
+		c.Set(request.ContextKeyRequestData, rData)
 
 		return next(c)
 	}

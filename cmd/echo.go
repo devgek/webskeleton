@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/devgek/webskeleton/global"
 	"log"
 
 	"github.com/devgek/webskeleton/config"
@@ -37,9 +38,9 @@ func init() {
 func runEcho(cmd *cobra.Command) {
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")
-	config.Debug, _ = cmd.Flags().GetBool("debug")
+	global.Debug, _ = cmd.Flags().GetBool("debug")
 	log.Println("Starting webskeleton with echo on port ", port)
-	if config.Debug {
+	if global.Debug {
 		log.Println("Debug mode is on")
 	}
 

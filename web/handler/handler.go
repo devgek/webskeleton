@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/global"
 	"github.com/devgek/webskeleton/web"
 	"github.com/labstack/echo"
 	"net/http"
@@ -9,10 +10,10 @@ import (
 
 //HandleHealth ...
 func HandleHealth(c echo.Context) error {
-	vd := web.NewViewData()
+	vd := config.NewTemplateData()
 	vd["Host"] = c.Request().Host
-	vd["ProjectName"] = config.ProjectName
-	vd["VersionInfo"] = config.ProjectVersion
+	vd["ProjectName"] = global.ProjectName
+	vd["VersionInfo"] = global.ProjectVersion
 	vd["health"] = "ok"
 
 	return c.JSON(http.StatusOK, vd)
@@ -38,5 +39,5 @@ func HandleFavicon(c echo.Context) error {
 func HandlePageDefault(c echo.Context) error {
 	page := c.Param("page")
 
-	return c.Render(http.StatusOK, page+".html", web.NewViewData())
+	return c.Render(http.StatusOK, page+".html", config.NewTemplateData())
 }

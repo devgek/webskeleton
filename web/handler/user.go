@@ -2,7 +2,6 @@ package handler
 
 import (
 	"github.com/devgek/webskeleton/config"
-	"github.com/devgek/webskeleton/web"
 	"github.com/devgek/webskeleton/web/viewmodel"
 	"github.com/labstack/echo"
 	"net/http"
@@ -14,7 +13,7 @@ func HandleUsers(c echo.Context) error {
 	//show user list
 	ec := c.(*config.EnvContext)
 	users, err := ec.Env.Services.GetAllUsers()
-	viewData := web.NewViewDataWithRequestData(ec.RequestData())
+	viewData := config.NewTemplateDataWithRequestData(ec.RequestData())
 	viewData["Users"] = users
 	viewData["EditEntityType"] = ec.Env.MessageLocator.GetString("entity.user")
 	if err != nil {

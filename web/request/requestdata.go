@@ -1,4 +1,4 @@
-package config
+package request
 
 import (
 	"net/http"
@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/objx"
 )
 
-//RequestData the data hold in request context
-type RequestData interface {
+//RData the data hold in request context
+type RData interface {
 	UserID() string
 	SetUserID(userID string)
 	Admin() bool
@@ -19,7 +19,7 @@ type requestData struct {
 }
 
 //NewRequestData create RequestData
-func NewRequestData() RequestData {
+func NewRequestData() RData {
 	return &requestData{"", false}
 }
 
@@ -53,7 +53,7 @@ func (c requestData) MSI() map[string]interface{} {
 var ContextKeyRequestData = "request-data"
 
 //FromCookie get RequestData from cookie value
-func FromCookie(cookie *http.Cookie) (RequestData, bool) {
+func FromCookie(cookie *http.Cookie) (RData, bool) {
 	c := objx.MustFromBase64(cookie.Value)
 
 	cData := NewRequestData()
