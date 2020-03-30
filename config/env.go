@@ -2,15 +2,12 @@ package config
 
 import (
 	"github.com/devgek/webskeleton/global"
-	"github.com/devgek/webskeleton/helper"
 	"github.com/devgek/webskeleton/msg"
 	"github.com/devgek/webskeleton/packrfix"
 	"github.com/devgek/webskeleton/web/template"
 	"github.com/gobuffalo/packr/v2"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 	"sync"
 
 	"github.com/devgek/webskeleton/data"
@@ -36,19 +33,14 @@ var webEnv *Env
 //GetWebEnv return new initialized environment
 func GetWebEnv() *Env {
 	once.Do(func() {
-		root, err := os.Getwd()
-		helper.PanicOnError(err)
-		//init template FileSystem
-		templatePath := filepath.Join(root, "web", "templates")
-		origninalTemplateBox := packr.New("templates", templatePath)
+		// ../web/templates important for packr2 to find files
+		origninalTemplateBox := packr.New("templates", "../web/templates")
 		templateBox := packrfix.New(origninalTemplateBox)
 
 		//init TStore
 		tStore := template.NewBoxBasedTemplateStore(templateBox)
 
-		//init asset FileSystem
-		path := filepath.Join(root, "web", "assets")
-		origninalAssetBox := packr.New("assets", path)
+		origninalAssetBox := packr.New("assets", "../web/assets")
 		assetBox := packrfix.New(origninalAssetBox)
 
 		//load locale specific message file, if not default
