@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/web/echo"
 	"log"
 
 	"github.com/devgek/webskeleton/config"
-	"github.com/devgek/webskeleton/webecho"
 	"github.com/spf13/cobra"
 )
 
@@ -46,7 +46,7 @@ func runEcho(cmd *cobra.Command) {
 
 	env := config.GetWebEnv()
 
-	e := webecho.InitWeb(env)
+	e := echo.InitEcho(env)
 
 	log.Fatal(e.Start(":" + port))
 }

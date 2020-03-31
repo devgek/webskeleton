@@ -1,4 +1,4 @@
-package webecho
+package echo
 
 import (
 	"github.com/devgek/webskeleton/config"
@@ -6,17 +6,15 @@ import (
 	"github.com/devgek/webskeleton/web/handler"
 	"github.com/devgek/webskeleton/web/template"
 	"github.com/labstack/echo"
-	"io"
-	"log"
 	"net/http"
 )
 
-//InitWeb initialize the web framework
-func InitWeb(env *config.Env) *echo.Echo {
+//InitEcho initialize the echo web framework
+func InitEcho(env *config.Env) *echo.Echo {
 	e := echo.New()
 	e.HideBanner = true
 
-	e.Renderer = NewTemplateRenderer(env)
+	e.Renderer = template.NewRenderer(env.TStore)
 
 	e.GET("/health", handler.HandleHealth)
 
@@ -42,23 +40,4 @@ func InitWeb(env *config.Env) *echo.Echo {
 	e.Use(handler.AuthMiddleware)
 
 	return e
-}
-
-// TemplateRenderer is a custom html/template renderer for Echo framework
-// damit man echo.Context.Render aufrufen kann
-type TemplateRenderer struct {
-	TStore template.TStore
-}
-
-//NewTemplateRenderer ...
-func NewTemplateRenderer(env *config.Env) *TemplateRenderer {
-	return &TemplateRenderer{env.TStore}
-}
-
-// Render renders a template document
-func (r *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	log.Println("render", name)
-	templ := r.TStore.GetTemplate(name)
-	//important templ.Execute not templ.ExecuteTemplate(w, name, data)
-	return templ.Execute(w, data)
 }
