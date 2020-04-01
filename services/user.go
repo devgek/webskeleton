@@ -53,8 +53,7 @@ func (s Services) CreateUser(username string, password string, email string, adm
 	var err error
 	user.Pass, err = helper.EncryptPassword(password)
 	if err == nil {
-		user, err = s.DS.CreateUser(user)
-		if err == nil {
+		if err = s.DS.CreateEntity(user); err == nil {
 			return user, err
 		}
 	}
@@ -74,13 +73,12 @@ func (s Services) UpdateUser(username string, email string, admin bool) (*models
 	oldUser.Email = email
 	oldUser.Admin = admin
 
-	newUser, err := s.DS.SaveUser(oldUser)
-	if err == nil {
-		return newUser, err
+	if err = s.DS.SaveEntity(oldUser); err == nil {
+		return oldUser, err
 	}
 
 	log.Println("UpdateUser:", err.Error())
-	return &models.User{}, ErrorUserNotSaved
+	return nil, ErrorUserNotSaved
 }
 
 //DeleteUser delete user

@@ -17,18 +17,18 @@ func (m *MockedDatastore) GetUser(username string) (*models.User, error) {
 	return args.Get(0).(*models.User), args.Error(1)
 }
 
-//CreateUser ...
-func (m *MockedDatastore) CreateUser(user *models.User) (*models.User, error) {
-	args := m.Called(user)
+//CreateEntity ...
+func (m *MockedDatastore) CreateEntity(entity interface{}) error {
+	args := m.Called(entity)
 
-	return args.Get(0).(*models.User), nil
+	return args.Error(1)
 }
 
-//SaveUser ...
-func (m *MockedDatastore) SaveUser(user *models.User) (*models.User, error) {
-	args := m.Called(user)
+//SaveEntity ...
+func (m *MockedDatastore) SaveEntity(entity interface{}) error {
+	args := m.Called(entity)
 
-	return args.Get(0).(*models.User), nil
+	return args.Error(1)
 }
 
 //DeleteEntityByID ...

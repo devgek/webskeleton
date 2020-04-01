@@ -43,7 +43,7 @@ func TestLoginUser(t *testing.T) {
 
 //TestLoginUserInMemory test login service with inmemory db
 func TestLoginUserInMemoryOK(t *testing.T) {
-	inMemoryDS, _ := data.NewInMemoryDatastore()
+	inMemoryDS := data.NewInMemoryDatastore()
 	services := services.NewServices(inMemoryDS)
 
 	// happy test, user with correct password
@@ -53,7 +53,7 @@ func TestLoginUserInMemoryOK(t *testing.T) {
 }
 
 func TestLoginUserInMemoryNOK(t *testing.T) {
-	inMemoryDS, _ := data.NewInMemoryDatastore()
+	inMemoryDS := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 
 	// user with wrong password
@@ -64,7 +64,7 @@ func TestLoginUserInMemoryNOK(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
-	inMemoryDS, _ := data.NewInMemoryDatastore()
+	inMemoryDS := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 
 	_, err := s.CreateUser("Roger", "secret", "roger.federer@atp.com", false)
@@ -75,7 +75,7 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestUpdateUser(t *testing.T) {
-	inMemoryDS, _ := data.NewInMemoryDatastore()
+	inMemoryDS := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 
 	messi, err := s.DS.GetUser("Lionel")
@@ -86,7 +86,7 @@ func TestUpdateUser(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
-	inMemoryDS, _ := data.NewInMemoryDatastore()
+	inMemoryDS := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 
 	user, err := s.CreateUser("Rafa", "secret", "rafael.nadal@atp.com", false)
@@ -96,7 +96,7 @@ func TestDeleteUser(t *testing.T) {
 }
 
 func TestDeleteUserError(t *testing.T) {
-	inMemoryDS, _ := data.NewInMemoryDatastore()
+	inMemoryDS := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 
 	user := &models.User{Model: gorm.Model{ID: 99}}

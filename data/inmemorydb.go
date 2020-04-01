@@ -5,20 +5,30 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// ...
+var (
+	MessiName   = "Lionel"
+	MessiPass   = "secret"
+	MessiEmail  = "lionel.messi@fcb.com"
+	MessiEmail2 = "lm@barcelona.es"
+	MessiID     = uint(0)
+)
+
 //NewInMemoryDatastore ...
-func NewInMemoryDatastore() (Datastore, error) {
+func NewInMemoryDatastore() Datastore {
 	ds, err := NewDatastore("sqlite3", ":memory:")
 	if err != nil {
 		panic(err)
 	}
 	//init the db with test data
-	impl := ds.(*DatastoreImpl)
-	passEncrypted, _ := bcrypt.GenerateFromPassword([]byte("secret"), bcrypt.MinCost)
-	err = impl.DB.Create(&models.User{Name: "Lionel", Pass: passEncrypted, Email: "lionel.messi@fcb.com"}).Error
+	passEncrypted, _ := bcrypt.GenerateFromPassword([]byte(MessiPass), bcrypt.MinCost)
+	messi := &models.User{Name: MessiName, Pass: passEncrypted, Email: MessiEmail}
+	err = ds.CreateEntity(messi)
 	if err != nil {
 		panic(err)
 	}
-	// impl.DB.Create(&models.User{Name: "Gerald", Pass: passEncrypted, Email: "gerald.kahrer@gmail.com"})
 
-	return ds, err
+	MessiID = messi.ID
+
+	return ds
 }
