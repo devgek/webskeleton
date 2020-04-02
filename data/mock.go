@@ -38,9 +38,16 @@ func (m *MockedDatastore) DeleteEntityByID(entity interface{}) error {
 	return args.Error(1)
 }
 
-//GetAllUser ...
-func (m *MockedDatastore) GetAllUser() ([]models.User, error) {
-	// args := m.Called()
+//GetAllEntities ...
+func (m *MockedDatastore) GetAllEntities(entitySlice interface{}) error {
+	args := m.Called(entitySlice)
 
-	return []models.User{}, nil
+	return args.Error(1)
+}
+
+//GetOneEntityBy ...
+func (m *MockedDatastore) GetOneEntityBy(entity interface{}, key string, val interface{}) error {
+	args := m.Called(entity, key, val)
+
+	return args.Error(1)
 }

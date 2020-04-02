@@ -9,6 +9,8 @@ import (
 
 //CRUDDatastore CRUD operations with abstract entity type
 type CRUDDatastore interface {
+	GetOneEntityBy(entity interface{}, key string, val interface{}) error
+	GetAllEntities(entitySlice interface{}) error
 	CreateEntity(entity interface{}) error
 	SaveEntity(entity interface{}) error
 	DeleteEntityByID(entity interface{}) error
@@ -17,7 +19,6 @@ type CRUDDatastore interface {
 //Datastore interface to datastore
 type Datastore interface {
 	CRUDDatastore
-	GetAllUser() ([]models.User, error)
 	GetUser(name string) (*models.User, error)
 }
 

@@ -2,12 +2,32 @@ package data
 
 import (
 	"errors"
+	"github.com/jinzhu/gorm"
 )
 
 //
 var (
+	ErrorEntityNotFountBy = errors.New("Entity with given where condition not found")
 	ErrorEntityNotDeleted = errors.New("Entity not deleted")
 )
+
+//GetOneEntityBy select * from table where key = value
+func (ds *DatastoreImpl) GetOneEntityBy(entity interface{}, key string, val interface{}) error {
+	if err := ds.Where(key+" = ?", val).First(entity).Error; err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			return ErrorEntityNotFountBy
+		}
+
+		return err
+	}
+
+	return nil
+}
+
+//GetAllEntities select * from table
+func (ds *DatastoreImpl) GetAllEntities(entitySlice interface{}) error {
+	return ds.Find(entitySlice).Error
+}
 
 //CreateEntity insert into entity table
 func (ds *DatastoreImpl) CreateEntity(entity interface{}) error {

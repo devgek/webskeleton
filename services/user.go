@@ -96,7 +96,8 @@ func (s Services) DeleteUser(id uint) error {
 
 //GetAllUsers ...
 func (s Services) GetAllUsers() ([]models.User, error) {
-	users, err := s.DS.GetAllUser()
+	var users = []models.User{}
+	err := s.DS.GetAllEntities(&users)
 	if err == nil {
 		return users, err
 	}
