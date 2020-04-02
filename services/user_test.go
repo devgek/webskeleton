@@ -3,11 +3,13 @@ package services_test
 import (
 	"errors"
 	"github.com/devgek/webskeleton/data"
+	"github.com/devgek/webskeleton/helper"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/services"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"golang.org/x/crypto/bcrypt"
 	"testing"
 )
@@ -64,14 +66,22 @@ func TestLoginUserInMemoryNOK(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
-	inMemoryDS := data.NewInMemoryDatastore()
-	s := services.NewServices(inMemoryDS)
+	// create an instance of the mocked Datastore
+	mockedDB := &data.MockedDatastore{}
+	s := services.NewServices(mockedDB)
 
-	_, err := s.CreateUser("Roger", "secret", "roger.federer@atp.com", false)
-	assert.Nil(t, err, "No error expected")
+	passEncrypted, _ := helper.EncryptPassword("secret")
+	userRoger := &models.User{Name: "Roger", Pass: passEncrypted, Email: "roger.federer@atp.com", Admin: false}
+	// setup expectations
+	mockedDB.On("CreateEntity", mock.Anything).Return(nil)
 
-	_, err = s.LoginUser("Roger", "secret")
+	userReturned, err := s.CreateUser("Roger", "secret", "roger.federer@atp.com", false)
 	assert.Nil(t, err, "No error expected")
+	assert.Equal(t, userRoger.Name, userReturned.Name, "Expected name Roger")
+	assert.Equal(t, userRoger.Email, userReturned.Email, "Expected email not returned")
+	assert.Equal(t, userRoger.Admin, userReturned.Admin, "Expected admin not returned")
+
+	mockedDB.AssertExpectations(t)
 }
 
 func TestUpdateUser(t *testing.T) {
