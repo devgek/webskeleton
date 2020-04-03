@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"github.com/devgek/webskeleton/data"
 )
 
@@ -12,6 +13,20 @@ type Services struct {
 //NewServices ...
 func NewServices(ds data.Datastore) *Services {
 	return &Services{ds}
+}
+
+//Do ... just for test mocking
+func (s Services) Do(par1 int, par2 int) (int, error) {
+	sum := par1 + par2
+	//useless, but for testing errors
+	if sum < 5 {
+		return -1, nil
+	}
+
+	if sum > 5 {
+		return sum, errors.New("invalid: sum > 5")
+	}
+	return sum, nil
 }
 
 //ServiceError ...

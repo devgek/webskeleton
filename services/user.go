@@ -1,7 +1,6 @@
 package services
 
 import (
-	"errors"
 	"github.com/devgek/webskeleton/helper"
 
 	"log"
@@ -16,20 +15,6 @@ var (
 	ErrorUserNotSaved    = &ServiceError{"msg.error.user.edit"}
 	ErrorUserNotDeleted  = &ServiceError{"msg.error.user.delete"}
 )
-
-//Do ... just for test mocking
-func (s Services) Do(par1 int, par2 int) (int, error) {
-	sum := par1 + par2
-	//useless, but for testing errors
-	if sum < 5 {
-		return -1, nil
-	}
-
-	if sum > 5 {
-		return sum, errors.New("invalid: sum > 5")
-	}
-	return sum, nil
-}
 
 //LoginUser check user and pwd
 func (s Services) LoginUser(username string, password string) (*models.User, error) {
@@ -102,6 +87,6 @@ func (s Services) GetAllUsers() ([]models.User, error) {
 		return users, err
 	}
 
-	log.Println("GetAllUses:", err.Error())
+	log.Println("GetAllUsers:", err.Error())
 	return users, err
 }
