@@ -35,7 +35,7 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 	}
 
 	db.LogMode(true)
-	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.User{}, &models.Contact{}, &models.ContactAddress{})
 
 	pass, _ := helper.EncryptPassword("xyz")
 	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com", Admin: true}
