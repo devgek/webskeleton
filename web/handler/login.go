@@ -23,7 +23,7 @@ func HandleLogin(c echo.Context) error {
 		viewData["LoginUser"] = theUser
 		viewData["LoginPass"] = thePass
 		viewData["ErrorMessage"] = ec.Env.MessageLocator.GetString("msg.error.login")
-		return c.Render(http.StatusOK, "login.html", viewData)
+		return c.Render(http.StatusOK, "login", viewData)
 	}
 
 	//login ok

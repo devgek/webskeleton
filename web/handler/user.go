@@ -11,15 +11,16 @@ import (
 //HandleUsers ...
 func HandleUsers(c echo.Context) error {
 	//show user list
+	entity := c.Param("entity")
 	ec := c.(*config.EnvContext)
-	users, err := ec.Env.Services.GetAllUsers()
+	users, err := ec.Env.Services.GetEntities(entity)
 	viewData := config.NewTemplateDataWithRequestData(ec.RequestData())
-	viewData["Users"] = users
-	viewData["EditEntityType"] = ec.Env.MessageLocator.GetString("entity.user")
+	viewData["Entities"] = users
+	viewData["EditEntityType"] = ec.Env.MessageLocator.GetString("entity." + entity)
 	if err != nil {
 		viewData["ErrorMessage"] = err.Error()
 	}
-	return c.Render(http.StatusOK, "users.html", viewData)
+	return c.Render(http.StatusOK, entity, viewData)
 }
 
 //HandleUserEdit ...

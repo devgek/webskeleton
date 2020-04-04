@@ -39,5 +39,5 @@ func HandleFavicon(c echo.Context) error {
 func HandlePageDefault(c echo.Context) error {
 	page := c.Param("page")
 
-	return c.Render(http.StatusOK, page+".html", config.NewTemplateData())
+	return c.Render(http.StatusOK, page, config.NewTemplateData())
 }

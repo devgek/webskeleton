@@ -5,46 +5,42 @@
 
 <!-- Page Header-->
 <div class="gks-page-header">
-    <span class="navbar-brand">{{.Messages.GetString "form.users.header"}}</span>
+    <span class="navbar-brand">{{.Messages.GetString "form.contact.list.header"}}</span>
     <span class="float-right">
         <button type="button" class="btn gks-btn gks-btn-important gks-edit-new" data-toggle="modal"
-            data-target="#userEditModal">{{.Messages.GetString "form.users.button.new"}}</button>
+            data-target="#contactEditModal">{{.Messages.GetString "form.contact.list.buttonnew"}}</button>
     </span>
 </div>
 <!-- Page Content -->
 <div class="gks-page-content">
-    <table class="table table-hover gk-table" id="userTable">
+    <table class="table table-hover gk-table" id="contactTable">
         <thead>
             <tr>
+                <th scope="col">Typ</th>
                 <th scope="col">Name</th>
-                <th scope="col">Passwort</th>
-                <th scope="col">Email</th>
-                <th scope="col">Administrator</th>
+                <th scope="col">Namenszusatz</th>
+                <th scope="col">Kundennummer</th>
+                <th scope="col">Kundentyp</th>
                 <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
-            {{range .Users}}
+            {{range .Entities}}
             <tr>
+                <td>{{.OrgType}}</td>
                 <td>{{.Name}}</td>
-                <td>********</td>
-                <td>{{.Email}}</td>
-                <td>
-                    {{if .Admin}}
-                    <span>{{$yes}}</span>
-                    {{else}}
-                    <span>{{$no}}</span>
-                    {{end}}
-                </td>
+                <td>{{.NameExt}}</td>
+                <td>{{.CustomerNr}}</td>
+                <td>{{.CustomerType}}</td>
                 <td class="w-5">
                     {{if $userIsAdmin}}
                     <div class="gks-icon-box">
-                        <a href="#" data-toggle="modal" data-target="#userEditModal">
+                        <a href="#" data-toggle="modal" data-target="#contactEditModal">
                             <svg class="gks-icon">
                                 <use xlink:href="/assets/svg/gks-icons.svg#i-edit"></use>
                             </svg>
                         </a>
-                        <a href="#" data-toggle="modal" data-target="#confirmDeleteModal" data-cfdurl="/userdelete"
+                        <a href="#" data-toggle="modal" data-target="#confirmDeleteModal" data-cfdurl="/entitydeletecontact"
                             data-cfdobjid="{{.ID}}">
                             <svg class="gks-icon">
                                 <use xlink:href="/assets/svg/gks-icons.svg#i-trash"></use>
@@ -64,12 +60,12 @@
 </div>
 <script>
     //create GKTable without inline editing
-    var userTable = new GKTable("userTable", false);
+    var userTable = new GKTable("contactTable", false);
 
 </script>
 
 <!-- user-edit -->
-{{template "t_user-edit" .}}
+{{template "t_contact-edit" .}}
 {{template "t_confirm-delete" .}}
 
 {{end}}

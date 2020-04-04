@@ -1,7 +1,7 @@
-{{define "t_user-edit"}}
+{{define "t_contact-edit"}}
 {{$userIsAdmin := .Admin}}
-{{$headerEdit := .Messages.GetString "form.user.edit.header"}}
-{{$headerNew := .Messages.GetString "form.user.edit.headernew"}}
+{{$headerEdit := .Messages.GetString "form.contact.edit.header"}}
+{{$headerNew := .Messages.GetString "form.contact.edit.headernew"}}
 <!-- Modal Dialog-->
 <div class="modal fade" id="userEditModal" data-backdrop="static" tabindex="-1" role="dialog"
     aria-labelledby="userEditModalLabel" aria-hidden="true">
@@ -25,26 +25,26 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="userEditName"
-                        class="col-form-label">{{.Messages.GetString "form.user.edit.label.name"}}</label>
+                        class="col-form-label">{{.Messages.GetString "form.contact.edit.label.name"}}</label>
                     <input name="userEditName" class="form-control" id="userEditName" value=""
                         autocomplete="new-password" />
                 </div>
                 <div class="form-group">
                     <label for="userEditPass"
-                        class="col-form-label">{{.Messages.GetString "form.user.edit.label.pass"}}</label>
+                        class="col-form-label">{{.Messages.GetString "form.contact.edit.label.pass"}}</label>
                     <input type="password" name="userEditPass" class="form-control" id="userEditPass" value=""
                         autocomplete="new-password" />
                 </div>
                 <div class="form-group">
                     <label for="userEditEmail"
-                        class="col-form-label">{{.Messages.GetString "form.user.edit.label.email"}}</label>
+                        class="col-form-label">{{.Messages.GetString "form.contact.edit.label.email"}}</label>
                     <input name="userEditEmail" class="form-control" id="userEditEmail" value=""
                         autocomplete="new-password" />
                 </div>
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="userEditAdmin">
                     <label class="form-check-label"
-                        for="userEditAdmin">{{.Messages.GetString "form.user.edit.label.admin"}}</label>
+                        for="userEditAdmin">{{.Messages.GetString "form.contact.edit.label.admin"}}</label>
                 </div>
             </div>
             <div class="modal-footer">

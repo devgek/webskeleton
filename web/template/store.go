@@ -38,10 +38,10 @@ func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) *template.Template
 
 	var templ *template.Template
 
-	if fileName == "login.html" {
-		templ = template.Must(parsePacked(ts.Box, fileName))
+	if fileName == "login" {
+		templ = template.Must(parsePacked(ts.Box, fileName+".html"))
 	} else {
-		templ = template.Must(parsePacked(ts.Box, "layout.html", fileName, "user-edit.html", "confirm-delete.html"))
+		templ = template.Must(parsePacked(ts.Box, "layout.html", fileName+".html", fileName+"-edit.html", "confirm-delete.html"))
 	}
 
 	ts.templates[fileName] = templ

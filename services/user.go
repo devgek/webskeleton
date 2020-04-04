@@ -52,7 +52,7 @@ func (s Services) UpdateUser(username string, email string, admin bool) (*models
 	oldUser, err := s.DS.GetUser(username)
 	if err != nil {
 		log.Println("UpdateUser:", err.Error())
-		return &models.User{}, ErrorUserNotSaved
+		return nil, ErrorUserNotSaved
 	}
 
 	oldUser.Email = email
@@ -77,16 +77,4 @@ func (s Services) DeleteUser(id uint) error {
 
 	log.Println("DeleteUser:", err.Error())
 	return ErrorUserNotDeleted
-}
-
-//GetAllUsers ...
-func (s Services) GetAllUsers() ([]models.User, error) {
-	var users = []models.User{}
-	err := s.DS.GetAllEntities(&users)
-	if err == nil {
-		return users, err
-	}
-
-	log.Println("GetAllUsers:", err.Error())
-	return users, err
 }

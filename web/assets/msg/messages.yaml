@@ -33,16 +33,28 @@ form:
   page1:
     header: "Seite 1"
     content: "Das ist der Inhalt von Seite 1"
-  users:
-    header: "Benutzer"
-    button: 
-      new: "Neuer Benutzer"
-  useredit:
-    header: "Benutzer bearbeiten"
-    headernew: "Benutzer neu anlegen"
-    label:
-      name: "Name:"
-      pass: "Passwort:"
-      email: "Email:"
-      admin: "Benutzer ist Administrator"
+  user:
+    list:
+      header: "Benutzer"
+      buttonnew: "Neuer Benutzer"
+    edit:
+      header: "Benutzer bearbeiten"
+      headernew: "Benutzer neu anlegen"
+      label:
+        name: "Name:"
+        pass: "Passwort:"
+        email: "Email:"
+        admin: "Benutzer ist Administrator"
+  contact:
+    list:
+      header: "Kontakt"
+      buttonnew: "Neuer Kontakt"
+    edit:
+      header: "Kontakt bearbeiten"
+      headernew: "Kontakt neu anlegen"
+      label:
+        name: "Name:"
+        pass: "Passwort:"
+        email: "Email:"
+        admin: "Benutzer ist Administrator"
 ...

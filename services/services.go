@@ -3,16 +3,18 @@ package services
 import (
 	"errors"
 	"github.com/devgek/webskeleton/data"
+	"github.com/devgek/webskeleton/models"
 )
 
 //Services the business serives
 type Services struct {
 	DS data.Datastore
+	EF models.EntityFactory
 }
 
 //NewServices ...
 func NewServices(ds data.Datastore) *Services {
-	return &Services{ds}
+	return &Services{ds, models.EntityFactory{}}
 }
 
 //Do ... just for test mocking
