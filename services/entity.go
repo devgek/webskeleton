@@ -1,18 +1,24 @@
 package services
 
 import (
+	"errors"
 	"log"
 )
 
-//GetEntities ...
-func (s Services) GetEntities(entityName string) (interface{}, error) {
-	entities := s.EF.GetSlice(entityName)
+//
+var (
+	ErrorEntityNotCreated = errors.New("Entity not created")
+	ErrorEntityNotSaved   = errors.New("Entity not saved")
+	ErrorEntityNotDeleted = errors.New("Entity not deleted")
+)
 
-	err := s.DS.GetAllEntities(entities)
+//CreateEntity create new user
+func (s Services) CreateEntity(entity interface{}) error {
+	err := s.DS.CreateEntity(entity)
 	if err == nil {
-		return entities, err
+		return err
 	}
 
-	log.Println("GetAllEntities:", err.Error())
-	return entities, err
+	log.Println("CreateEntity:", err.Error())
+	return ErrorEntityNotCreated
 }

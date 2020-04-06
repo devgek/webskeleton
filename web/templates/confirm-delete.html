@@ -6,8 +6,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmDeleteModalLabel">{{.Messages.GetMessageF "form.confirmdelete.header" .EditEntityType}}</h5>
-                <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000"
-                    data-tableId="userTable">
+                <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000" data-toastid="confirmDeleteToast">
                     <div class="toast-header">
                         <span class="gk-toast-text">Toast Text</span>
                         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -34,33 +33,33 @@
 <script>
     $('#confirmDeleteModal').on('show.bs.modal', function (event) {
         var trigger = $(event.relatedTarget); // Link that triggered the modal
-        var theRow = userTable.getRowFromParent(trigger);
-        var data = userTable.getRowData(theRow);
-        userTable.selectRow(theRow)
+        var theRow = activeGKTable.getRowFromParent(trigger);
+        var data = activeGKTable.getRowData(theRow);
+        activeGKTable.selectRow(theRow)
         var url = trigger.data("cfdurl") // the url to delete the object
-        var objId = trigger.data("cfdobjid") // the object id of the object to delete
-        userTable.setDeleteUrl(url)
-        userTable.setDeleteObjId(objId)
+        var objId = trigger.data("gkvobjid") // the object id of the object to delete
+        activeGKTable.setDeleteUrl(url)
+        activeGKTable.setRowObjId(objId)
     });
 
     $('.btn-delete-app').click(function () {
 
-        var posting = $.post(userTable.getDeleteUrl(), { gkvObjId: userTable.getDeleteObjId() });
+        var posting = $.post(activeGKTable.getDeleteUrl(), { gkvObjId: activeGKTable.getRowObjId() });
 
         posting.done(function (data) {
             var isError = data.IsError
             if (isError) {
-                userTable.showMessage(data.Message)
+                activeGKTable.showMessage(data.Message)
             }
             else {
-                var theRow = userTable.getSelectedRow()
-                userTable.deleteRow(theRow)
-                userTable.showMessage(data.Message)
+                var theRow = activeGKTable.getSelectedRow()
+                activeGKTable.deleteRow(theRow)
+                activeGKTable.showMessage(data.Message)
             }
         });
 
         posting.fail(function (xhr, status, error) {
-            userTable.showMessage("Technischer Fehler: " + xhr.status + ":" + xhr.statusText)
+            activeGKTable.showMessage("Technischer Fehler: " + xhr.status + ":" + xhr.statusText)
         });
     });
 

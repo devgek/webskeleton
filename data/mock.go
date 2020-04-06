@@ -32,9 +32,9 @@ func (m *MockedDatastore) SaveEntity(entity interface{}) error {
 }
 
 //DeleteEntityByID ...
-func (m *MockedDatastore) DeleteEntityByID(entity interface{}) error {
+func (m *MockedDatastore) DeleteEntityByID(entity interface{}, id uint) error {
 
-	args := m.Called(entity)
+	args := m.Called(entity, id)
 	return args.Error(0)
 }
 
@@ -48,6 +48,13 @@ func (m *MockedDatastore) GetAllEntities(entitySlice interface{}) error {
 //GetOneEntityBy ...
 func (m *MockedDatastore) GetOneEntityBy(entity interface{}, key string, val interface{}) error {
 	args := m.Called(entity, key, val)
+
+	return args.Error(0)
+}
+
+//GetEntityByID ...
+func (m *MockedDatastore) GetEntityByID(entity interface{}, id uint) error {
+	args := m.Called(entity, id)
 
 	return args.Error(0)
 }

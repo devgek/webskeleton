@@ -6,7 +6,6 @@ import (
 	"github.com/devgek/webskeleton/helper"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/services"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -101,7 +100,7 @@ func TestDeleteUser(t *testing.T) {
 
 	user, err := s.CreateUser("Rafa", "secret", "rafael.nadal@atp.com", false)
 	assert.Nil(t, err, "No error expected")
-	err = s.DS.DeleteEntityByID(user)
+	err = s.DS.DeleteEntityByID(user, user.ID)
 	assert.Nil(t, err, "No error expected")
 }
 
@@ -109,8 +108,7 @@ func TestDeleteUserError(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 
-	user := &models.User{Model: gorm.Model{ID: 99}}
-	err := s.DS.DeleteEntityByID(user)
+	err := s.DS.DeleteEntityByID(&models.User{}, 99)
 	assert.Equal(t, data.ErrorEntityNotDeleted, err, "Expected error not returned")
 }
 func TestDoTableBased(t *testing.T) {

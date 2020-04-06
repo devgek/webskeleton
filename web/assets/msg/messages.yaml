@@ -1,6 +1,9 @@
 ---
 msg:
   success:
+    entity:
+      edit: "%s wurde geändert"
+      delete: "%s wurde gelöscht"
     user:
       create: "Benutzer wurde angelegt"
       edit: "Benutzer wurde geändert"
@@ -8,6 +11,9 @@ msg:
   error:
     ajax: "Technischer Fehler:"
     login:  "Login nicht erlaubt"
+    entity:
+      edit: "%s kann nicht geändert werden"
+      delete: "%s kann nicht gelöscht werden"
     user:
       create: "Benutzer kann nicht angelegt werden"
       edit: "Benutzer kann nicht gändert werden"
@@ -17,6 +23,7 @@ ckbox:
   false: "nein"
 entity:
   user: "Benutzer"
+  contact: "Kontakt"
 form:
   all:
     btn:

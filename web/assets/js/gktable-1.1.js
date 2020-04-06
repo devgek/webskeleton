@@ -1,6 +1,7 @@
 //GKTable 1.2
 //GKTableObjects container holding all GKTable-objects of current site
 var GKTableObjects = [];
+var activeGKTable;
 //buttonColTemplate code template for creating the edit button column in each table row
 var buttonColTemplate = `
 <td class="gk-col-buttons">
@@ -30,7 +31,7 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
   this.rowData = [];
   this.selectedRow = -1;
   this.deleteUrl = "";
-  this.deleteObjId = -1;
+  this.rowObjId = 0;
   this.editNew = false;
 
   if (saveFunc === undefined) {
@@ -59,6 +60,7 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
   this.toast = $(".toast[data-tableId=" + this.tableId + "]");
 
   GKTableObjects.push(this);
+  activeGKTable = this;
 
   this.selectEnlosingRow = function(obj) {
     this.selectedRow = this.getRowFromParent(obj);
@@ -269,12 +271,12 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
     this.deleteUrl = url;
   };
 
-  this.getDeleteObjId = function () {
-    return this.deleteObjId;
+  this.getRowObjId = function () {
+    return this.rowObjId;
   };
 
-  this.setDeleteObjId = function (objId) {
-    this.deleteObjId = objId;
+  this.setRowObjId = function (objId) {
+    this.rowObjId = objId;
   };
 
   this.isEditNew = function () {
@@ -342,7 +344,7 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
   };
 
   this.showMessage = function (msg) {
-    const $toast = $(".toast[data-tableId=" + this.tableId + "]");
+    const $toast = $(".toast[data-toastid='confirmDeleteToast']");
     $toast.find("span.gk-toast-text").text(msg);
     $toast.toast("show");
   };

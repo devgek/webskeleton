@@ -27,21 +27,21 @@
         <tbody>
             {{range .Entities}}
             <tr>
-                <td>{{.OrgType}}</td>
+                <td>{{.OrgType.String}}</td>
                 <td>{{.Name}}</td>
                 <td>{{.NameExt}}</td>
-                <td>{{.CustomerNr}}</td>
-                <td>{{.CustomerType}}</td>
+                <td>{{.ID}}</td>
+                <td>{{.CustomerType.Desc}}</td>
                 <td class="w-5">
                     {{if $userIsAdmin}}
                     <div class="gks-icon-box">
-                        <a href="#" data-toggle="modal" data-target="#contactEditModal">
+                        <a href="#" data-toggle="modal" data-target="#contactEditModal" data-gkvobjid="{{.ID}}">
                             <svg class="gks-icon">
                                 <use xlink:href="/assets/svg/gks-icons.svg#i-edit"></use>
                             </svg>
                         </a>
-                        <a href="#" data-toggle="modal" data-target="#confirmDeleteModal" data-cfdurl="/entitydeletecontact"
-                            data-cfdobjid="{{.ID}}">
+                        <a href="#" data-toggle="modal" data-target="#confirmDeleteModal"
+                            data-cfdurl="/entitydeletecontact" data-gkvobjid="{{.ID}}">
                             <svg class="gks-icon">
                                 <use xlink:href="/assets/svg/gks-icons.svg#i-trash"></use>
                             </svg>

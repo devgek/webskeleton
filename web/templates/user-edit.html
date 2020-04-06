@@ -59,6 +59,8 @@
 <script>
     $('#userEditModal').on('show.bs.modal', function (event) {
         var trigger = $(event.relatedTarget); // Link that triggered the modal
+        var objId = trigger.data("gkvobjid") // the object id of the row that triggered this modal
+        userTable.setRowObjId(objId);
         var isEditNew = $(trigger).hasClass("gks-edit-new");
         userTable.setEditNew(isEditNew)
         var data = []
@@ -96,12 +98,13 @@
         if (userTable.isEditNew()) {
             url = "/entitynewuser"
         }
+        var vObjId = userTable.getRowObjId();
         var vName = $("#userEditName").val()
         var vPass = $("#userEditPass").val()
         var vEmail = $("#userEditEmail").val()
         var vAdmin = $("#userEditAdmin").prop("checked")
 
-        var posting = $.post(url, { gkvName: vName, gkvPass: vPass, gkvEmail: vEmail, gkvAdmin: vAdmin });
+        var posting = $.post(url, { gkvObjId: vObjId, gkvName: vName, gkvPass: vPass, gkvEmail: vEmail, gkvAdmin: vAdmin });
 
         posting.done(function (data) {
             var isError = data.IsError

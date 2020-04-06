@@ -3,12 +3,12 @@
 {{$headerEdit := .Messages.GetString "form.contact.edit.header"}}
 {{$headerNew := .Messages.GetString "form.contact.edit.headernew"}}
 <!-- Modal Dialog-->
-<div class="modal fade" id="userEditModal" data-backdrop="static" tabindex="-1" role="dialog"
-    aria-labelledby="userEditModalLabel" aria-hidden="true">
+<div class="modal fade" id="contactEditModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="contactEditModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="userEditModalLabel"></h5>
+                <h5 class="modal-title" id="contactEditModalLabel"></h5>
                 <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000"
                     data-tableId="userTable">
                     <div class="toast-header">
@@ -24,27 +24,28 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="userEditName"
+                    <label for="contactEditName"
+                        class="col-form-label">{{.Messages.GetString "form.contact.edit.label.orgtype"}}</label>
+                    <input name="contactEditOrgType" class="form-control" id="contactEditOrgType" value=""
+                        autocomplete="new-password" />
+                </div>
+                <div class="form-group">
+                    <label for="contactEditName"
                         class="col-form-label">{{.Messages.GetString "form.contact.edit.label.name"}}</label>
-                    <input name="userEditName" class="form-control" id="userEditName" value=""
+                    <input type="password" name="contactEditName" class="form-control" id="contactEditName" value=""
                         autocomplete="new-password" />
                 </div>
                 <div class="form-group">
-                    <label for="userEditPass"
-                        class="col-form-label">{{.Messages.GetString "form.contact.edit.label.pass"}}</label>
-                    <input type="password" name="userEditPass" class="form-control" id="userEditPass" value=""
+                    <label for="contactEditNameExt"
+                        class="col-form-label">{{.Messages.GetString "form.contact.edit.label.nameext"}}</label>
+                    <input name="contactEditNameExt" class="form-control" id="contactEditNameExt" value=""
                         autocomplete="new-password" />
                 </div>
                 <div class="form-group">
-                    <label for="userEditEmail"
-                        class="col-form-label">{{.Messages.GetString "form.contact.edit.label.email"}}</label>
-                    <input name="userEditEmail" class="form-control" id="userEditEmail" value=""
+                    <label for="contactEditCustomerNr"
+                        class="col-form-label">{{.Messages.GetString "form.contact.edit.label.customernr"}}</label>
+                    <input name="contactEditCustomerNr" class="form-control" id="contactEditCustomerNr" value=""
                         autocomplete="new-password" />
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="userEditAdmin">
-                    <label class="form-check-label"
-                        for="userEditAdmin">{{.Messages.GetString "form.contact.edit.label.admin"}}</label>
                 </div>
             </div>
             <div class="modal-footer">
@@ -57,37 +58,37 @@
     </div>
 </div>
 <script>
-    $('#userEditModal').on('show.bs.modal', function (event) {
+    $('#contactEditModal').on('show.bs.modal', function (event) {
         var trigger = $(event.relatedTarget); // Link that triggered the modal
         var isEditNew = $(trigger).hasClass("gks-edit-new");
         userTable.setEditNew(isEditNew)
         var data = []
         if (isEditNew) {
-            $("#userEditModalLabel").html("{{$headerNew}}");
-            $("#userEditName").prop("readonly", false);
-            $("#userEditPass").prop("readonly", false);
+            $("#contactEditModalLabel").html("{{$headerNew}}");
+            $("#contactEditName").prop("readonly", false);
+            $("#contactEditPass").prop("readonly", false);
             data[0] = "";
             data[1] = "";
             data[2] = "";
             data[3] = "nein";
         }
         else {
-            $("#userEditModalLabel").html("{{$headerEdit}}")
-            $("#userEditName").prop("readonly", true);
-            $("#userEditPass").prop("readonly", true);
+            $("#contactEditModalLabel").html("{{$headerEdit}}")
+            $("#contactEditName").prop("readonly", true);
+            $("#contactEditPass").prop("readonly", true);
             var theRow = userTable.getRowFromParent(trigger);
             data = userTable.getRowData(theRow);
             userTable.selectRow(theRow)
         }
-        $("#userEditName").val(data[0]);
-        $("#userEditPass").val(data[1]);
-        $("#userEditEmail").val(data[2]);
+        $("#contactEditName").val(data[0]);
+        $("#contactEditPass").val(data[1]);
+        $("#contactEditEmail").val(data[2]);
         var adminData = data[3];
         if (adminData.trim() == "ja") {
-            $("#userEditAdmin").prop("checked", true);
+            $("#contactEditAdmin").prop("checked", true);
         }
         else {
-            $("#userEditAdmin").prop("checked", false);
+            $("#contactEditAdmin").prop("checked", false);
         }
     });
 
@@ -96,10 +97,10 @@
         if (userTable.isEditNew()) {
             url = "/entitynewuser"
         }
-        var vName = $("#userEditName").val()
-        var vPass = $("#userEditPass").val()
-        var vEmail = $("#userEditEmail").val()
-        var vAdmin = $("#userEditAdmin").prop("checked")
+        var vName = $("#contactEditName").val()
+        var vPass = $("#contactEditPass").val()
+        var vEmail = $("#contactEditEmail").val()
+        var vAdmin = $("#contactEditAdmin").prop("checked")
 
         var posting = $.post(url, { gkvName: vName, gkvPass: vPass, gkvEmail: vEmail, gkvAdmin: vAdmin });
 

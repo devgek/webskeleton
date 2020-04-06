@@ -65,16 +65,3 @@ func (s Services) UpdateUser(username string, email string, admin bool) (*models
 	log.Println("UpdateUser:", err.Error())
 	return nil, ErrorUserNotSaved
 }
-
-//DeleteUser delete user
-func (s Services) DeleteUser(id uint) error {
-	user := &models.User{}
-	user.ID = id
-	err := s.DS.DeleteEntityByID(user)
-	if err == nil {
-		return err
-	}
-
-	log.Println("DeleteUser:", err.Error())
-	return ErrorUserNotDeleted
-}

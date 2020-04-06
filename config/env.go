@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/msg"
 	"github.com/devgek/webskeleton/packrfix"
 	"github.com/devgek/webskeleton/web/template"
@@ -23,6 +24,7 @@ type Env struct {
 	DS             data.Datastore
 	Services       *services.Services
 	MessageLocator *msg.MessageLocator
+	EF             models.EntityFactory
 }
 
 var once sync.Once

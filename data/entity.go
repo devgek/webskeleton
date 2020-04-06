@@ -24,6 +24,11 @@ func (ds *DatastoreImpl) GetOneEntityBy(entity interface{}, key string, val inte
 	return nil
 }
 
+//GetEntityByID ...
+func (ds *DatastoreImpl) GetEntityByID(entity interface{}, id uint) error {
+	return ds.First(entity, id).Error
+}
+
 //GetAllEntities select * from table
 func (ds *DatastoreImpl) GetAllEntities(entitySlice interface{}) error {
 	return ds.Find(entitySlice).Error
@@ -42,8 +47,8 @@ func (ds *DatastoreImpl) SaveEntity(entity interface{}) error {
 //DeleteEntityByID delete entity by id (primary key)
 //ID must be provided
 //Attention ds is not the same as db!
-func (ds *DatastoreImpl) DeleteEntityByID(entity interface{}) error {
-	db := ds.Unscoped().Delete(entity)
+func (ds *DatastoreImpl) DeleteEntityByID(entity interface{}, id uint) error {
+	db := ds.Unscoped().Delete(entity, id)
 
 	if db.Error != nil {
 		return db.Error

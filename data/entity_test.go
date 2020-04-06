@@ -3,7 +3,6 @@ package data_test
 import (
 	"github.com/devgek/webskeleton/data"
 	"github.com/devgek/webskeleton/models"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -70,15 +69,15 @@ func TestDeleteEntityById(t *testing.T) {
 	err := inMemoryDS.CreateEntity(roger)
 
 	assert.Nil(t, err, "No error expected")
-	if err = inMemoryDS.DeleteEntityByID(roger); err != nil {
+	if err = inMemoryDS.DeleteEntityByID(roger, roger.ID); err != nil {
 		t.Errorf("Error while deleting entity: %v", err)
 	}
 
 	roger, err = inMemoryDS.GetUser("Roger")
 	assert.NotNil(t, err, "Error expected, cause user should be deleted")
 
-	notExistingUser := &models.User{Model: gorm.Model{ID: 99}}
-	err = inMemoryDS.DeleteEntityByID(notExistingUser)
+	notExistingUser := &models.User{}
+	err = inMemoryDS.DeleteEntityByID(notExistingUser, 99)
 	assert.NotNil(t, err, "Error expected")
 	assert.Equal(t, data.ErrorEntityNotDeleted, err, "Expected dedicated error ErrorEntityNotDeleted")
 }

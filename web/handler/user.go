@@ -5,23 +5,7 @@ import (
 	"github.com/devgek/webskeleton/web/viewmodel"
 	"github.com/labstack/echo"
 	"net/http"
-	"strconv"
 )
-
-//HandleUsers ...
-func HandleUsers(c echo.Context) error {
-	//show user list
-	entity := c.Param("entity")
-	ec := c.(*config.EnvContext)
-	users, err := ec.Env.Services.GetEntities(entity)
-	viewData := config.NewTemplateDataWithRequestData(ec.RequestData())
-	viewData["Entities"] = users
-	viewData["EditEntityType"] = ec.Env.MessageLocator.GetString("entity." + entity)
-	if err != nil {
-		viewData["ErrorMessage"] = err.Error()
-	}
-	return c.Render(http.StatusOK, entity, viewData)
-}
 
 //HandleUserEdit ...
 func HandleUserEdit(c echo.Context) error {
@@ -77,23 +61,4 @@ func HandleUserNew(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, userEditResponse)
-}
-
-//HandleUserDelete ...
-func HandleUserDelete(c echo.Context) error {
-	oID := c.FormValue("gkvObjId")
-	ioID, _ := strconv.Atoi(oID)
-
-	ec := c.(*config.EnvContext)
-	err := ec.Env.Services.DeleteUser(uint(ioID))
-
-	baseResponse := &viewmodel.BaseResponse{}
-	if err != nil {
-		baseResponse.IsError = true
-		baseResponse.Message = ec.Env.MessageLocator.GetString("msg.error.user.delete")
-	} else {
-		baseResponse.Message = ec.Env.MessageLocator.GetString("msg.success.user.delete")
-	}
-
-	return c.JSON(http.StatusOK, baseResponse)
 }

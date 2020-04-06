@@ -16,6 +16,7 @@ func InitEcho(env *config.Env) *echo.Echo {
 	e.HideBanner = true
 	if global.Debug {
 		e.Debug = true
+		// e.Use(middleware.Recover())
 	}
 
 	e.Renderer = template.NewRenderer(env.TStore)
@@ -33,11 +34,11 @@ func InitEcho(env *config.Env) *echo.Echo {
 	// e.Static(web.AssetPattern, web.AssetRoot)
 
 	e.Match([]string{"GET", "POST"}, "/entitylist:entity", handler.HandleEntityList)
+	e.POST("/entityedit:entity", handler.HandleEntityEdit)
+	e.POST("/entitydelete:entity", handler.HandleEntityDelete)
 
-	// e.Match([]string{"GET", "POST"}, "/entitylist:entity", handler.HandleUsers)
-	e.POST("/entityedit:entity", handler.HandleUserEdit)
+	// e.POST("/entityedit:entity", handler.HandleUserEdit)
 	e.POST("/entitynew:entity", handler.HandleUserNew)
-	e.POST("/entitydelete:entity", handler.HandleUserDelete)
 
 	e.Match([]string{"GET", "POST"}, "/:page", handler.HandlePageDefault)
 
