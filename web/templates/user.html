@@ -17,7 +17,7 @@
         <thead>
             <tr>
                 <th scope="col">Name</th>
-                <th scope="col" class="d-none">Passwort</th>
+                <th scope="col">Passwort</th>
                 <th scope="col">Email</th>
                 <th scope="col">Administrator</th>
                 <th scope="col"></th>
@@ -27,7 +27,7 @@
             {{range .Entities}}
             <tr>
                 <td>{{.Name}}</td>
-                <td class="d-none">{{.Pass}}</td>
+                <td>{{.Pass}}</td>
                 <td>{{.Email}}</td>
                 <td>
                     {{if .Admin}}

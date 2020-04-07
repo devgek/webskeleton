@@ -35,10 +35,8 @@ func InitEcho(env *config.Env) *echo.Echo {
 
 	e.Match([]string{"GET", "POST"}, "/entitylist:entity", handler.HandleEntityList)
 	e.POST("/entityedit:entity", handler.HandleEntityEdit)
+	e.POST("/entitynew:entity", handler.HandleEntityNew)
 	e.POST("/entitydelete:entity", handler.HandleEntityDelete)
-
-	// e.POST("/entityedit:entity", handler.HandleUserEdit)
-	e.POST("/entitynew:entity", handler.HandleUserNew)
 
 	e.Match([]string{"GET", "POST"}, "/:page", handler.HandlePageDefault)
 

@@ -36,7 +36,7 @@ func TestGetAllEntities(t *testing.T) {
 func TestCreateEntity(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 
-	roger := &models.User{Name: "Roger", Pass: []byte{'s', 'e', 'c', 'r', 'e', 't'}, Email: "roger.federer@atp.com", Admin: false}
+	roger := &models.User{Name: "Roger", Pass: "secret", Email: "roger.federer@atp.com", Admin: false}
 	err := inMemoryDS.CreateEntity(roger)
 
 	assert.Nil(t, err, "No error expected")
@@ -65,7 +65,7 @@ func TestSaveEntity(t *testing.T) {
 func TestDeleteEntityById(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 
-	roger := &models.User{Name: "Roger", Pass: []byte{'s', 'e', 'c', 'r', 'e', 't'}, Email: "roger.federer@atp.com", Admin: false}
+	roger := &models.User{Name: "Roger", Pass: "secret", Email: "roger.federer@atp.com", Admin: false}
 	err := inMemoryDS.CreateEntity(roger)
 
 	assert.Nil(t, err, "No error expected")

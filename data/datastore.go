@@ -39,7 +39,7 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 	db.LogMode(true)
 	db.AutoMigrate(&models.User{}, &models.Contact{}, &models.ContactAddress{})
 
-	pass, _ := helper.EncryptPassword("xyz")
+	pass := helper.EncryptPassword("xyz")
 	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com", Admin: true}
 
 	// err = db.FirstOrCreate(admin, &models.User{Name: "admin"}).Error
@@ -51,7 +51,7 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 	contactAddress := &models.ContactAddress{Street: "Short Street", StreetNr: "11", Zip: "3100", City: "St. Pauls"}
 	customer := &models.Contact{OrgType: types.OrgTypeOrg, Name: "Mustermann GesmbH", CustomerType: types.CustomerTypeK, ContactAddresses: []models.ContactAddress{*contactAddress}}
 
-	err = db.FirstOrCreate(customer, "ID = ?", 1).Error
+	err = db.FirstOrCreate(customer, "name = ?", "Mustermann GesmbH").Error
 
 	return &DatastoreImpl{db}, err
 }

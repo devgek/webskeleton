@@ -20,7 +20,7 @@ var (
 func (s Services) LoginUser(username string, password string) (*models.User, error) {
 	user, err := s.DS.GetUser(username)
 	if err == nil {
-		if err = helper.ComparePassword(user.Pass, []byte(password)); err == nil {
+		if err = helper.ComparePassword(user.Pass, password); err == nil {
 			return user, nil
 		}
 	}
@@ -36,11 +36,10 @@ func (s Services) CreateUser(username string, password string, email string, adm
 	user.Email = email
 	user.Admin = admin
 	var err error
-	user.Pass, err = helper.EncryptPassword(password)
-	if err == nil {
-		if err = s.DS.CreateEntity(user); err == nil {
-			return user, err
-		}
+	user.Pass = helper.EncryptPassword(password)
+
+	if err = s.DS.CreateEntity(user); err == nil {
+		return user, err
 	}
 
 	log.Println("CreateUser:", err.Error())

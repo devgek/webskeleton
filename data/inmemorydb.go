@@ -1,8 +1,8 @@
 package data
 
 import (
+	"github.com/devgek/webskeleton/helper"
 	"github.com/devgek/webskeleton/models"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // ...
@@ -21,7 +21,7 @@ func NewInMemoryDatastore() Datastore {
 		panic(err)
 	}
 	//init the db with test data
-	passEncrypted, _ := bcrypt.GenerateFromPassword([]byte(MessiPass), bcrypt.MinCost)
+	passEncrypted := helper.EncryptPassword(MessiPass)
 	messi := &models.User{Name: MessiName, Pass: passEncrypted, Email: MessiEmail}
 	err = ds.CreateEntity(messi)
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/global"
 	"github.com/devgek/webskeleton/web"
+	"github.com/devgek/webskeleton/web/request"
 	"github.com/labstack/echo"
 	"net/http"
 )
@@ -39,5 +40,5 @@ func HandleFavicon(c echo.Context) error {
 func HandlePageDefault(c echo.Context) error {
 	page := c.Param("page")
 
-	return c.Render(http.StatusOK, page, config.NewTemplateData())
+	return c.Render(http.StatusOK, page, config.NewTemplateDataWithRequestData(request.Must(c.Get(request.ContextKeyRequestData))))
 }

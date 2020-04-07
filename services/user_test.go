@@ -9,7 +9,6 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"golang.org/x/crypto/bcrypt"
 	"testing"
 )
 
@@ -28,7 +27,7 @@ func TestLoginUser(t *testing.T) {
 	mockedDB := &data.MockedDatastore{}
 	services := services.NewServices(mockedDB)
 
-	passEncrypted, _ := bcrypt.GenerateFromPassword([]byte("secret"), bcrypt.MinCost)
+	passEncrypted := helper.EncryptPassword("secret")
 	userGerald := &models.User{Name: "Gerald", Pass: passEncrypted, Email: "gerald.kahrer@gmail.com"}
 	// setup expectations
 	mockedDB.On("GetUser", "Gerald").Return(userGerald, nil)
@@ -69,7 +68,7 @@ func TestCreateUser(t *testing.T) {
 	mockedDB := &data.MockedDatastore{}
 	s := services.NewServices(mockedDB)
 
-	passEncrypted, _ := helper.EncryptPassword("secret")
+	passEncrypted := helper.EncryptPassword("secret")
 	userRoger := &models.User{Name: "Roger", Pass: passEncrypted, Email: "roger.federer@atp.com", Admin: false}
 	// setup expectations
 	mockedDB.On("CreateEntity", mock.Anything).Return(nil)

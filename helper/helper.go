@@ -65,11 +65,14 @@ func RecursiveSearchReplaceFiles(fullpath string, replacers map[string]string) e
 }
 
 //EncryptPassword create hashed password
-func EncryptPassword(password string) ([]byte, error) {
-	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+func EncryptPassword(password string) string {
+	encryptedPass, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+	PanicOnError(err)
+
+	return string(encryptedPass)
 }
 
 //ComparePassword compare hashed password and possible plaintext equivalent
-func ComparePassword(hashedPassword, password []byte) error {
-	return bcrypt.CompareHashAndPassword(hashedPassword, password)
+func ComparePassword(hashedPassword, password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }

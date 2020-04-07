@@ -3,6 +3,7 @@ package template
 import (
 	"github.com/devgek/webskeleton/global"
 	"github.com/devgek/webskeleton/packrfix"
+	"strings"
 	"sync"
 	"text/template"
 )
@@ -38,9 +39,12 @@ func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) *template.Template
 
 	var templ *template.Template
 
-	if fileName == "login" {
+	switch {
+	case fileName == "login":
 		templ = template.Must(parsePacked(ts.Box, fileName+".html"))
-	} else {
+	case strings.Contains(fileName, "page"):
+		templ = template.Must(parsePacked(ts.Box, "layout.html", fileName+".html"))
+	default:
 		templ = template.Must(parsePacked(ts.Box, "layout.html", fileName+".html", fileName+"-edit.html", "confirm-delete.html"))
 	}
 

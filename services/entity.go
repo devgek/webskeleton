@@ -2,7 +2,8 @@ package services
 
 import (
 	"errors"
-	"log"
+	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/models"
 )
 
 //
@@ -13,12 +14,12 @@ var (
 )
 
 //CreateEntity create new user
-func (s Services) CreateEntity(entity interface{}) error {
-	err := s.DS.CreateEntity(entity)
-	if err == nil {
-		return err
+func (s Services) CreateEntity(entity interface{}, entityName string) error {
+	if entityName == "user" {
+		user := entity.(*models.User)
+		user.Pass = helper.EncryptPassword(user.Pass)
+		return s.DS.CreateEntity(user)
 	}
 
-	log.Println("CreateEntity:", err.Error())
-	return ErrorEntityNotCreated
+	return s.DS.CreateEntity(entity)
 }

@@ -60,6 +60,7 @@ func HandleEntityEdit(c echo.Context) error {
 	oEntityObject := ec.Env.EF.Get(entity)
 
 	entityResponse := viewmodel.NewEntityResponse(oEntityObject)
+	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
 
 	err := ec.Env.DS.GetEntityByID(oEntityObject, uint(ioID))
 	if err == nil {
@@ -70,12 +71,37 @@ func HandleEntityEdit(c echo.Context) error {
 		err = ec.Env.DS.SaveEntity(oEntityObject)
 	}
 
-	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
 	if err != nil {
 		entityResponse.IsError = true
 		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.error.entity.edit", entityName)
 	} else {
 		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.success.entity.edit", entityName)
+	}
+
+	//on client entityResponse is received as javascript object, no JSON.parse is needed
+	return c.JSON(http.StatusOK, entityResponse)
+}
+
+//HandleEntityNew ...
+func HandleEntityNew(c echo.Context) error {
+	ec := c.(*config.EnvContext)
+	entity := ec.Param("entity")
+	oEntityObject := ec.Env.EF.Get(entity)
+
+	entityResponse := viewmodel.NewEntityResponse(oEntityObject)
+	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
+
+	if err := ec.Bind(oEntityObject); err != nil {
+		return err
+	}
+
+	err := ec.Env.Services.CreateEntity(oEntityObject, entity)
+
+	if err != nil {
+		entityResponse.IsError = true
+		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.error.entity.create", entityName)
+	} else {
+		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.success.entity.create", entityName)
 	}
 
 	//on client entityResponse is received as javascript object, no JSON.parse is needed

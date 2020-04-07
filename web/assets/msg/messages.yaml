@@ -2,6 +2,7 @@
 msg:
   success:
     entity:
+      create: "%s wurde angelegt"
       edit: "%s wurde geändert"
       delete: "%s wurde gelöscht"
     user:
@@ -12,6 +13,7 @@ msg:
     ajax: "Technischer Fehler:"
     login:  "Login nicht erlaubt"
     entity:
+      create: "%s kann nicht angelegt werden"
       edit: "%s kann nicht geändert werden"
       delete: "%s kann nicht gelöscht werden"
     user:

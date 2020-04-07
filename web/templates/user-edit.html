@@ -10,7 +10,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="userEditModalLabel"></h5>
                 <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000"
-                    data-tableId="userTable">
+                    data-toastid="userEdit">
                     <div class="toast-header">
                         <span class="gk-toast-text">Toast Text</span>
                         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -57,6 +57,12 @@
     </div>
 </div>
 <script>
+    function modalShowMessage(msg) {
+        const $toast = $("#userEditModal .toast");
+        $toast.find("span.gk-toast-text").text(msg);
+        $toast.toast("show");
+    };
+
     $('#userEditModal').on('show.bs.modal', function (event) {
         var trigger = $(event.relatedTarget); // Link that triggered the modal
         var objId = trigger.data("gkvobjid") // the object id of the row that triggered this modal
@@ -109,23 +115,23 @@
         posting.done(function (data) {
             var isError = data.IsError
             if (isError) {
-                userTable.showMessage(data.Message)
+                modalShowMessage(data.Message)
             }
             else {
                 if (userTable.isEditNew()) {
                     userTable.handleNew();
                 }
                 var rowData = []
-                rowData.push(data.Name, "********", data.Email, (data.Admin ? '{{.Messages.GetString "ckbox.true"}}' : '{{.Messages.GetString "ckbox.false"}}'))
+                rowData.push(data.EntityObject.Name, data.EntityObject.Pass, data.EntityObject.Email, (data.EntityObject.Admin ? '{{.Messages.GetString "ckbox.true"}}' : '{{.Messages.GetString "ckbox.false"}}'))
                 var theRow = userTable.getSelectedRow()
                 userTable.changeRowData(theRow, rowData)
                 userTable.setPersisted(theRow);
-                userTable.showMessage(data.Message)
+                modalShowMessage(data.Message)
             }
         });
 
         posting.fail(function (xhr, status, error) {
-            userTable.showMessage('{{.Messages.GetString "msg.error.ajax"}}' + xhr.status + ':' + xhr.statusText)
+            modalShowMessage('{{.Messages.GetString "msg.error.ajax"}}' + xhr.status + ':' + xhr.statusText)
         });
     });
 
