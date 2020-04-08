@@ -1,16 +1,8 @@
 package services
 
 import (
-	"errors"
 	"github.com/devgek/webskeleton/helper"
 	"github.com/devgek/webskeleton/models"
-)
-
-//
-var (
-	ErrorEntityNotCreated = errors.New("Entity not created")
-	ErrorEntityNotSaved   = errors.New("Entity not saved")
-	ErrorEntityNotDeleted = errors.New("Entity not deleted")
 )
 
 //CreateEntity create new user

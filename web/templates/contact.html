@@ -16,22 +16,22 @@
     <table class="table table-hover gk-table" id="contactTable">
         <thead>
             <tr>
-                <th scope="col">Typ</th>
-                <th scope="col">Name</th>
-                <th scope="col">Namenszusatz</th>
-                <th scope="col">Kundennummer</th>
-                <th scope="col">Kundentyp</th>
+                <th scope="col">{{.Messages.GetString "form.contact.list.orgtype"}}</th>
+                <th scope="col">{{.Messages.GetString "form.contact.list.name"}}</th>
+                <th scope="col">{{.Messages.GetString "form.contact.list.nameext"}}</th>
+                <th scope="col">{{.Messages.GetString "form.contact.list.customernr"}}</th>
+                <th scope="col">{{.Messages.GetString "form.contact.list.customertype"}}</th>
                 <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             {{range .Entities}}
             <tr>
-                <td>{{.OrgType.String}}</td>
-                <td>{{.Name}}</td>
-                <td>{{.NameExt}}</td>
-                <td>{{.ID}}</td>
-                <td>{{.CustomerType.Desc}}</td>
+                <td data-gkvval="{{.OrgType.Val}}">{{.OrgType}}</td>
+                <td data-gkvval="{{.Name}}">{{.Name}}</td>
+                <td data-gkvval="{{.NameExt}}">{{.NameExt}}</td>
+                <td data-gkvval="{{.ID}}">{{.ID}}</td>
+                <td data-gkvval="{{.CustomerType.Val}}">{{.CustomerType.Desc}}</td>
                 <td class="w-5">
                     {{if $userIsAdmin}}
                     <div class="gks-icon-box">

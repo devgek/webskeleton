@@ -1,5 +1,4 @@
 {{define "t_contact-edit"}}
-{{$userIsAdmin := .Admin}}
 {{$headerEdit := .Messages.GetString "form.contact.edit.header"}}
 {{$headerNew := .Messages.GetString "form.contact.edit.headernew"}}
 <!-- Modal Dialog-->
@@ -9,8 +8,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="contactEditModalLabel"></h5>
-                <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000"
-                    data-tableId="userTable">
+                <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
                     <div class="toast-header">
                         <span class="gk-toast-text">Toast Text</span>
                         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -24,15 +22,16 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="contactEditName"
-                        class="col-form-label">{{.Messages.GetString "form.contact.edit.label.orgtype"}}</label>
-                    <input name="contactEditOrgType" class="form-control" id="contactEditOrgType" value=""
-                        autocomplete="new-password" />
+                    <label for="contactEditOrgType" class="col-form-label">{{.Messages.GetString "form.contact.edit.label.orgtype"}}</label>
+                    <select name="contactEditOrgType" class="form-control" id="contactEditOrgType" value="" >
+                        <option value="0">{{ ( index .OrgTypes 0).Desc }}</option>
+                        <option value="1">{{ ( index .OrgTypes 1).Desc }}</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="contactEditName"
                         class="col-form-label">{{.Messages.GetString "form.contact.edit.label.name"}}</label>
-                    <input type="password" name="contactEditName" class="form-control" id="contactEditName" value=""
+                    <input name="contactEditName" class="form-control" id="contactEditName" value=""
                         autocomplete="new-password" />
                 </div>
                 <div class="form-group">
@@ -47,6 +46,17 @@
                     <input name="contactEditCustomerNr" class="form-control" id="contactEditCustomerNr" value=""
                         autocomplete="new-password" />
                 </div>
+                <div class="form-group">
+                    <label for="contactEditCustomerType"
+                        class="col-form-label">{{.Messages.GetString "form.contact.edit.label.customertype"}}</label>
+                        <select name="contactEditCustomerType" class="form-control" id="contactEditCustomerType" value="" >
+                            <option value="0">{{ ( index .CustomerTypes 0).Desc }}</option>
+                            <option value="1">{{ ( index .CustomerTypes 1).Desc }}</option>
+                            <option value="2">{{ ( index .CustomerTypes 2).Desc }}</option>
+                            <option value="3">{{ ( index .CustomerTypes 3).Desc }}</option>
+                            <option value="4">{{ ( index .CustomerTypes 4).Desc }}</option>
+                        </select>
+                   </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn gks-btn btn-back-app"
@@ -58,72 +68,75 @@
     </div>
 </div>
 <script>
+    function modalShowMessage(msg) {
+        const $toast = $("#contactEditModal .toast");
+        $toast.find("span.gk-toast-text").text(msg);
+        $toast.toast("show");
+    };
+
     $('#contactEditModal').on('show.bs.modal', function (event) {
         var trigger = $(event.relatedTarget); // Link that triggered the modal
+        var objId = trigger.data("gkvobjid") // the object id of the row that triggered this modal
+        activeGKTable.setRowObjId(objId);
         var isEditNew = $(trigger).hasClass("gks-edit-new");
-        userTable.setEditNew(isEditNew)
+        activeGKTable.setEditNew(isEditNew)
         var data = []
+        $("#contactEditCustomerNr").prop("readonly", true);
         if (isEditNew) {
             $("#contactEditModalLabel").html("{{$headerNew}}");
-            $("#contactEditName").prop("readonly", false);
-            $("#contactEditPass").prop("readonly", false);
             data[0] = "";
             data[1] = "";
             data[2] = "";
-            data[3] = "nein";
+            data[3] = "";
+            data[4] = "";
         }
         else {
             $("#contactEditModalLabel").html("{{$headerEdit}}")
-            $("#contactEditName").prop("readonly", true);
-            $("#contactEditPass").prop("readonly", true);
-            var theRow = userTable.getRowFromParent(trigger);
-            data = userTable.getRowData(theRow);
-            userTable.selectRow(theRow)
+            var theRow = activeGKTable.getRowFromParent(trigger);
+            data = activeGKTable.getRowDataHidden(theRow);
+            activeGKTable.selectRow(theRow)
         }
-        $("#contactEditName").val(data[0]);
-        $("#contactEditPass").val(data[1]);
-        $("#contactEditEmail").val(data[2]);
-        var adminData = data[3];
-        if (adminData.trim() == "ja") {
-            $("#contactEditAdmin").prop("checked", true);
-        }
-        else {
-            $("#contactEditAdmin").prop("checked", false);
-        }
+        $("#contactEditOrgType").val(data[0]);
+        $("#contactEditName").val(data[1]);
+        $("#contactEditNameExt").val(data[2]);
+        $("#contactEditCustomerNr").val(data[3]);
+        $("#contactEditCustomerType").val(data[4]);
     });
 
     $('.btn-save-app').click(function () {
-        var url = "/entityedituser";
-        if (userTable.isEditNew()) {
-            url = "/entitynewuser"
+        var url = "/entityeditcontact";
+        if (activeGKTable.isEditNew()) {
+            url = "/entitynewcontact"
         }
-        var vName = $("#contactEditName").val()
-        var vPass = $("#contactEditPass").val()
-        var vEmail = $("#contactEditEmail").val()
-        var vAdmin = $("#contactEditAdmin").prop("checked")
+        var vObjId = activeGKTable.getRowObjId();
+        var vOrgType = $("#contactEditOrgType").val();
+        var vName = $("#contactEditName").val();
+        var vNameExt = $("#contactEditNameExt").val();
+        var vCustomerNr = $("#contactEditCustomerNr").val();
+        var vCustomerType = $("#contactEditCustomerType").val();
 
-        var posting = $.post(url, { gkvName: vName, gkvPass: vPass, gkvEmail: vEmail, gkvAdmin: vAdmin });
+        var posting = $.post(url, { gkvObjId: vObjId, gkvOrgType: vOrgType, gkvName: vName, gkvNameExt: vNameExt, gkvCustomerNr: vCustomerNr, gkvCustomerType: vCustomerType });
 
         posting.done(function (data) {
             var isError = data.IsError
             if (isError) {
-                userTable.showMessage(data.Message)
+                modalShowMessage(data.Message)
             }
             else {
-                if (userTable.isEditNew()) {
-                    userTable.handleNew();
+                if (activeGKTable.isEditNew()) {
+                    activeGKTable.handleNew();
                 }
                 var rowData = []
-                rowData.push(data.Name, "********", data.Email, (data.Admin ? '{{.Messages.GetString "ckbox.true"}}' : '{{.Messages.GetString "ckbox.false"}}'))
-                var theRow = userTable.getSelectedRow()
-                userTable.changeRowData(theRow, rowData)
-                userTable.setPersisted(theRow);
-                userTable.showMessage(data.Message)
+                rowData.push(data.EntityObject.OrgType, data.EntityObject.Name, data.EntityObject.NameExt, data.EntityObject.CustomerNr, data.EntityObject.gkvCustomerType)
+                var theRow = activeGKTable.getSelectedRow()
+                activeGKTable.changeRowData(theRow, rowData)
+                activeGKTable.setPersisted(theRow);
+                modalShowMessage(data.Message)
             }
         });
 
         posting.fail(function (xhr, status, error) {
-            userTable.showMessage('{{.Messages.GetString "msg.error.ajax"}}' + xhr.status + ':' + xhr.statusText)
+            modalShowMessage(data.Message)('{{.Messages.GetString "msg.error.ajax"}}' + xhr.status + ':' + xhr.statusText)
         });
     });
 

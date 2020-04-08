@@ -175,6 +175,18 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
     return rowData;
   };
 
+  this.getRowDataHidden = function (theRow) {
+    const $cols = $(this.root).find(
+      ".gk-row-edit[data-linenr=" + theRow + "] td.gk-col-edit"
+    );
+    var rowData = [];
+    $cols.each(function (index, element) {
+      rowData.push($(element).data("gkvval"));
+    });
+
+    return rowData;
+  };
+
   this.storeRowData = function (theRow) {
     const $cols = $(this.root).find(
       ".gk-row-edit[data-linenr=" + theRow + "] td.gk-col-edit"

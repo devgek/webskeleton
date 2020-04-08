@@ -58,12 +58,19 @@ form:
     list:
       header: "Kontakt"
       buttonnew: "Neuer Kontakt"
+      orgtype: "Typ"
+      name: "Name"
+      nameext: "Namenszusatz"
+      customernr: "Kundennummer"
+      customertype: "Kundentyp"
+
     edit:
       header: "Kontakt bearbeiten"
       headernew: "Kontakt neu anlegen"
       label:
+        orgtype: "Organisationstyp:"
         name: "Name:"
-        pass: "Passwort:"
-        email: "Email:"
-        admin: "Benutzer ist Administrator"
+        nameext: "Namenszusatz:"
+        customernr: "Kundennummer:"
+        customertype: "Kundentyp:"
 ...

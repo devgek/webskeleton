@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/types"
 	"github.com/devgek/webskeleton/web/request"
 )
 
@@ -24,6 +25,8 @@ func NewTemplateData() TData {
 	vd["Messages"] = GetWebEnv().MessageLocator
 	vd["ProjectName"] = global.ProjectName
 	vd["VersionInfo"] = global.ProjectVersion
+	vd["OrgTypes"] = types.OrgTypes()
+	vd["CustomerTypes"] = types.CustomerTypes()
 
 	return vd
 }
