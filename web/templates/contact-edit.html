@@ -127,10 +127,13 @@
                     activeGKTable.handleNew();
                 }
                 var rowData = []
+                rowDataHidden = []
+                rowDataHidden.push(data.EntityObject.OrgType, data.EntityObject.Name, data.EntityObject.NameExt, data.EntityObject.CustomerNr, data.EntityObject.CustomerType)
                 var OrgTypeName = webskeleton_T_OrgTypes[data.EntityObject.OrgType]
                 var CustomerTypeName = webskeleton_T_CustomerTypes[data.EntityObject.CustomerType]
                 rowData.push(OrgTypeName, data.EntityObject.Name, data.EntityObject.NameExt, data.EntityObject.CustomerNr, CustomerTypeName)
                 var theRow = activeGKTable.getSelectedRow()
+                activeGKTable.changeRowDataHidden(theRow, rowDataHidden)
                 activeGKTable.changeRowData(theRow, rowData)
                 activeGKTable.setPersisted(theRow);
                 modalShowMessage(data.Message)

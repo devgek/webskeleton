@@ -69,12 +69,3 @@ func FromCookie(cookie *http.Cookie) (RData, bool) {
 
 	return &requestData{}, false
 }
-
-//Must ...
-func Must(i interface{}) RData {
-	if i == nil {
-		return &requestData{}
-	}
-
-	return i.(RData)
-}

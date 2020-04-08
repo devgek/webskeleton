@@ -13,5 +13,10 @@ type EnvContext struct {
 
 //RequestData get RequestData from context
 func (ec *EnvContext) RequestData() request.RData {
-	return ec.Get(request.ContextKeyRequestData).(request.RData)
+	i := ec.Get(request.ContextKeyRequestData)
+	if i == nil {
+		return request.NewRequestData()
+	}
+
+	return i.(request.RData)
 }

@@ -258,6 +258,16 @@ function GKTable(tableId, isInlineEditing, saveFunc, deleteFunc) {
     });
   };
 
+  this.changeRowDataHidden = function(theRow, data) {
+    const $cols = $(this.root).find(
+      ".gk-row-edit[data-linenr=" + theRow + "] td.gk-col-edit"
+    );
+    var theArray = data;
+    $cols.each(function (index, element) {
+      $(element).data("gkvval", theArray[index]);
+    });
+  };
+
   this.setPersisted = function (theRow) {
     $(this.root)
       .find(".gk-row-edit[data-linenr=" + theRow + "]")

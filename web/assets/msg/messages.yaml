@@ -5,10 +5,6 @@ msg:
       create: "%s wurde angelegt"
       edit: "%s wurde geändert"
       delete: "%s wurde gelöscht"
-    user:
-      create: "Benutzer wurde angelegt"
-      edit: "Benutzer wurde geändert"
-      delete: "Benutzer wurde gelöscht"
   error:
     ajax: "Technischer Fehler:"
     login:  "Login nicht erlaubt"
@@ -16,10 +12,6 @@ msg:
       create: "%s kann nicht angelegt werden"
       edit: "%s kann nicht geändert werden"
       delete: "%s kann nicht gelöscht werden"
-    user:
-      create: "Benutzer kann nicht angelegt werden"
-      edit: "Benutzer kann nicht gändert werden"
-      delete: "Benutzer kann nicht gelöscht werden"
 ckbox:
   true: "ja"
   false: "nein"
