@@ -87,6 +87,7 @@ func runBootstrap(cmd *cobra.Command) {
 	replacers["webskeleton-auth"] = projectName + "-auth"
 	replacers["go-webskeleton"] = projectTitle
 	replacers[".webskeleton.yaml"] = "." + projectName + ".yaml"
+	replacers["webskeleton_T_"] = projectName + "_T_"
 	err = helper.RecursiveSearchReplaceFiles(fullpath, replacers)
 	helper.ExitOnError(err, "")
 
