@@ -13,7 +13,7 @@ import (
 var echoCmd = &cobra.Command{
 	Use:   "echo",
 	Short: "start web server and serve html with echo http server",
-	Long:  `webskeleton serve; a typical go web app`,
+	Long:  `bla bla`,
 	Run: func(cmd *cobra.Command, args []string) {
 		runEcho(cmd)
 	},
