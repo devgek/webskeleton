@@ -10,8 +10,8 @@ import (
 )
 
 // serveCmd represents the serve command
-var echoCmd = &cobra.Command{
-	Use:   "echo",
+var serveCmd = &cobra.Command{
+	Use:   "serve",
 	Short: "start web server and serve html with echo http server",
 	Long:  `bla bla`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -20,7 +20,7 @@ var echoCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(echoCmd)
+	rootCmd.AddCommand(serveCmd)
 
 	// Here you will define your flags and configuration settings.
 
@@ -31,15 +31,15 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	echoCmd.Flags().String("port", "8080", "The port this app listens")
-	echoCmd.Flags().Bool("debug", false, "debug mode on/off")
+	serveCmd.Flags().String("port", "8080", "The port this app listens")
+	serveCmd.Flags().Bool("debug", false, "debug mode on/off")
 }
 
 func runEcho(cmd *cobra.Command) {
 	// start the web server
 	port, _ := cmd.Flags().GetString("port")
 	global.Debug, _ = cmd.Flags().GetBool("debug")
-	log.Println("Starting webskeleton with echo on port ", port)
+	log.Println("Starting webskeleton server with echo on port ", port)
 	if global.Debug {
 		log.Println("Debug mode is on")
 	}

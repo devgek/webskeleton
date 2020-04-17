@@ -8,6 +8,6 @@ It also contains a login form and a simple menu. You can login with "admin/xyz".
 1. **`go get -u github.com/devgek/webskeleton`**
 2. `cd $GOPATH/src/{repository}/{user}`
 3. `mkdir {project}`
-4. **`webskeleton bootstrap --repository={repository} --user={user} --project={project} --web=[echo|mux]`**
+4. **`webskeleton bootstrap --repository={repository} --user={user} --project={project} --title={projecttitle}`**
 5. `cd $GOPATH/src/{repository}/{user}/{project}`
-6. **`go run main.go`**
+6. **`go run main.go serve`**
