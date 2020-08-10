@@ -1,12 +1,8 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-)
-
 //ContactAddress ...
 type ContactAddress struct {
-	gorm.Model
+	Entity
 	ContactID uint
 	Street    string `gorm:"type:varchar(100);not null"`
 	StreetNr  string `gorm:"type:varchar(10);not null"`

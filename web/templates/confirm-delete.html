@@ -4,64 +4,38 @@
     aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">{{.Messages.GetMessageF "form.confirmdelete.header" .EditEntityType}}</h5>
-                <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000" data-toastid="confirmDeleteToast">
-                    <div class="toast-header">
-                        <span class="gk-toast-text">Toast Text</span>
-                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary">
+                    <h3 class="block-title" id="confirmDeleteModalLabel">
+                        {{.Messages.GetMessageF "form.confirmdelete.header" .EditEntityType}}</h3>
+                    <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true"
+                        data-delay="3000" data-toastid="confirmDeleteToast">
+                        <div class="toast-header">
+                            <span class="gk-toast-text">Toast Text</span>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
                         </button>
                     </div>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div>{{.Messages.GetMessageF "form.confirmdelete.body" .EditEntityType}}</diV>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn gks-btn btn-back-app"
-                    data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
-                <button type="button"
-                    class="btn gks-btn gks-btn-important btn-delete-app">{{.Messages.GetString "form.all.btn.delete"}}</button>
+                <div class="block-content font-size-sm">
+                    <div>{{.Messages.GetMessageF "form.confirmdelete.body" .EditEntityType}}</diV>
+                </div>
+
+                <div class="block-content block-content-full text-right border-top">
+                    <button type="button" class="btn btn-sm btn-light btn-back-app"
+                        data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
+                    <button type="button" class="btn btn-sm btn-primary btn-delete-app">
+                        <i class="fa fa-check mr-1"></i>{{.Messages.GetString "form.all.btn.delete"}}
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-    $('#confirmDeleteModal').on('show.bs.modal', function (event) {
-        var trigger = $(event.relatedTarget); // Link that triggered the modal
-        var theRow = activeGKTable.getRowFromParent(trigger);
-        var data = activeGKTable.getRowData(theRow);
-        activeGKTable.selectRow(theRow)
-        var url = trigger.data("cfdurl") // the url to delete the object
-        var objId = trigger.data("gkvobjid") // the object id of the object to delete
-        activeGKTable.setDeleteUrl(url)
-        activeGKTable.setRowObjId(objId)
-    });
-
-    $('.btn-delete-app').click(function () {
-
-        var posting = $.post(activeGKTable.getDeleteUrl(), { gkvObjId: activeGKTable.getRowObjId() });
-
-        posting.done(function (data) {
-            var isError = data.IsError
-            if (isError) {
-                activeGKTable.showMessage(data.Message)
-            }
-            else {
-                var theRow = activeGKTable.getSelectedRow()
-                activeGKTable.deleteRow(theRow)
-                activeGKTable.showMessage(data.Message)
-            }
-        });
-
-        posting.fail(function (xhr, status, error) {
-            activeGKTable.showMessage("Technischer Fehler: " + xhr.status + ":" + xhr.statusText)
-        });
-    });
-
-</script>
 {{end}}

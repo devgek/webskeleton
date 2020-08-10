@@ -1,8 +1,10 @@
 package config
 
 import (
-	"github.com/devgek/webskeleton/web/request"
+	"log"
+
 	"github.com/labstack/echo"
+	"kahrersoftware.at/webskeleton/web/request"
 )
 
 //EnvContext extends echo.Context to provide the application environment
@@ -19,4 +21,14 @@ func (ec *EnvContext) RequestData() request.RData {
 	}
 
 	return i.(request.RData)
+}
+
+//FormValueRequired ...
+func (ec *EnvContext) FormValueRequired(formValue string) string {
+	v := ec.Context.FormValue(formValue)
+	if v == "" {
+		log.Panic("Missing required form value:", formValue)
+	}
+
+	return v
 }

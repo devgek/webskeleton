@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" href="data:,">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap-4.3.1.min.css" crossorigin="anonymous" type="text/css">
+    <link rel="stylesheet" href="assets/css/sidebar.css" crossorigin="anonymous" type="text/css">
+    <link rel="stylesheet" href="assets/css/gks-1.1.css" crossorigin="anonymous" type="text/css">
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- activate following line, if there is another version of jquery somewhere in the project-->
+    <!--script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" onload="window.$ = window.jQuery;"-->
+    <script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script>
+    <script src="assets/js/popper-1.14.7.min.js" crossorigin="anonymous" type="text/javascript"></script>
+    <script src="assets/js/bootstrap-4.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script>
+    <!-- gktable JavaScript -->
+    <script src="assets/js/gktable-1.1.js" crossorigin="anonymous" type="text/javascript"></script>
+    <script src="assets/js/gktypes.js" crossorigin="anonymous" type="text/javascript"></script>
+
+    <title>{{.ProjectName}}</title>
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>{{.ProjectName}}</h3>
+            </div>
+    
+            <ul class="list-unstyled components">
+                <!--li class="active">
+                    <a href="#page1Submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{{.Messages.GetString "form.page1.header"}}</a>
+                    <ul class="collapse list-unstyled" id="page1Submenu">
+                        <li>
+                            <a href="/page1">Page1-1</a>
+                        </li>
+                        <li>
+                            <a href="/page1">Page1-2</a>
+                        </li>
+                        <li>
+                            <a href="/page1">Page1-3</a>
+                        </li>
+                    </ul>
+                </li-->
+                <li>
+                    <a href="/entitylistuser">{{.Messages.GetString "form.user.list.header"}}</a>
+                </li>
+                <li>
+                    <a href="/entitylistcontact">{{.Messages.GetString "form.contact.list.header"}}</a>
+                </li>
+                <li>
+                    <a href="/page1">{{.Messages.GetString "form.page1.header"}}</a>
+                </li>
+            </ul>
+        </nav>
+    
+        <!-- Page Content -->
+        <div id="content">
+            <!-- App Header -->
+            <nav class="gks-app-header navbar navbar-light">
+                <span class="navbar-brand mb-0 h1">&nbsp;</span>
+                <ul class="nav justify-content-end">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                            aria-expanded="false">{{.UserID}}</a>
+                        <div class="dropdown-menu gks-dropdown-right">
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        
+            {{template "t_content" .}}
+        
+        </div>
+    
+    </div>  
+
+</body>
+
+</html>

@@ -1,11 +1,12 @@
 package template
 
 import (
-	"github.com/devgek/webskeleton/global"
-	"github.com/devgek/webskeleton/packrfix"
 	"strings"
 	"sync"
 	"text/template"
+
+	"github.com/gobuffalo/packr/v2"
+	"kahrersoftware.at/webskeleton/global"
 )
 
 //TemplateRoot rootdir for template files
@@ -19,12 +20,12 @@ type TStore interface {
 // BoxBasedTemplateStore ...
 type BoxBasedTemplateStore struct {
 	sync.Mutex
-	Box       *packrfix.BoxExtended
+	Box       *packr.Box
 	templates map[string]*template.Template
 }
 
 //NewBoxBasedTemplateStore ...
-func NewBoxBasedTemplateStore(box *packrfix.BoxExtended) TStore {
+func NewBoxBasedTemplateStore(box *packr.Box) TStore {
 	return &BoxBasedTemplateStore{Box: box, templates: map[string]*template.Template{}}
 }
 
@@ -33,7 +34,8 @@ func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) *template.Template
 	ts.Lock()
 	defer ts.Unlock()
 
-	if val, ok := ts.templates[fileName]; ok && !global.Debug {
+	//if dev mode, than parse the template on each request
+	if val, ok := ts.templates[fileName]; ok && !global.IsDev() {
 		return val
 	}
 
@@ -44,6 +46,8 @@ func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) *template.Template
 		templ = template.Must(parsePacked(ts.Box, fileName+".html"))
 	case strings.Contains(fileName, "page"):
 		templ = template.Must(parsePacked(ts.Box, "layout.html", fileName+".html"))
+	case strings.Contains(fileName, "consumptiongroup"):
+		templ = template.Must(parsePacked(ts.Box, "layout.html", fileName+".html", fileName+"-edit.html", "confirm-delete.html", "energymetermapping-edit-embedded.html", "confirm-delete-embedded.html"))
 	default:
 		templ = template.Must(parsePacked(ts.Box, "layout.html", fileName+".html", fileName+"-edit.html", "confirm-delete.html"))
 	}
@@ -55,7 +59,7 @@ func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) *template.Template
 
 // ParsePacked parses html templates from packr box
 // template is nil, it is created from the first file.
-func parsePacked(box *packrfix.BoxExtended, filenames ...string) (*template.Template, error) {
+func parsePacked(box *packr.Box, filenames ...string) (*template.Template, error) {
 	var t *template.Template
 
 	for _, filename := range filenames {

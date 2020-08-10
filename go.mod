@@ -14,4 +14,5 @@ require (
 	github.com/stretchr/objx v0.3.0
 	github.com/stretchr/testify v1.5.1
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de
+	golang.org/x/tools v0.0.0-20200809012840-6f4f008689da // indirect
 )

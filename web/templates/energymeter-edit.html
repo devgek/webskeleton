@@ -1,0 +1,171 @@
+{{define "t_energymeter-edit"}}
+{{$userIsAdmin := .Admin}}
+{{$headerEdit := .Messages.GetString "form.energymeter.edit.header"}}
+{{$headerNew := .Messages.GetString "form.energymeter.edit.headernew"}}
+<!-- Modal Dialog-->
+<div class="modal fade" id="energymeterEditModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="energymeterEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary">
+                    <h3 class="block-title" id="energymeterEditModalLabel">Modal Title</h3>
+                    <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true"
+                        data-delay="3000" data-tableId="energymeterTable">
+                        <div class="toast-header">
+                            <span class="gk-toast-text">Toast Text</span>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content font-size-sm">
+                    <div class="form-group">
+                        <label for="energymeterEditType"
+                            class="col-form-label">{{.Messages.GetString "form.energymeter.edit.label.type"}}</label>
+                        <select name="energymeterEditType" class="form-control" id="energymeterEditType"
+                            value="">
+                            <option value="1">{{ ( index .EnergyTypes 1).Desc }}</option>
+                            <option value="2">{{ ( index .EnergyTypes 2).Desc }}</option>
+                            <option value="3">{{ ( index .EnergyTypes 3).Desc }}</option>
+                            <option value="4">{{ ( index .EnergyTypes 4).Desc }}</option>
+                            <option value="5">{{ ( index .EnergyTypes 5).Desc }}</option>
+                            <option value="6">{{ ( index .EnergyTypes 6).Desc }}</option>
+                            <option value="7">{{ ( index .EnergyTypes 7).Desc }}</option>
+                        </select>
+                    </div>
+                   <div class="form-group">
+                        <label for="energymeterEditName"
+                            class="col-form-label">{{.Messages.GetString "form.energymeter.edit.label.name"}}</label>
+                        <input name="energymeterEditName" class="form-control" id="energymeterEditName"
+                            value="" autocomplete="new-password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="energymeterEditDesc"
+                            class="col-form-label">{{.Messages.GetString "form.energymeter.edit.label.desc"}}</label>
+                        <input name="energymeterEditDesc" class="form-control" id="energymeterEditDesc"
+                            value="" autocomplete="new-password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="energymeterEditZnr" 
+                            class="col-form-label">{{.Messages.GetString "form.energymeter.edit.label.znr"}}</label>
+                        <select name="energymeterEditZnr" class="form-control" id="energymeterEditZnr" value="">
+                            <option value="xx">yy</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="energymeterEditConstant" 
+                            class="col-form-label">{{.Messages.GetString "form.energymeter.edit.label.constant"}}</label>
+                        <input name="energymeterEditConstant" class="form-control" id="energymeterEditConstant" value="" autocomplete="new-password"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="energymeterEditFrom" 
+                            class="col-form-label">{{.Messages.GetString "form.energymeter.edit.label.from"}}</label>
+                            <input name="energymeterEditFrom" class="form-control" id="energymeterEditFrom" value="" autocomplete="new-password"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="energymeterEditTo" 
+                            class="col-form-label">{{.Messages.GetString "form.energymeter.edit.label.to"}}</label>
+                            <input name="energymeterEditTo" class="form-control" id="energymeterEditTo" value="" autocomplete="new-password"/>
+                    </div>
+                 </div>
+                <div class="block-content block-content-full text-right border-top">
+                    <button type="button" class="btn btn-sm btn-light btn-back-app"
+                        data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
+                    <button type="button" class="btn btn-sm btn-primary btn-save-app">
+                        <i class="fa fa-check mr-1"></i>{{.Messages.GetString "form.all.btn.save"}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function loadMeterListAndSelect(selectedValue) {
+        if (activeGKEntityTable.entityOptions.length > 0) {
+            return;
+        }
+
+        var posting = $.post("apientitylistmeter");
+
+        posting.done(function (data) {
+            var isError = data.IsError
+            if (isError) {
+                modalShowMessage(data.Message)
+            }
+            else {
+                activeGKEntityTable.entityOptions = data.EntityObject;
+                prepareMeterSelect(selectedValue);
+            }
+        });
+
+        posting.fail(function (xhr, status, error) {
+            modalShowMessage('{{.Messages.GetString "msg.error.ajax"}}' + xhr.status + ':' + xhr.statusText)
+        });
+    };
+
+    function prepareMeterSelect(selectedValue) {
+        var theSelect = $('#energymeterEditZnr');
+        var theOptions = theSelect.prop('options');
+        $('option', theSelect).remove();
+        $.each(activeGKEntityTable.entityOptions, function (index, meter) {
+            theOptions[theOptions.length] = new Option(meter.ZNR, meter.ID);
+        });
+
+        theSelect.val(selectedValue);
+    };
+
+    activeGKEntityTable.prepareEditDialog = function () {
+        if (activeGKEntityTable.isEditNew()) {
+            $("#energymeterEditModalLabel").html("{{$headerNew}}");
+            $("#energymeterEditType").prop("disabled", false);
+            $("#energymeterEditZnr").prop("disabled", false);
+        }
+        else {
+            $("#energymeterEditModalLabel").html("{{$headerEdit}}")
+            $("#energymeterEditType").prop("disabled", true);
+            $("#energymeterEditZnr").prop("disabled", true);
+        }
+        $("#energymeterEditType").val(activeGKEntityTable.editRowDataHidden[0]);
+        $("#energymeterEditName").val(activeGKEntityTable.editRowData[1]);
+        $("#energymeterEditDesc").val(activeGKEntityTable.editRowData[2]);
+        $("#energymeterEditZnr").val(activeGKEntityTable.editRowDataHidden[3]);
+        $("#energymeterEditConstant").val(activeGKEntityTable.editRowData[4]);
+        $("#energymeterEditFrom").val(activeGKEntityTable.editRowData[5]);
+        $("#energymeterEditTo").val(activeGKEntityTable.editRowData[6]);
+
+        loadMeterListAndSelect(activeGKEntityTable.editRowDataHidden[3]);
+    };
+    activeGKEntityTable.prepareSendRowData = function () {
+        var sendParams = [];
+        sendParams["gkvObjId"] = activeGKEntityTable.getEditRowKey();
+        sendParams["gkvEnergyType"] = $("#energymeterEditType").val();
+        sendParams["gkvName"] = $("#energymeterEditName").val();
+        sendParams["gkvDesc"] = $("#energymeterEditDesc").val();
+        sendParams["gkvMeterID"] = $("#energymeterEditZnr").val();
+        sendParams["gkvConstant"] = $("#energymeterEditConstant").val();
+        sendParams["gkvDayFrom"] = $("#energymeterEditFrom").val();
+        sendParams["gkvDayTo"] = $("#energymeterEditTo").val();
+
+        return sendParams;
+    };
+    activeGKEntityTable.getRowDataFromEntity = function (data) {
+        var rowData = [];
+        var EnergyTypeName = bepo_T_EnergyTypes[data.EntityObject.EnergyType]
+        rowData.push(EnergyTypeName, data.EntityObject.Name, data.EntityObject.Desc, data.EntityObject.Meter.ZNR, data.EntityObject.Constant, data.EntityObject.DayFrom, data.EntityObject.DayTo)
+        return rowData;
+    };
+    activeGKEntityTable.getRowDataHiddenFromEntity = function (data) {
+        var rowDataHidden = [];
+        rowDataHidden.push(data.EntityObject.EnergyType, data.EntityObject.Name, data.EntityObject.Desc, data.EntityObject.Meter.ID, data.EntityObject.Constant, data.EntityObject.DayFrom, data.EntityObject.DayTo)
+        return rowDataHidden;
+    };
+
+</script>
+{{end}}

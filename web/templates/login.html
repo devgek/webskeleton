@@ -1,3 +1,6 @@
+{{$labelUser := .Messages.GetString "form.login.label.user"}}
+{{$labelPass := .Messages.GetString "form.login.label.pass"}}
+
 <!doctype html>
 <html lang="en">
 
@@ -6,49 +9,75 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="icon" href="data:,">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap-4.3.1.min.css" crossorigin="anonymous" type="text/css">
-    <link rel="stylesheet" href="assets/css/gks-1.1.css" crossorigin="anonymous" type="text/css">
+    <!-- Icons -->
+    <link rel="shortcut icon" href="assets/favicon_kahrersoftware.png">
 
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!-- activate following line, if there is another version of jquery somewhere in the project-->
-    <!--script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" onload="window.$ = window.jQuery;"-->
-    <script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script>
-    <script src="assets/js/popper-1.14.7.min.js" crossorigin="anonymous" type="text/javascript"></script>
-    <script src="assets/js/bootstrap-4.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script>
-    <!-- gktable JavaScript -->
-    <script src="assets/js/gktable-1.1.js" crossorigin="anonymous" type="text/javascript"></script>
+    <!-- Stylesheets -->
+    <!-- Fonts and OneUI framework -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
+    <link rel="stylesheet" id="css-main" href="assets/css/oneui.min.css">
 
-    <title>{{.ProjectName}}</title>
+    <title>{{.ProjectTitle}}</title>
 </head>
 
 <body>
-    <div class="container mt-5 p-2">
-        <div class="card w-50 m-3 mx-auto">
-            <div class="card-header text-white gks-bg-menu"><h2>{{.ProjectName}}</h2></div>
-            <div class="card-body">
-                <form action="loginuser" method="POST">
-                    <div class="form-group">
-                        <label for="inputUser">{{.Messages.GetString "form.login.label.user"}}</label>
-                        <input type="text" class="form-control" id="inputUser" name="userid"
-                            value="{{.LoginUser}}" aria-describedby="emailHelp">
+    <div id="page-container">
+        <main id="main-container">
+            <div class="hero-static bg-white-95">
+                <div class="content">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 col-lg-6 col-xl-4">
+                            <div class="block block-themed block-fx-shadow mb-0">
+                                <div class="block-header">
+                                    <h3 class="block-title">Login</h3>
+                                </div>
+                                <div class="block-content">
+                                    <div class="p-sm-3 px-lg-4 py-lg-5">
+                                        <h1 class="mb-2">BEPO</h1>
+                                        <p>Berndorf Energie Portal</p>
+                                        <form class="" action="loginuser" method="POST">
+                                            <div class="py-3">
+                                                <div class="form-group">
+                                                    <input type="text"
+                                                        class="form-control form-control-alt form-control-lg"
+                                                        id="login-username" name="userid" placeholder="{{$labelUser}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password"
+                                                        class="form-control form-control-alt form-control-lg"
+                                                        id="login-password" name="password"
+                                                        placeholder="{{$labelPass}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6 col-xl-5">
+                                                    <button type="submit" class="btn btn-block btn-primary">
+                                                        <i class="fa fa-fw fa-sign-in-alt mr-1"></i> Anmelden
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer text-danger">
+                                                {{.ErrorMessage}}
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="inputPassword">{{.Messages.GetString "form.login.label.pass"}}</label>
-                        <input type="password" class="form-control" id="inputPassword" name="password"
-                            value="{{.LoginPass}}">
-                    </div>
-                    <button type="submit" class="btn text-white gks-bg-menu">Login</button>
-                </form>
-            </div>
-            <div class="card-footer text-danger">
-                {{.ErrorMessage}}
-            </div>
-        </div>
+                </div>
 
+            </div>
+        </main>
     </div>
-
+    <script src="assets/js/oneui.core.min-4.6.js"></script>
+    <script src="assets/js/oneui.app.min-4.6.js"></script>
+    <script>
+        jQuery(function () {
+            $("#login-username").focus();
+        });
+    </script>
 </body>
 
 </html>

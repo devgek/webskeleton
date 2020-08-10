@@ -1,8 +1,8 @@
 package data
 
 import (
-	"github.com/devgek/webskeleton/helper"
-	"github.com/devgek/webskeleton/models"
+	"kahrersoftware.at/webskeleton/helper"
+	"kahrersoftware.at/webskeleton/models"
 )
 
 // ...

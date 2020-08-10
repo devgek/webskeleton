@@ -4,45 +4,52 @@ import (
 	"net/http"
 
 	"github.com/stretchr/objx"
+	"kahrersoftware.at/webskeleton/types"
 )
 
 //RData the data hold in request context
 type RData interface {
 	UserID() string
 	SetUserID(userID string)
-	Admin() bool
-	SetAdmin(admin bool)
+	Role() types.RoleType
+	SetRole(role types.RoleType)
+	IsAdmin() bool
 }
 type requestData struct {
-	userID string
-	admin  bool
+	userID     string
+	role       types.RoleType
+	customerID uint
 }
 
 //NewRequestData create RequestData
 func NewRequestData() RData {
-	return &requestData{"", false}
+	return &requestData{"", types.RoleTypeUser, 0}
 }
 
 func (c requestData) UserID() string {
 	return c.userID
 }
 
-func (c requestData) Admin() bool {
-	return c.admin
+func (c requestData) Role() types.RoleType {
+	return c.role
 }
 
 func (c *requestData) SetUserID(userID string) {
 	c.userID = userID
 }
 
-func (c *requestData) SetAdmin(admin bool) {
-	c.admin = admin
+func (c *requestData) SetRole(role types.RoleType) {
+	c.role = role
+}
+
+func (c requestData) IsAdmin() bool {
+	return c.role == types.RoleTypeAdmin
 }
 
 func (c requestData) MSI() map[string]interface{} {
 	ctxMap := objx.New(map[string]interface{}{
 		"userID": c.UserID(),
-		"admin":  c.Admin(),
+		"role":   c.Role(),
 	})
 	return objx.New(map[string]interface{}{
 		"request-data": ctxMap,
@@ -60,10 +67,9 @@ func FromCookie(cookie *http.Cookie) (RData, bool) {
 	val := c.Get("cookie-data.request-data.userID")
 	if val != nil {
 		cData.SetUserID(val.Str())
-		val = c.Get("cookie-data.request-data.admin")
+		val = c.Get("cookie-data.request-data.role")
 		if val != nil {
-			cData.SetAdmin(val.Bool())
-			return cData, true
+			cData.SetRole(types.RoleType(val.Int()))
 		}
 	}
 

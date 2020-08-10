@@ -1,11 +1,11 @@
 package services
 
 import (
-	"github.com/devgek/webskeleton/helper"
+	"kahrersoftware.at/webskeleton/helper"
 
 	"log"
 
-	"github.com/devgek/webskeleton/models"
+	"kahrersoftware.at/webskeleton/models"
 )
 
 //

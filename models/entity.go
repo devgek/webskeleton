@@ -1,29 +1,32 @@
 package models
 
-//EntityFactory create Entities by name
-type EntityFactory struct {
+import (
+	"strconv"
+
+	"github.com/jinzhu/gorm"
+	"kahrersoftware.at/webskeleton/dtos"
+)
+
+//Entity ...
+type Entity struct {
+	gorm.Model
 }
 
-//Get return entity struct by name
-func (ef EntityFactory) Get(entityName string) interface{} {
-	switch entityName {
-	case "user":
-		return &User{}
-	case "contact":
-		return &Contact{}
-	default:
-		panic("Undefind entity " + entityName)
-	}
+//EntityHolder struct that holds entities
+type EntityHolder interface {
+	LoadRelated(db *gorm.DB) error
 }
 
-//GetSlice return slice of entity struct by name
-func (ef EntityFactory) GetSlice(entityName string) interface{} {
-	switch entityName {
-	case "user":
-		return &[]User{}
-	case "contact":
-		return &[]Contact{}
-	default:
-		panic("Undefind entity " + entityName)
-	}
+//LoadRelatedEntities implement this method in concrete entity
+func (e *Entity) LoadRelatedEntities(db *gorm.DB) error {
+	return nil
+}
+
+//BuildEntityOption ...
+func (e *Entity) BuildEntityOption() dtos.EntityOption {
+	o := dtos.EntityOption{}
+	o.ID = e.ID
+	o.Value = "Entity with ID " + strconv.Itoa(int(e.ID))
+
+	return o
 }

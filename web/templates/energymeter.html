@@ -1,0 +1,135 @@
+{{define "t_content"}}
+{{$userIsAdmin := .Admin}}
+{{$yes := .Messages.GetString "ckbox.true"}}
+{{$no := .Messages.GetString "ckbox.false"}}
+
+<!-- Your Block -->
+<div class="block block-rounded">
+    <div class="block-header block-header-default">
+        <h3 class="block-title text-primary">{{.Messages.GetString "form.energymeter.list.header"}}</h3>
+    </div>
+    <div class="block-content block-content-full font-size-sm">
+        <div class="float-right mb-2">
+            <button type="button" class="btn btn-outline-primary gk-btn-new" data-toggle="modal"
+                data-target="#energymeterEditModal">{{.Messages.GetString "form.energymeter.list.buttonnew"}}</button>
+        </div>
+        <!--div class="pb-3">&nbsp;</div-->
+        <form action="be_forms_input_groups.html" method="POST" onsubmit="return false;">
+            <div class="form-inline font-size-sm">
+                <div class="input-group font-size-sm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text font-size-sm bg-grey-light">
+                            Energietyp
+                        </span>
+                    </div>
+                    <select name="energymeterFilterType" class="form-control font-size-sm bg-info-light"
+                        id="energymeterFilterType" value="0"
+                        onchange="return activeGKEntityTable.applyColFilter(0, this.value);">
+                        <option value="0">{{.Messages.GetString "form.all.option.all"}}</option>
+                        <option value="1">{{ ( index .EnergyTypes 1).Desc }}</option>
+                        <option value="2">{{ ( index .EnergyTypes 2).Desc }}</option>
+                        <option value="3">{{ ( index .EnergyTypes 3).Desc }}</option>
+                        <option value="4">{{ ( index .EnergyTypes 4).Desc }}</option>
+                        <option value="5">{{ ( index .EnergyTypes 5).Desc }}</option>
+                        <option value="6">{{ ( index .EnergyTypes 6).Desc }}</option>
+                        <option value="7">{{ ( index .EnergyTypes 7).Desc }}</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="block block-rounded">
+    <div class="block-content font-size-sm">
+        <table class="table table-hover table-bordered table-sm gk-table js-table-sections" id="energymeterTable">
+            <thead>
+                <tr>
+                    <th style="width: 30px;"></th>
+                    <th scope="col" class="w-10">{{.Messages.GetString "form.energymeter.list.energytype"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.energymeter.list.name"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.energymeter.list.desc"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.energymeter.list.znr"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.energymeter.list.constant"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.energymeter.list.from"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.energymeter.list.to"}}</th>
+                    <th scope="col" class="w-5">{{.Messages.GetString "form.all.label.actions"}}</th>
+                </tr>
+            </thead>
+            {{range .Entities}}
+            {{$countMappings := len .EnergyMeterMappings}}
+            {{$classSectionsOn := ""}}
+            {{if $countMappings}}
+                {{$classSectionsOn = "js-table-sections-header"}}
+            {{end}}
+            <tbody class="{{$classSectionsOn}}">
+                <tr data-entityid="{{.ID}}">
+                    <td class="text-center">
+                        {{if $countMappings}}
+                        <i class="fa fa-angle-right text-muted"></i>
+                        {{end}}
+                    </td>
+                    <td data-gkvval="{{.EnergyType.Val}}">{{.EnergyType.Desc}}</td>
+                    <td data-gkvval="{{.Name}}">{{.Name}}</td>
+                    <td data-gkvval="{{.Desc}}">{{.Desc}}</td>
+                    <td data-gkvval="{{.Meter.ID}}">{{.Meter.ZNR}}</td>
+                    <td data-gkvval="{{.Constant}}">{{.Constant}}</td>
+                    <td data-gkvval="{{.DayFrom}}">{{.DayFrom}}</td>
+                    <td data-gkvval="{{.DayTo}}">{{.DayTo}}</td>
+                    <td class="">
+                        {{if $userIsAdmin}}
+                        <div class="btn-group-sm">
+                            <button type="button" class="btn btn-sm btn-alt-primary gk-btn-edit" data-toggle="modal"
+                                data-target="#energymeterEditModal" >
+                                <i class="fa fa-fw fa-pencil-alt"></i>
+                            </button>
+                            {{if not $countMappings}}
+                            <button type="button" class="btn btn-sm btn-alt-primary gk-btn-delete" data-toggle="modal"
+                                data-target="#confirmDeleteModal">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                            {{end}}
+                        </div>
+                        {{else}}
+                        <div class="d-none">
+                            &nbsp;
+                        </div>
+                        {{end}}
+                    </td>
+                </tr>
+            </tbody>
+            {{if $countMappings}}
+                <tbody class="font-size-sm">
+                    {{range .EnergyMeterMappings}}
+                    <tr class="gk-row-section">
+                        <td class="text-center"></td>
+                        <td class="font-w600 font-size-sm text-primary">{{.ConsumptionGroup.Name}}</td>
+                        <td class="font-w600 font-size-sm text-primary">{{.ConsumptionGroup.Desc}}</td>
+                        <td class="font-w600 font-size-sm text-primary">{{.Factor}}%</td>
+                        <td class="font-w600 font-size-sm" colspan="5">
+                            {{if lt .Factor 0}}
+                            <i class="fa fa-minus-circle text-danger"></i>
+                            {{else}}
+                            <i class="fa fa-plus-circle text-info"></i>
+                            {{end}}
+                        </td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            {{end}}
+            {{end}}
+        </table>
+    </div>
+</div>
+<!-- END Your Block -->
+<!-- Page Content -->
+<script>
+    //create GKTable without inline editing
+    var myGKTable = new GKEntityTable("energymeter");
+    myGKTable.initColFilter(0, 0, "0");
+</script>
+
+<!-- user-edit -->
+{{template "t_energymeter-edit" .}}
+{{template "t_confirm-delete" .}}
+
+{{end}}

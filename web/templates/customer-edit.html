@@ -1,0 +1,84 @@
+{{define "t_customer-edit"}}
+{{$userIsAdmin := .Admin}}
+{{$headerEdit := .Messages.GetString "form.customer.edit.header"}}
+{{$headerNew := .Messages.GetString "form.customer.edit.headernew"}}
+<!-- Modal Dialog-->
+<div class="modal fade" id="customerEditModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="customerEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary">
+                    <h3 class="block-title" id="customerEditModalLabel">Modal Title</h3>
+                    <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true"
+                        data-delay="3000" data-tableId="customerTable">
+                        <div class="toast-header">
+                            <span class="gk-toast-text">Toast Text</span>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content font-size-sm">
+                    <div class="form-group">
+                        <label for="customerEditName"
+                            class="col-form-label">{{.Messages.GetString "form.customer.edit.label.name"}}</label>
+                        <input name="customerEditName" class="form-control" id="customerEditName" value=""
+                            autocomplete="new-password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="customerEditShort"
+                            class="col-form-label">{{.Messages.GetString "form.customer.edit.label.short"}}</label>
+                        <input name="customerEditShort" class="form-control" id="customerEditShort" value=""
+                            autocomplete="new-password" />
+                    </div>
+                </div>
+                <div class="block-content block-content-full text-right border-top">
+                    <button type="button" class="btn btn-sm btn-light btn-back-app"
+                        data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
+                    <button type="button" class="btn btn-sm btn-primary btn-save-app">
+                        <i class="fa fa-check mr-1"></i>{{.Messages.GetString "form.all.btn.save"}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    activeGKEntityTable.prepareEditDialog = function () {
+        if (activeGKEntityTable.isEditNew()) {
+            $("#customerEditModalLabel").html("{{$headerNew}}");
+            $("#customerEditShort").prop("readonly", false);
+        }
+        else {
+            $("#customerEditModalLabel").html("{{$headerEdit}}")
+            $("#customerEditShort").prop("readonly", true);
+        }
+        $("#customerEditName").val(activeGKEntityTable.editRowData[0]);
+        $("#customerEditShort").val(activeGKEntityTable.editRowData[1]);
+    };
+    activeGKEntityTable.prepareSendRowData = function () {
+        var sendParams = [];
+        sendParams["gkvObjId"] = activeGKEntityTable.getEditRowKey();
+        sendParams["gkvCustomerName"] = $("#customerEditName").val();
+        sendParams["gkvCustomerShort"] = $("#customerEditShort").val();
+
+        return sendParams;
+    };
+    activeGKEntityTable.getRowDataFromEntity = function (data) {
+        var rowData = [];
+        rowData.push(data.EntityObject.Name, data.EntityObject.Short)
+        return rowData;
+    };
+    activeGKEntityTable.getRowDataHiddenFromEntity = function (data) {
+        return activeGKEntityTable.getRowDataFromEntity(data);
+    };
+
+</script>
+{{end}}

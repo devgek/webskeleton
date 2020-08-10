@@ -1,8 +1,8 @@
 package web
 
 import (
-	"github.com/devgek/webskeleton/web/request"
 	"github.com/stretchr/objx"
+	"kahrersoftware.at/webskeleton/web/request"
 )
 
 //AuthCookieName the name of the auth cookie

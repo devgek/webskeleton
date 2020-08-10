@@ -1,0 +1,113 @@
+{{define "t_consumptiongroup-edit"}}
+{{$userIsAdmin := .Admin}}
+{{$headerEdit := .Messages.GetString "form.consumptiongroup.edit.header"}}
+{{$headerNew := .Messages.GetString "form.consumptiongroup.edit.headernew"}}
+<!-- Modal Dialog-->
+<div class="modal fade" id="consumptiongroupEditModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="consumptiongroupEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary">
+                    <h3 class="block-title" id="consumptiongroupEditModalLabel">Modal Title</h3>
+                    <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true"
+                        data-delay="3000" data-tableId="consumptiongroupTable">
+                        <div class="toast-header">
+                            <span class="gk-toast-text">Toast Text</span>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content font-size-sm">
+                    <div class="form-group">
+                        <label for="consumptiongroupEditCustomer" 
+                            class="col-form-label">{{.Messages.GetString "form.consumptiongroup.edit.label.customer"}}</label>
+                        <select name="consumptiongroupEditCustomer" class="form-control" id="consumptiongroupEditCustomer" value="">
+                        </select>
+                    </div>
+                     <div class="form-group">
+                        <label for="consumptiongroupEditType"
+                            class="col-form-label">{{.Messages.GetString "form.consumptiongroup.edit.label.type"}}</label>
+                        <select name="consumptiongroupEditType" class="form-control" id="consumptiongroupEditType" value="">
+                            <option value="1">{{ ( index .EnergyTypes 1).Desc }}</option>
+                            <option value="2">{{ ( index .EnergyTypes 2).Desc }}</option>
+                            <option value="3">{{ ( index .EnergyTypes 3).Desc }}</option>
+                            <option value="4">{{ ( index .EnergyTypes 4).Desc }}</option>
+                            <option value="5">{{ ( index .EnergyTypes 5).Desc }}</option>
+                            <option value="6">{{ ( index .EnergyTypes 6).Desc }}</option>
+                            <option value="7">{{ ( index .EnergyTypes 7).Desc }}</option>
+                        </select>
+                    </div>
+                   <div class="form-group">
+                        <label for="consumptiongroupEditName"
+                            class="col-form-label">{{.Messages.GetString "form.consumptiongroup.edit.label.name"}}</label>
+                        <input name="consumptiongroupEditName" class="form-control" id="consumptiongroupEditName"
+                            value="" autocomplete="new-password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="consumptiongroupEditDesc"
+                            class="col-form-label">{{.Messages.GetString "form.consumptiongroup.edit.label.desc"}}</label>
+                        <input name="consumptiongroupEditDesc" class="form-control" id="consumptiongroupEditDesc"
+                            value="" autocomplete="new-password" />
+                    </div>
+                </div>
+                <div class="block-content block-content-full text-right border-top">
+                    <button type="button" class="btn btn-sm btn-light btn-back-app"
+                        data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
+                    <button type="button" class="btn btn-sm btn-primary btn-save-app">
+                        <i class="fa fa-check mr-1"></i>{{.Messages.GetString "form.all.btn.save"}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    activeGKEntityTable.prepareEditDialog = function () {
+        if (activeGKEntityTable.isEditNew()) {
+            $("#consumptiongroupEditModalLabel").html("{{$headerNew}}");
+            $("#consumptiongroupEditType").prop("disabled", false);
+            $("#consumptiongroupEditCustomer").prop("disabled", false);
+        }
+        else {
+            $("#consumptiongroupEditModalLabel").html("{{$headerEdit}}")
+            $("#consumptiongroupEditType").prop("disabled", true);
+            $("#consumptiongroupEditCustomer").prop("disabled", true);
+        }
+        $("#consumptiongroupEditCustomer").val(activeGKEntityTable.editRowDataHidden[0]);
+        $("#consumptiongroupEditType").val(activeGKEntityTable.editRowDataHidden[1]);
+        $("#consumptiongroupEditName").val(activeGKEntityTable.editRowData[2]);
+        $("#consumptiongroupEditDesc").val(activeGKEntityTable.editRowData[3]);
+
+        activeGKEntityTable.prepareEntitySelect("customer", "consumptiongroupEditCustomer", activeGKEntityTable.editRowDataHidden[0])
+    };
+    activeGKEntityTable.prepareSendRowData = function () {
+        var sendParams = [];
+        sendParams["gkvObjId"] = activeGKEntityTable.getEditRowKey();
+        sendParams["gkvCustomerID"] = $("#consumptiongroupEditType").val();
+        sendParams["gkvEnergyType"] = $("#consumptiongroupEditCustomer").val();
+        sendParams["gkvName"] = $("#consumptiongroupEditName").val();
+        sendParams["gkvDesc"] = $("#consumptiongroupEditDesc").val();
+
+        return sendParams;
+    };
+    activeGKEntityTable.getRowDataFromEntity = function (data) {
+        var rowData = [];
+        var EnergyTypeName = bepo_T_EnergyTypes[data.EntityObject.EnergyType]
+        rowData.push(data.EntityObject.Customer.Short, EnergyTypeName, data.EntityObject.Name, data.EntityObject.Desc)
+        return rowData;
+    };
+    activeGKEntityTable.getRowDataHiddenFromEntity = function (data) {
+        var rowDataHidden = [];
+        rowDataHidden.push(data.EntityObject.Customer.ID, data.EntityObject.EnergyType, data.EntityObject.Name, data.EntityObject.Desc)
+        return rowDataHidden;
+    };
+</script>
+{{end}}

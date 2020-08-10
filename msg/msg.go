@@ -3,9 +3,10 @@ package msg
 import (
 	"bytes"
 	"fmt"
-	"github.com/devgek/webskeleton/helper"
-	"github.com/spf13/viper"
 	"sync"
+
+	"github.com/spf13/viper"
+	"kahrersoftware.at/webskeleton/helper"
 )
 
 //MessageLocator the message locator

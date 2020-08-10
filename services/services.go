@@ -2,8 +2,9 @@ package services
 
 import (
 	"errors"
-	"github.com/devgek/webskeleton/data"
-	"github.com/devgek/webskeleton/models"
+
+	"kahrersoftware.at/webskeleton/data"
+	"kahrersoftware.at/webskeleton/models"
 )
 
 //Services the business serives

@@ -1,13 +1,15 @@
 package handler
 
 import (
-	"github.com/devgek/webskeleton/config"
-	"github.com/devgek/webskeleton/web"
-	"github.com/devgek/webskeleton/web/request"
-	"github.com/labstack/echo"
-	"github.com/stretchr/objx"
 	"log"
 	"net/http"
+
+	"github.com/labstack/echo"
+	"github.com/stretchr/objx"
+	"kahrersoftware.at/webskeleton/config"
+	"kahrersoftware.at/webskeleton/global"
+	"kahrersoftware.at/webskeleton/web"
+	"kahrersoftware.at/webskeleton/web/request"
 )
 
 //HandleLogin ...
@@ -22,7 +24,7 @@ func HandleLogin(c echo.Context) error {
 		viewData := config.NewTemplateData()
 		viewData["LoginUser"] = theUser
 		viewData["LoginPass"] = thePass
-		viewData["ErrorMessage"] = ec.Env.MessageLocator.GetString("msg.error.login")
+		viewData["ErrorMessage"] = ec.Env.MessageLocator.GetString(err.Error())
 		return c.Render(http.StatusOK, "login", viewData)
 	}
 
@@ -32,7 +34,8 @@ func HandleLogin(c echo.Context) error {
 	//hold userID and admin flag in request data
 	requestData := request.NewRequestData()
 	requestData.SetUserID(theUser)
-	requestData.SetAdmin(user.Admin)
+	requestData.SetRole(user.Role)
+	requestData.SetCustomerID(user.CustomerID)
 
 	cookieData := web.NewCookieData(requestData)
 
@@ -43,5 +46,5 @@ func HandleLogin(c echo.Context) error {
 		Value: authCookieValue,
 		Path:  "/"})
 
-	return c.Redirect(http.StatusTemporaryRedirect, "/page1")
+	return c.Redirect(http.StatusTemporaryRedirect, global.StartPage)
 }

@@ -1,0 +1,59 @@
+span.wp-100 {
+  width: 100px;
+  display: inline-block;
+}
+.w-10 {
+  width: 10%;
+}
+
+.w-5 {
+  width: 5%;
+}
+
+.w-8 {
+  width: 8%;
+}
+.table thead th {
+  text-transform: none;
+}
+
+.block-title {
+  text-transform: none;
+}
+
+.font-size-sm {
+  font-size: 0.813rem!important;
+}
+
+.border-heating {
+  border-color: #8b0000!important;
+}
+
+.border-natural-gas {
+  border-color: #ee82ee!important;
+}
+
+.text-heating {
+  color: #8b0000!important;
+}
+
+.text-natural-gas {
+  color: #ee82ee!important;
+}
+
+.btn-group-sm>.btn {
+  line-height: 1.0;
+}
+
+.gk-bar-chart {
+  max-height: 550px;
+ }
+.gk-bar-chart-container {
+  max-height: 640px;
+  max-width: 1300px;
+}
+
+tr.gk-row-section>td {
+  padding-left: 30px;
+  padding-right: 30px;
+}

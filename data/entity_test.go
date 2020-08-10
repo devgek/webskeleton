@@ -1,11 +1,12 @@
 package data_test
 
 import (
-	"github.com/devgek/webskeleton/data"
-	"github.com/devgek/webskeleton/models"
+	"testing"
+
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
-	"testing"
+	"kahrersoftware.at/webskeleton/data"
+	"kahrersoftware.at/webskeleton/models"
 )
 
 func TestGetOneEntityBy(t *testing.T) {
@@ -33,6 +34,15 @@ func TestGetAllEntities(t *testing.T) {
 	assert.Equal(t, 2, len(users), "Expected %v, but got %v", 2, len(users))
 }
 
+func TestGetAllEntitiesFiltered(t *testing.T) {
+	inMemoryDS := data.NewInMemoryDatastore()
+
+	var users = []models.User{}
+	err := inMemoryDS.GetAllEntities(&users)
+	inMemoryDS.GetDB().Where("name = ? AND admin = ?", "admin", false)
+	assert.Nil(t, err, "No error expected")
+	assert.Equal(t, 2, len(users), "Expected %v, but got %v", 2, len(users))
+}
 func TestCreateEntity(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 

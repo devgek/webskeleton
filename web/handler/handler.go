@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"github.com/devgek/webskeleton/config"
-	"github.com/devgek/webskeleton/global"
-	"github.com/devgek/webskeleton/web"
-	"github.com/labstack/echo"
 	"net/http"
+
+	"github.com/labstack/echo"
+	"kahrersoftware.at/webskeleton/config"
+	"kahrersoftware.at/webskeleton/global"
+	"kahrersoftware.at/webskeleton/web"
 )
 
 //HandleHealth ...
@@ -17,6 +18,15 @@ func HandleHealth(c echo.Context) error {
 	vd["health"] = "ok"
 
 	return c.JSON(http.StatusOK, vd)
+}
+
+//HandleStartApp ...
+func HandleStartApp(c echo.Context) error {
+	ec := c.(*config.EnvContext)
+	rData := ec.RequestData()
+	startPage := global.StartPage
+
+	return c.Redirect(http.StatusTemporaryRedirect, startPage)
 }
 
 //HandleLogout ...
@@ -41,4 +51,16 @@ func HandlePageDefault(c echo.Context) error {
 
 	ec := c.(*config.EnvContext)
 	return c.Render(http.StatusOK, page, config.NewTemplateDataWithRequestData(ec.RequestData()))
+}
+
+//AssetHandlerFunc handles asset files
+func AssetHandlerFunc(h http.Handler) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		//no caching in dev mode
+		if !global.IsDev() {
+			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
+		}
+		h.ServeHTTP(c.Response(), c.Request())
+		return nil
+	}
 }

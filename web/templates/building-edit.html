@@ -1,0 +1,92 @@
+{{define "t_building-edit"}}
+{{$userIsAdmin := .Admin}}
+{{$headerEdit := .Messages.GetString "form.building.edit.header"}}
+{{$headerNew := .Messages.GetString "form.building.edit.headernew"}}
+<!-- Modal Dialog-->
+<div class="modal fade" id="buildingEditModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="buildingEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary">
+                    <h3 class="block-title" id="buildingEditModalLabel">Modal Title</h3>
+                    <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true"
+                        data-delay="3000" data-tableId="buildingTable">
+                        <div class="toast-header">
+                            <span class="gk-toast-text">Toast Text</span>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content font-size-sm">
+                    <div class="form-group">
+                        <label for="buildingEditName"
+                            class="col-form-label">{{.Messages.GetString "form.building.edit.label.name"}}</label>
+                        <input name="buildingEditName" class="form-control" id="buildingEditName" value=""
+                            autocomplete="new-password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="buildingEditShort"
+                            class="col-form-label">{{.Messages.GetString "form.building.edit.label.short"}}</label>
+                        <input name="buildingEditShort" class="form-control" id="buildingEditShort" value=""
+                            autocomplete="new-password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="buildingEditDesc"
+                            class="col-form-label">{{.Messages.GetString "form.building.edit.label.desc"}}</label>
+                        <input name="buildingEditDesc" class="form-control" id="buildingEditDesc" value=""
+                            autocomplete="new-password" />
+                    </div>
+                </div>
+                <div class="block-content block-content-full text-right border-top">
+                    <button type="button" class="btn btn-sm btn-light btn-back-app"
+                        data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
+                    <button type="button" class="btn btn-sm btn-primary btn-save-app">
+                        <i class="fa fa-check mr-1"></i>{{.Messages.GetString "form.all.btn.save"}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    activeGKEntityTable.prepareEditDialog = function () {
+        if (activeGKEntityTable.isEditNew()) {
+            $("#buildingEditModalLabel").html("{{$headerNew}}");
+            $("#buildingEditShort").prop("readonly", false);
+        }
+        else {
+            $("#buildingEditModalLabel").html("{{$headerEdit}}")
+            $("#buildingEditShort").prop("readonly", true);
+        }
+        $("#buildingEditName").val(activeGKEntityTable.editRowData[0]);
+        $("#buildingEditShort").val(activeGKEntityTable.editRowData[1]);
+        $("#buildingEditDesc").val(activeGKEntityTable.editRowData[2]);
+    };
+    activeGKEntityTable.prepareSendRowData = function () {
+        var sendParams = [];
+        sendParams["gkvObjId"] = activeGKEntityTable.getEditRowKey();
+        sendParams["gkvName"] = $("#buildingEditName").val();
+        sendParams["gkvShort"] = $("#buildingEditShort").val();
+        sendParams["gkvBuildingDesc"] = $("#buildingEditDesc").val();
+
+        return sendParams;
+    };
+    activeGKEntityTable.getRowDataFromEntity = function (data) {
+        var rowData = [];
+        rowData.push(data.EntityObject.Name, data.EntityObject.Short, data.EntityObject.Desc)
+        return rowData;
+    };
+    activeGKEntityTable.getRowDataHiddenFromEntity = function (data) {
+        return activeGKEntityTable.getRowDataFromEntity(data);
+    };
+
+</script>
+{{end}}

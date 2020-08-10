@@ -1,0 +1,69 @@
+{{define "t_content"}}
+{{$userIsAdmin := .Admin}}
+{{$yes := .Messages.GetString "ckbox.true"}}
+{{$no := .Messages.GetString "ckbox.false"}}
+
+<!-- Your Block -->
+<div class="block block-rounded">
+    <div class="block-header block-header-default">
+        <h3 class="block-title text-primary">{{.Messages.GetString "form.customer.list.header"}}</h3>
+    </div>
+    <div class="block-content block-content-full font-size-sm">
+        <div class="float-right mb-2">
+            <button type="button" class="btn btn-outline-primary gk-btn-new" data-toggle="modal"
+                data-target="#customerEditModal">{{.Messages.GetString "form.customer.list.buttonnew"}}</button>
+        </div>
+        <div class="pb-3">&nbsp;</div>
+    </div>
+</div>
+<div class="block block-rounded">
+    <div class="block-content block-content-full font-size-sm">
+        <table class="table gk-table table-hover table-sm table-bordered table-striped js-dataTable-simple dataTable" id="customerTable">
+            <thead>
+                <tr>
+                    <th scope="col">{{.Messages.GetString "form.customer.list.name"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.customer.list.short"}}</th>
+                    <th scope="col" class="w-5">{{.Messages.GetString "form.all.label.actions"}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Entities}}
+                <tr data-entityid="{{.ID}}">
+                    <td data-gkvval="{{.Name}}">{{.Name}}</td>
+                    <td data-gkvval="{{.Short}}">{{.Short}}</td>
+                    <td class="">
+                        {{if $userIsAdmin}}
+                        <div class="btn-group-sm">
+                            <button type="button" class="btn btn-sm btn-alt-primary gk-btn-edit" data-toggle="modal"
+                                data-target="#customerEditModal" >
+                                <i class="fa fa-fw fa-pencil-alt"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-alt-primary gk-btn-delete" data-toggle="modal"
+                                data-target="#confirmDeleteModal" >
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                        </div>
+                        {{else}}
+                        <div class="d-none">
+                            &nbsp;
+                        </div>
+                        {{end}}
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- END Your Block -->
+<!-- Page Content -->
+<script>
+    //create GKTable without inline editing
+    var myTable = new GKEntityTable("customer");
+</script>
+
+<!-- user-edit -->
+{{template "t_customer-edit" .}}
+{{template "t_confirm-delete" .}}
+
+{{end}}

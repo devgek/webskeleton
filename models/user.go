@@ -1,12 +1,8 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-)
-
 //User ...
 type User struct {
-	gorm.Model
+	Entity
 	Name  string `gorm:"type:varchar(50);not null;unique" form:"gkvName"`
 	Pass  string `form:"gkvPass"`
 	Email string `gorm:"type:varchar(100);not null" form:"gkvEmail"`

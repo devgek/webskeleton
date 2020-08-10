@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" href="data:,">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap-4.3.1.min.css" crossorigin="anonymous" type="text/css">
+    <link rel="stylesheet" href="assets/css/gks-1.1.css" crossorigin="anonymous" type="text/css">
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- activate following line, if there is another version of jquery somewhere in the project-->
+    <!--script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" onload="window.$ = window.jQuery;"-->
+    <script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script>
+    <script src="assets/js/popper-1.14.7.min.js" crossorigin="anonymous" type="text/javascript"></script>
+    <script src="assets/js/bootstrap-4.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script>
+    <!-- gktable JavaScript -->
+    <script src="assets/js/gktable-1.1.js" crossorigin="anonymous" type="text/javascript"></script>
+
+    <title>{{.ProjectName}}</title>
+</head>
+
+<body>
+    <div class="container mt-5 p-2">
+        <div class="card w-50 m-3 mx-auto">
+            <div class="card-header text-white gks-bg-menu"><h2>{{.ProjectName}}</h2></div>
+            <div class="card-body">
+                <form action="loginuser" method="POST">
+                    <div class="form-group">
+                        <label for="inputUser">{{.Messages.GetString "form.login.label.user"}}</label>
+                        <input type="text" class="form-control" id="inputUser" name="userid"
+                            value="{{.LoginUser}}" aria-describedby="emailHelp">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword">{{.Messages.GetString "form.login.label.pass"}}</label>
+                        <input type="password" class="form-control" id="inputPassword" name="password"
+                            value="{{.LoginPass}}">
+                    </div>
+                    <button type="submit" class="btn text-white gks-bg-menu">Login</button>
+                </form>
+            </div>
+            <div class="card-footer text-danger">
+                {{.ErrorMessage}}
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

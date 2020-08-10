@@ -1,11 +1,12 @@
 package data_test
 
 import (
-	"github.com/devgek/webskeleton/data"
-	"github.com/devgek/webskeleton/models"
-	"github.com/devgek/webskeleton/types"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"kahrersoftware.at/webskeleton/data"
+	"kahrersoftware.at/webskeleton/models"
+	"kahrersoftware.at/webskeleton/types"
 )
 
 func TestCreateContact(t *testing.T) {

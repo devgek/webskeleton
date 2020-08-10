@@ -1,0 +1,138 @@
+{{define "t_user-edit"}}
+{{$userIsAdmin := .Admin}}
+{{$headerEdit := .Messages.GetString "form.user.edit.header"}}
+{{$headerNew := .Messages.GetString "form.user.edit.headernew"}}
+<!-- Modal Dialog-->
+<div class="modal fade" id="userEditModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="userEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userEditModalLabel"></h5>
+                <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+                    <div class="toast-header">
+                        <span class="gk-toast-text">Toast Text</span>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="userEditName"
+                        class="col-form-label">{{.Messages.GetString "form.user.edit.label.name"}}</label>
+                    <input name="userEditName" class="form-control" id="userEditName" value=""
+                        autocomplete="new-password" />
+                </div>
+                <div class="form-group">
+                    <label for="userEditPass"
+                        class="col-form-label">{{.Messages.GetString "form.user.edit.label.pass"}}</label>
+                    <input type="password" name="userEditPass" class="form-control" id="userEditPass" value=""
+                        autocomplete="new-password" />
+                </div>
+                <div class="form-group">
+                    <label for="userEditEmail"
+                        class="col-form-label">{{.Messages.GetString "form.user.edit.label.email"}}</label>
+                    <input name="userEditEmail" class="form-control" id="userEditEmail" value=""
+                        autocomplete="new-password" />
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="userEditAdmin">
+                    <label class="form-check-label"
+                        for="userEditAdmin">{{.Messages.GetString "form.user.edit.label.admin"}}</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn gks-btn btn-back-app"
+                    data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
+                <button type="button"
+                    class="btn gks-btn gks-btn-important btn-save-app">{{.Messages.GetString "form.all.btn.save"}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function modalShowMessage(msg) {
+        const $toast = $("#userEditModal .toast");
+        $toast.find("span.gk-toast-text").text(msg);
+        $toast.toast("show");
+    };
+
+    $('#userEditModal').on('show.bs.modal', function (event) {
+        var trigger = $(event.relatedTarget); // Link that triggered the modal
+        var objId = trigger.data("gkvobjid") // the object id of the row that triggered this modal
+        userTable.setRowObjId(objId);
+        var isEditNew = $(trigger).hasClass("gks-edit-new");
+        userTable.setEditNew(isEditNew)
+        var data = []
+        if (isEditNew) {
+            $("#userEditModalLabel").html("{{$headerNew}}");
+            $("#userEditName").prop("readonly", false);
+            $("#userEditPass").prop("readonly", false);
+            data[0] = "";
+            data[1] = "";
+            data[2] = "";
+            data[3] = "nein";
+        }
+        else {
+            $("#userEditModalLabel").html("{{$headerEdit}}")
+            $("#userEditName").prop("readonly", true);
+            $("#userEditPass").prop("readonly", true);
+            var theRow = userTable.getRowFromParent(trigger);
+            data = userTable.getRowData(theRow);
+            userTable.selectRow(theRow)
+        }
+        $("#userEditName").val(data[0]);
+        $("#userEditPass").val(data[1]);
+        $("#userEditEmail").val(data[2]);
+        var adminData = data[3];
+        if (adminData.trim() == "ja") {
+            $("#userEditAdmin").prop("checked", true);
+        }
+        else {
+            $("#userEditAdmin").prop("checked", false);
+        }
+    });
+
+    $('.btn-save-app').click(function () {
+        var url = "/entityedituser";
+        if (userTable.isEditNew()) {
+            url = "/entitynewuser"
+        }
+        var vObjId = userTable.getRowObjId();
+        var vName = $("#userEditName").val()
+        var vPass = $("#userEditPass").val()
+        var vEmail = $("#userEditEmail").val()
+        var vAdmin = $("#userEditAdmin").prop("checked")
+
+        var posting = $.post(url, { gkvObjId: vObjId, gkvName: vName, gkvPass: vPass, gkvEmail: vEmail, gkvAdmin: vAdmin });
+
+        posting.done(function (data) {
+            var isError = data.IsError
+            if (isError) {
+                modalShowMessage(data.Message)
+            }
+            else {
+                if (userTable.isEditNew()) {
+                    userTable.handleNew();
+                }
+                var rowData = []
+                rowData.push(data.EntityObject.Name, data.EntityObject.Pass, data.EntityObject.Email, (data.EntityObject.Admin ? '{{.Messages.GetString "ckbox.true"}}' : '{{.Messages.GetString "ckbox.false"}}'))
+                var theRow = userTable.getSelectedRow()
+                userTable.changeRowData(theRow, rowData)
+                userTable.setPersisted(theRow);
+                modalShowMessage(data.Message)
+            }
+        });
+
+        posting.fail(function (xhr, status, error) {
+            modalShowMessage('{{.Messages.GetString "msg.error.ajax"}}' + xhr.status + ':' + xhr.statusText)
+        });
+    });
+
+</script>
+{{end}}

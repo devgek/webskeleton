@@ -1,0 +1,106 @@
+{{define "t_content"}}
+{{$userIsAdmin := .Admin}}
+{{$yes := .Messages.GetString "ckbox.true"}}
+{{$no := .Messages.GetString "ckbox.false"}}
+
+<div class="block block-rounded">
+    <div class="block-header block-header-default">
+        <h1 class="block-title text-primary">Verbrauchswerte je Kunde und Verbrauchsgruppe</h1>
+    </div>
+    <div class="block-content block-content-full font-size-sm">
+        <form action="pageconsumptionmonth" name="formconsumptionmonth" method="POST">
+            <input type="hidden" name="consumptionmonthFilterEnergyType" value="{{.FilterEnergyType}}"/>
+            <div class="form-inline">
+                <div class="input-group font-size-sm">
+                    <div class="input-group-prepend font-size-sm">
+                        <span class="input-group-text font-size-sm bg-grey-light">
+                            Kunde
+                        </span>
+                    </div>
+                    <select name="consumptionmonthFilterCustomer" class="form-control font-size-sm bg-info-light"
+                        id="consumptionmonthFilterCustomer" onchange="formconsumptionmonth.submit()">
+                        {{range .CustomerOptions}}
+                        <option value="{{.Value}}">{{.Value}}</option>
+                       {{end}}
+                    </select>
+                </div>
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <div class="input-group font-size-sm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text font-size-sm bg-grey-light">
+                            Jahr
+                        </span>
+                    </div>
+                    <select name="consumptionmonthFilterYear" class="form-control font-size-sm bg-info-light"
+                        id="consumptionmonthFilterYear" onchange="formconsumptionmonth.submit()">
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="block block-rounded">
+    <div class="block-content block-content-full font-size-sm">
+        <ul class="nav nav-tabs nav-tabs-alt" data-toggle="tabs" role="tablist">
+            {{$EnergyType := .FilterEnergyType}}
+            {{range .EnergyTypes}}
+                {{if gt .Val "0"}}
+                    {{if eq .Val $EnergyType}}
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#tab-month-{{$EnergyType}}">{{.DescUnit}}</a>
+                        </li>
+                    {{else}}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tab-month-{{$EnergyType}}" onclick="formconsumptionmonth.consumptionmonthFilterEnergyType.value='{{.Val}}';formconsumptionmonth.submit()">{{.DescUnit}}</a>
+                        </li>
+                    {{end}}
+                {{end}}
+            {{end}}
+        </ul>
+        <div class="block-content tab-content">
+            <div class="tab-pane active" id="tab-month-{{.FilterEnergyType}}" role="tabpanel">
+                <table class="table table-sm table-bordered table-striped" id="consumptionmonthTable">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="w-10">Monat</th>
+                            {{$entry0 := index .ConsumptionListMonth.Entries 0 }}
+                            {{range $entry0.Values}}
+                            <th scope="col" class="w-10 text-right">{{.Name}}</th>
+                            {{end}}
+                            <th scope="col">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range $i, $elem := .ConsumptionListMonth.Entries}}
+                        {{$theFont := ""}}
+                        {{if eq $i 12}}
+                        {{$theFont = "font-w600"}}
+                        {{end}}
+                        <tr class="{{$theFont}}">
+                            <td class="text-nowrap">{{.Name}}</td>
+                            {{range .Values}}
+                                {{if .Sum}}
+                                    <td class="text-right gk-format-curr">{{.ValueF}}</td>
+                                {{else}}
+                                    <td class="text-right"><a href="" class="gk-format-curr">{{.ValueF}}</a></td>
+                                {{end}}
+                            {{end}}
+                            <td>&nbsp;</td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(function () { bepo_prepareSelect("consumptionmonthFilterCustomer", "{{.FilterCustomerShort}}"); });
+    jQuery(function () { bepo_prepareSelect("consumptionmonthFilterYear", "{{.FilterYear}}"); });
+    jQuery(function () { bepo_format_all_curr(); });
+</script>
+
+{{end}}

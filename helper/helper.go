@@ -2,13 +2,17 @@ package helper
 
 import (
 	"bytes"
-	"golang.org/x/crypto/bcrypt"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"runtime"
+	"sort"
+	"strconv"
 	"strings"
+	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 //GoPaths returns the GOPATH as an array of paths
@@ -75,4 +79,48 @@ func EncryptPassword(password string) string {
 //ComparePassword compare hashed password and possible plaintext equivalent
 func ComparePassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+}
+
+//SortedKeys return slice of sorted map keys
+func SortedKeys(theMap map[string]interface{}) []string {
+	keys := make([]string, len(theMap))
+	i := 0
+	for k := range theMap {
+		keys[i] = k
+		i++
+	}
+
+	sort.Strings(keys)
+	return keys
+}
+
+//MonthFromDay day as yyyy-mm-dd
+func MonthFromDay(day string) int {
+	m := day[5:7]
+	i, err := strconv.Atoi(m)
+	PanicOnError(err)
+	return i
+}
+
+var monthNames = []string{"Jänner", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"}
+
+//MonthName ...
+func MonthName(month int) string {
+	return monthNames[month-1]
+}
+
+//ValueOrDefault ...
+func ValueOrDefault(value string, defaultValue string) string {
+	if value == "" {
+		return defaultValue
+	}
+
+	return value
+}
+
+//ActualYear return the actual year as string
+func ActualYear() string {
+	now := time.Now()
+
+	return strconv.Itoa(now.Year())
 }

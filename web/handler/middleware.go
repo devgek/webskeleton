@@ -1,13 +1,14 @@
 package handler
 
 import (
-	"github.com/devgek/webskeleton/config"
-	"github.com/devgek/webskeleton/web"
-	"github.com/devgek/webskeleton/web/request"
-	"github.com/labstack/echo"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/labstack/echo"
+	"kahrersoftware.at/webskeleton/config"
+	"kahrersoftware.at/webskeleton/web"
+	"kahrersoftware.at/webskeleton/web/request"
 )
 
 //EnvContextMiddleware this is a custom echo context, representing the environment context
@@ -33,7 +34,7 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := c.Request()
 		//don't check auth cookie with this requests
-		if r.URL.Path == "/login" || r.URL.Path == "/loginuser" || r.URL.Path == "/health" || strings.Contains(r.URL.Path, web.AssetPattern) {
+		if r.URL.Path == "/login" || r.URL.Path == "/loginuser" || r.URL.Path == "/health" || strings.Contains(r.URL.Path, "api") || strings.Contains(r.URL.Path, web.AssetPattern) {
 			return next(c)
 		}
 
@@ -41,6 +42,7 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 
 		if err == http.ErrNoCookie {
 			// not authenticated
+			log.Println("a: ", r.URL.Path, " not authenticated!")
 			return c.Redirect(http.StatusTemporaryRedirect, "/login")
 		}
 		if err != nil {

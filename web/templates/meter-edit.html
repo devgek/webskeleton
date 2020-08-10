@@ -1,0 +1,111 @@
+{{define "t_meter-edit"}}
+{{$userIsAdmin := .Admin}}
+{{$headerEdit := .Messages.GetString "form.meter.edit.header"}}
+{{$headerNew := .Messages.GetString "form.meter.edit.headernew"}}
+<!-- Modal Dialog-->
+<div class="modal fade" id="meterEditModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="meterEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary">
+                    <h3 class="block-title" id="meterEditModalLabel">Modal Title</h3>
+                    <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true"
+                        data-delay="3000" data-tableId="meterTable">
+                        <div class="toast-header">
+                            <span class="gk-toast-text">Toast Text</span>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content font-size-sm">
+                    <div class="form-group">
+                        <label for="meterEditType"
+                            class="col-form-label">{{.Messages.GetString "form.meter.edit.label.type"}}</label>
+                        <select name="meterEditType" class="form-control" id="meterEditType"
+                            value="">
+                            <option value="0">{{ ( index .MeterTypes 0).Desc }}</option>
+                            <option value="1">{{ ( index .MeterTypes 1).Desc }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="meterEditZnr"
+                            class="col-form-label">{{.Messages.GetString "form.meter.edit.label.znr"}}</label>
+                        <input name="meterEditZnr" class="form-control" id="meterEditZnr" value=""
+                            autocomplete="new-password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="meterEditDesc"
+                            class="col-form-label">{{.Messages.GetString "form.meter.edit.label.desc"}}</label>
+                        <input name="meterEditDesc" class="form-control" id="meterEditDesc" value=""
+                            autocomplete="new-password" />
+                    </div>
+                    <div class="form-group">
+                        <label for="meterEditBuilding" 
+                            class="col-form-label">{{.Messages.GetString "form.meter.edit.label.building"}}</label>
+                        <select name="meterEditBuilding" class="form-control" id="meterEditBuilding" value="">
+                            <option value="xx">yy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="block-content block-content-full text-right border-top">
+                    <button type="button" class="btn btn-sm btn-light btn-back-app"
+                        data-dismiss="modal">{{.Messages.GetString "form.all.btn.abort"}}</button>
+                    <button type="button" class="btn btn-sm btn-primary btn-save-app">
+                        <i class="fa fa-check mr-1"></i>{{.Messages.GetString "form.all.btn.save"}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    activeGKEntityTable.prepareEditDialog = function () {
+        if (activeGKEntityTable.isEditNew()) {
+            $("#meterEditModalLabel").html("{{$headerNew}}");
+            $("#meterEditType").prop("disabled", false);
+            $("#meterEditZnr").prop("disabled", false);
+        }
+        else {
+            $("#meterEditModalLabel").html("{{$headerEdit}}")
+            $("#meterEditType").prop("disabled", true);
+            $("#meterEditZnr").prop("disabled", true);
+        }
+        $("#meterEditType").val(activeGKEntityTable.editRowDataHidden[0]);
+        $("#meterEditZnr").val(activeGKEntityTable.editRowData[1]);
+        $("#meterEditDesc").val(activeGKEntityTable.editRowData[2]);
+        $("#meterEditBuilding").val(activeGKEntityTable.editRowDataHidden[3]);
+    };
+    activeGKEntityTable.prepareSendRowData = function () {
+        var sendParams = [];
+        sendParams["gkvObjId"] = activeGKEntityTable.getEditRowKey();
+        sendParams["gkvType"] = $("#meterEditType").val();
+        sendParams["gkvZnr"] = $("#meterEditZnr").val();
+        sendParams["gkvDesc"] = $("#meterEditDesc").val();
+        sendParams["gkvBuildingID"] = $("#meterEditBuilding").val();
+
+        return sendParams;
+    };
+    activeGKEntityTable.getRowDataFromEntity = function (data) {
+        var rowData = [];
+        var MeterTypeName = bepo_T_MeterTypes[data.EntityObject.Type]
+        rowData.push(MeterTypeName, data.EntityObject.ZNR, data.EntityObject.Desc, data.EntityObject.Building.Short)
+        return rowData;
+    };
+    activeGKEntityTable.getRowDataHiddenFromEntity = function (data) {
+        var rowDataHidden = [];
+        rowDataHidden.push(data.EntityObject.Type, data.EntityObject.ZNR, data.EntityObject.Desc, data.EntityObject.Building.ID);
+        return rowDataHidden;
+    };
+
+    activeGKEntityTable.prepareEntitySelect("building", "meterEditBuilding", "0");
+
+</script>
+{{end}}
