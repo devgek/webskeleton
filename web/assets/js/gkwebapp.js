@@ -1,41 +1,30 @@
-//bepo-types
+//webskeleton-types
 //converting type values (int) to string representation of the type
 //used in javascript code on client side
-var bepo_T_OrgTypes = ["ORG", "PER"];
-var bepo_T_CustomerTypes = [
+var gkwebapp_T_OrgTypes = ["ORG", "PER"];
+var gkwebapp_T_MenuTypes = ["admin", "consumption"];
+var gkwebapp_T_RoleTypes = ["Benutzer", "Administrator"];
+var gkwebapp_T_ContactTypes = [
   "Kunde",
   "Lieferant",
   "Partner",
   "Interessent",
   "Werbung",
 ];
-var bepo_T_MenuTypes = ["admin", "consumption"];
-var bepo_T_EnergyTypes = [
-  "Undefiniert",
-  "Strom",
-  "Nutzwasser",
-  "Druckluft",
-  "Trinkwasser",
-  "Erdgas",
-  "Diesel",
-  "Heizung",
-];
-var bepo_T_MeterTypes = ["Stromzähler", "Anderer Zähler"];
-var bepo_T_RoleTypes = ["Kunde", "BAGBenutzer", "BAGAdministrator"];
 
-function bepo_prepareSelect(selectId, selectedValue) {
+function gkwebapp_prepareSelect(selectId, selectedValue) {
   var theSelect = $("#" + selectId);
 
   theSelect.val(selectedValue);
 }
 
-function bepo_modalShowMessage(modalId, msg) {
+function gkwebapp_modalShowMessage(modalId, msg) {
   const $toast = $("#" + modalId + " .toast");
   $toast.find("span.gk-toast-text").text(msg);
   $toast.toast("show");
 }
 
-function bepo_format_curr(num) {
+function gkwebapp_format_curr(num) {
   var str = num.toString().replace("$", ""),
     parts = false,
     output = [],
@@ -62,10 +51,10 @@ function bepo_format_curr(num) {
   return formatted + (parts ? "," + parts[1].substr(0, 2) : "");
 }
 
-function bepo_format_all_curr() {
+function gkwebapp_format_all_curr() {
   const $cols = $(".gk-format-curr");
   $cols.each(function (index, element) {
-    var vf = bepo_format_curr($(element).text());
+    var vf = gkwebapp_format_curr($(element).text());
     $(element).text(vf);
   });
 }

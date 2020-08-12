@@ -48,6 +48,7 @@ func InitEcho(env *config.Env) *echo.Echo {
 	e.POST("/entitydelete:entity", handler.HandleEntityDelete)
 
 	e.Match([]string{"GET", "POST"}, "/", handler.HandleStartApp)
+	e.Match([]string{"GET", "POST"}, "/page1", handler.HandlePage1)
 	e.Match([]string{"GET", "POST"}, "/:page", handler.HandlePageDefault)
 
 	e.Use(handler.EnvContextMiddleware)

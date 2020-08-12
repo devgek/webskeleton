@@ -11,7 +11,7 @@
       "mode": "auto",
       "program": "${fileDirname}",
       "env": {},
-      "args": ["serve", "--port=8080", "--debug=true"]
+      "args": ["serve", "--config=config-dev.yaml"]
       // "args": ["bootstrap", "--user=gek", "--project=mygo2"]
     }
   ]

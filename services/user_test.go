@@ -11,6 +11,7 @@ import (
 	"kahrersoftware.at/webskeleton/helper"
 	"kahrersoftware.at/webskeleton/models"
 	"kahrersoftware.at/webskeleton/services"
+	"kahrersoftware.at/webskeleton/types"
 )
 
 /*
@@ -70,15 +71,15 @@ func TestCreateUser(t *testing.T) {
 	s := services.NewServices(mockedDB)
 
 	passEncrypted := helper.EncryptPassword("secret")
-	userRoger := &models.User{Name: "Roger", Pass: passEncrypted, Email: "roger.federer@atp.com", Admin: false}
+	userRoger := &models.User{Name: "Roger", Pass: passEncrypted, Email: "roger.federer@atp.com", Role: types.RoleTypeUser}
 	// setup expectations
 	mockedDB.On("CreateEntity", mock.Anything).Return(nil)
 
-	userReturned, err := s.CreateUser("Roger", "secret", "roger.federer@atp.com", false)
+	userReturned, err := s.CreateUser("Roger", "secret", "roger.federer@atp.com", types.RoleTypeUser)
 	assert.Nil(t, err, "No error expected")
 	assert.Equal(t, userRoger.Name, userReturned.Name, "Expected name Roger")
 	assert.Equal(t, userRoger.Email, userReturned.Email, "Expected email not returned")
-	assert.Equal(t, userRoger.Admin, userReturned.Admin, "Expected admin not returned")
+	assert.Equal(t, userRoger.Role, userReturned.Role, "Expected admin not returned")
 
 	mockedDB.AssertExpectations(t)
 }
@@ -90,7 +91,7 @@ func TestUpdateUser(t *testing.T) {
 	messi, err := s.DS.GetUser("Lionel")
 	assert.Nil(t, err, "No error expected")
 	messi.Email = "lm@barcelona.es"
-	messi2, err := s.UpdateUser(messi.Name, messi.Email, messi.Admin)
+	messi2, err := s.UpdateUser(messi.Name, messi.Email, messi.Role)
 	assert.Equal(t, messi.Email, messi2.Email, "Email not expected")
 }
 
@@ -98,7 +99,7 @@ func TestDeleteUser(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 
-	user, err := s.CreateUser("Rafa", "secret", "rafael.nadal@atp.com", false)
+	user, err := s.CreateUser("Rafa", "secret", "rafael.nadal@atp.com", types.RoleTypeUser)
 	assert.Nil(t, err, "No error expected")
 	err = s.DS.DeleteEntityByID(user, user.ID)
 	assert.Nil(t, err, "No error expected")

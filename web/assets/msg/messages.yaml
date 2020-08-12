@@ -5,25 +5,47 @@ msg:
       create: "%s wurde angelegt"
       edit: "%s wurde geändert"
       delete: "%s wurde gelöscht"
+      list: "Liste(%s) wurde gelesen"
   error:
     ajax: "Technischer Fehler:"
-    login:  "Login nicht erlaubt"
+    login: "Login nicht erlaubt"
     entity:
       create: "%s kann nicht angelegt werden"
       edit: "%s kann nicht geändert werden"
       delete: "%s kann nicht gelöscht werden"
+      list: "Liste(%s) kann nicht gelesen werden"
+      optionlist: "Optionenliste(%s) kann nicht gelesen werden"
+    user:
+      passwordrules: "Das Passwort entspricht nicht den Regeln"
 ckbox:
   true: "ja"
   false: "nein"
 entity:
   user: "Benutzer"
   contact: "Kontakt"
+  contactaddress: "Kontaktadresse"
+layout:
+  page:
+    header: "webskeleton Webapp mit Golang backend"
+    logout: "Abmelden"
+    nav:
+      pages:
+        header: "Benutzerfunktionen"
+        page1: "Seite 1"
+      admin:
+        header: "Administration"
+        user: "Benutzer"
+        contact: "Kontakt"
 form:
   all:
     btn:
       abort: "Abbrechen"
       save: "Speichern"
       delete: "Löschen"
+    label:
+      actions: "Aktionen"
+    option:
+      all: "Alle"
   confirmdelete:
     header: "%s löschen"
     body: "%s wirklich löschen?"
@@ -31,9 +53,13 @@ form:
     label:
       user: "Benutzer"
       pass: "Passwort"
+    btn:
+      login: "Anmelden"
   page1:
     header: "Seite 1"
     content: "Das ist der Inhalt von Seite 1"
+    label:
+      contacttype: "Kontakttyp:"
   user:
     list:
       header: "Benutzer"
@@ -45,7 +71,8 @@ form:
         name: "Name:"
         pass: "Passwort:"
         email: "Email:"
-        admin: "Benutzer ist Administrator"
+        role: "Benutzerrolle:"
+        customer: "Anzeige Energiedaten:"
   contact:
     list:
       header: "Kontakt"
@@ -53,9 +80,8 @@ form:
       orgtype: "Typ"
       name: "Name"
       nameext: "Namenszusatz"
-      customernr: "Kundennummer"
-      customertype: "Kundentyp"
-
+      contacttype: "Kontakttyp"
+      id: "Id"
     edit:
       header: "Kontakt bearbeiten"
       headernew: "Kontakt neu anlegen"
@@ -63,6 +89,5 @@ form:
         orgtype: "Organisationstyp:"
         name: "Name:"
         nameext: "Namenszusatz:"
-        customernr: "Kundennummer:"
-        customertype: "Kundentyp:"
-...
+        contacttype: "Kontakttyp:"
+        id: "Id:"

@@ -70,6 +70,7 @@ func FromCookie(cookie *http.Cookie) (RData, bool) {
 		val = c.Get("cookie-data.request-data.role")
 		if val != nil {
 			cData.SetRole(types.RoleType(val.Int()))
+			return cData, true
 		}
 	}
 

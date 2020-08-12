@@ -35,7 +35,6 @@ func HandleLogin(c echo.Context) error {
 	requestData := request.NewRequestData()
 	requestData.SetUserID(theUser)
 	requestData.SetRole(user.Role)
-	requestData.SetCustomerID(user.CustomerID)
 
 	cookieData := web.NewCookieData(requestData)
 

@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"kahrersoftware.at/webskeleton/data"
 	"kahrersoftware.at/webskeleton/models"
+	"kahrersoftware.at/webskeleton/types"
 )
 
 func TestGetOneEntityBy(t *testing.T) {
@@ -46,7 +47,7 @@ func TestGetAllEntitiesFiltered(t *testing.T) {
 func TestCreateEntity(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 
-	roger := &models.User{Name: "Roger", Pass: "secret", Email: "roger.federer@atp.com", Admin: false}
+	roger := &models.User{Name: "Roger", Pass: "secret", Email: "roger.federer@atp.com", Role: types.RoleTypeUser}
 	err := inMemoryDS.CreateEntity(roger)
 
 	assert.Nil(t, err, "No error expected")
@@ -75,7 +76,7 @@ func TestSaveEntity(t *testing.T) {
 func TestDeleteEntityById(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 
-	roger := &models.User{Name: "Roger", Pass: "secret", Email: "roger.federer@atp.com", Admin: false}
+	roger := &models.User{Name: "Roger", Pass: "secret", Email: "roger.federer@atp.com", Role: types.RoleTypeUser}
 	err := inMemoryDS.CreateEntity(roger)
 
 	assert.Nil(t, err, "No error expected")

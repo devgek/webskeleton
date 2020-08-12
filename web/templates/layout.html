@@ -21,7 +21,7 @@
     <!-- OneUI CSS -->
     <link rel="stylesheet" id="css-main" href="assets/css/oneui.min.css" type="text/css">
     <!-- bepo app CSS -->
-    <link rel="stylesheet" id="css-bepo" href="assets/css/bepo.css" type="text/css">
+    <link rel="stylesheet" id="css-bepo" href="assets/css/gkwebapp.css" type="text/css">
 
     <script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script>
     <!-- bootstrap comes with oneui -->
@@ -29,7 +29,7 @@
 
     <!-- app JavaScript -->
     <script src="assets/js/gkentitytable-1.0.js" crossorigin="anonymous" type="text/javascript"></script>
-    <script src="assets/js/bepo.js" crossorigin="anonymous" type="text/javascript"></script>
+    <script src="assets/js/gkwebapp.js" crossorigin="anonymous" type="text/javascript"></script>
 
     <title>{{.ProjectTitle}}</title>
 </head>
@@ -45,7 +45,7 @@
                 <div class="d-flex align-items-center">
                     <!-- Logo -->
                     <a class="font-w600 text-dual mr-3" href="{{.StartPage}}">
-                        <span class="font-w700 font-size-h5">BEPO Berndorf Energie Portal</span>
+                        <span class="font-w700 font-size-h5">{{.Messages.GetString "layout.page.header"}}</span>
                     </a>
                     <!-- END Logo -->
 
@@ -73,7 +73,7 @@
                                 <h5 class="dropdown-header text-uppercase">Aktionen</h5>
                                 <a class="dropdown-item d-flex align-items-center justify-content-between"
                                     href="/logout">
-                                    <span>Abmelden</span>
+                                    <span>{{.Messages.GetString "layout.page.logout"}}</span>
                                     <i class="si si-logout ml-1"></i>
                                 </a>
                             </div>
@@ -111,24 +111,14 @@
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                     aria-haspopup="true" aria-expanded="false" href="#">
                                     <i class="nav-main-link-icon si si-speedometer"></i>
-                                    <span class="nav-main-link-name">Verbrauchsdaten</span>
+                                    <span
+                                        class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.pages.header"}}</span>
                                 </a>
                                 <ul class="nav-main-submenu">
-                                    {{if not .RestrictedToCustomer}}
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link" href="/pageconsumptionyear">
-                                            <span class="nav-main-link-name">Gesamt</span>
-                                        </a>
-                                    </li>
-                                    {{end}}
-                                    <!--li class="nav-main-item">
-                                        <a class="nav-main-link" href="/pageconsumptionmonth">
-                                            <span class="nav-main-link-name">je Kunde</span>
-                                        </a>
-                                    </li-->
-                                    <li class="nav-main-item">
-                                        <a class="nav-main-link" href="/pageconsumptiongroupmeters">
-                                            <span class="nav-main-link-name">Verbrauchsgruppen je Kunde</span>
+                                        <a class="nav-main-link" href="/page1">
+                                            <span
+                                                class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.pages.page1"}}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -138,37 +128,20 @@
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                     aria-haspopup="true" aria-expanded="false" href="#">
                                     <i class="nav-main-link-icon si si-settings"></i>
-                                    <span class="nav-main-link-name">Administration</span>
+                                    <span
+                                        class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.header"}}</span>
                                 </a>
                                 <ul class="nav-main-submenu">
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link" href="/entitylistcustomer">
-                                            <span class="nav-main-link-name">Kunden</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-main-item">
-                                        <a class="nav-main-link" href="/entitylistconsumptiongroup">
-                                            <span class="nav-main-link-name">Verbrauchsgruppen</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-main-item">
-                                        <a class="nav-main-link" href="/entitylistenergymeter">
-                                            <span class="nav-main-link-name">Energiezähler</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-main-item">
-                                        <a class="nav-main-link" href="/entitylistmeter">
-                                            <span class="nav-main-link-name">Zähler</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-main-item">
-                                        <a class="nav-main-link" href="/entitylistbuilding">
-                                            <span class="nav-main-link-name">Gebäude</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-main-item">
                                         <a class="nav-main-link" href="/entitylistuser">
-                                            <span class="nav-main-link-name">Benutzer</span>
+                                            <span
+                                                class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.user"}}</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link" href="/entitylistcontact">
+                                            <span
+                                                class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.contact"}}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -207,7 +180,7 @@
     <script src="assets/js/plugins/datatables/buttons/buttons.colVis.min.js"></script>
 
     <!-- Page JS Code -->
-    <script src="assets/js/pages/bepo_tables_datatables.min.js"></script>
+    <script src="assets/js/pages/gkwebapp_tables_datatables.min.js"></script>
     <script src="assets/js/plugins/easy-pie-chart/jquery.easypiechart.min.js"></script>
     <script src="assets/js/plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
     <script src="assets/js/plugins/chart.js/Chart.bundle.min.js"></script>

@@ -9,12 +9,17 @@ var (
 	ProjectVersion = "V1.0"
 	DatabaseName   = "webskeleton.db"
 	Debug          = false
-	StartPage      = "/"
+	StartPage      = "/page1"
 )
 
 //IsDev ...
 func IsDev() bool {
 	return viper.GetString("mode") == "DEV"
+}
+
+//IsAssetsCache ...
+func IsAssetsCache() bool {
+	return viper.GetBool("assets.cache")
 }
 
 //IsServerDebug ...
@@ -70,4 +75,9 @@ func DatastorePassword() string {
 //DatastoreDb ...
 func DatastoreDb() string {
 	return viper.GetString("datastore.db")
+}
+
+//IsDatastoreLog ...
+func IsDatastoreLog() bool {
+	return viper.GetBool("datastore.log")
 }

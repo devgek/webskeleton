@@ -22,8 +22,6 @@ func HandleHealth(c echo.Context) error {
 
 //HandleStartApp ...
 func HandleStartApp(c echo.Context) error {
-	ec := c.(*config.EnvContext)
-	rData := ec.RequestData()
 	startPage := global.StartPage
 
 	return c.Redirect(http.StatusTemporaryRedirect, startPage)
@@ -56,8 +54,8 @@ func HandlePageDefault(c echo.Context) error {
 //AssetHandlerFunc handles asset files
 func AssetHandlerFunc(h http.Handler) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		//no caching in dev mode
-		if !global.IsDev() {
+		//cache assets in browser for one day
+		if global.IsAssetsCache() {
 			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
 		}
 		h.ServeHTTP(c.Response(), c.Request())

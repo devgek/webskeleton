@@ -163,7 +163,7 @@ func HandleEntityNew(c echo.Context) error {
 	var err error
 	if entity == "user" {
 		user := oEntityObject.(*models.User)
-		entityResponse.EntityObject, err = ec.Env.Services.CreateUser(user.Name, user.Pass, user.Email, user.Role, user.CustomerID)
+		entityResponse.EntityObject, err = ec.Env.Services.CreateUser(user.Name, user.Pass, user.Email, user.Role)
 		if err != nil {
 			entityResponse.Message = ec.Env.MessageLocator.GetMessageF(err.Error(), entityName)
 		} else {

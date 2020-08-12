@@ -1,0 +1,25 @@
+# mode DEV|PROD
+# in DEV mode templates are reloaded on every change
+mode: DEV
+#assets can be cached in browser for one day
+assets:
+  cache: false
+# server
+server:
+  tls: false
+  cert: cert.pem
+  key: key.pem
+  port: 8080
+  debug: true
+datastore:
+  system: sqlite3
+  db: webskeleton.db
+  log: true
+# datastore:
+#   system: postgres #sqlite3 | postgres
+#   host: localhost
+#   port: 5432
+#   user: bepo
+#   password: bep0
+#   db: bepo
+#   log: true

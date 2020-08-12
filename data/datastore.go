@@ -61,15 +61,16 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 		return nil, err
 	}
 
-	if global.IsDev() {
+	if global.IsDatastoreLog() {
 		//log gorm db statements
 		db.LogMode(true)
 	}
 
-	db.AutoMigrate(&models.User{}, &models.Contact{}, &models.ContactAddress{})
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Contact{}, &models.ContactAddress{})
 
 	pass := helper.EncryptPassword("xyz")
-	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com", Admin: true}
+	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com", Role: types.RoleTypeAdmin}
 
 	// err = db.FirstOrCreate(admin, &models.User{Name: "admin"}).Error
 	err = db.FirstOrCreate(admin, "name = ?", "admin").Error
@@ -78,9 +79,9 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 	}
 
 	contactAddress := &models.ContactAddress{Street: "Short Street", StreetNr: "11", Zip: "3100", City: "St. Pauls"}
-	customer := &models.Contact{OrgType: types.OrgTypeOrg, Name: "Mustermann GesmbH", CustomerType: types.CustomerTypeK, ContactAddresses: []models.ContactAddress{*contactAddress}}
+	contact := &models.Contact{OrgType: types.OrgTypeOrg, Name: "Mustermann GesmbH", NameExt: "Max Mustermann", ContactType: types.ContactTypeK, ContactAddresses: []models.ContactAddress{*contactAddress}}
 
-	err = db.FirstOrCreate(customer, "name = ?", "Mustermann GesmbH").Error
+	err = db.FirstOrCreate(contact, "name = ?", "Mustermann GesmbH").Error
 
 	return &DatastoreImpl{db}, err
 }

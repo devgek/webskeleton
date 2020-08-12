@@ -1,9 +1,9 @@
 package config
 
 import (
-	"github.com/devgek/webskeleton/global"
-	"github.com/devgek/webskeleton/types"
-	"github.com/devgek/webskeleton/web/request"
+	"kahrersoftware.at/webskeleton/global"
+	"kahrersoftware.at/webskeleton/types"
+	"kahrersoftware.at/webskeleton/web/request"
 )
 
 //TData map holding data for page templates
@@ -14,7 +14,7 @@ func NewTemplateDataWithRequestData(requestData request.RData) TData {
 	vd := NewTemplateData()
 
 	vd["UserID"] = requestData.UserID()
-	vd["Admin"] = requestData.Admin()
+	vd["Admin"] = requestData.IsAdmin()
 
 	return vd
 }
@@ -26,7 +26,8 @@ func NewTemplateData() TData {
 	vd["ProjectName"] = global.ProjectName
 	vd["VersionInfo"] = global.ProjectVersion
 	vd["OrgTypes"] = types.OrgTypes()
-	vd["CustomerTypes"] = types.CustomerTypes()
+	vd["RoleTypes"] = types.RoleTypes()
+	vd["ContactTypes"] = types.ContactTypes()
 
 	return vd
 }

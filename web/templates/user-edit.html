@@ -48,13 +48,6 @@
                         <select name="userEditRole" class="form-control" id="userEditRole" value="">
                             <option value="0">{{ ( index .RoleTypes 0).Desc }}</option>
                             <option value="1">{{ ( index .RoleTypes 1).Desc }}</option>
-                            <option value="2">{{ ( index .RoleTypes 2).Desc }}</option>
-                        </select>
-                    </div>
-                    <div class="form-group customer-assignment">
-                        <label for="userEditCustomer"
-                            class="col-form-label">{{.Messages.GetString "form.user.edit.label.customer"}}</label>
-                        <select name="userEditCustomer" class="form-control" id="userEditCustomer" value="">
                         </select>
                     </div>
                 </div>
@@ -86,9 +79,6 @@
         $("#userEditPass").val(activeGKEntityTable.editRowDataHidden[1]);
         $("#userEditEmail").val(activeGKEntityTable.editRowDataHidden[2]);
         $("#userEditRole").val(activeGKEntityTable.editRowDataHidden[3]);
-        $("#userEditCustomer").val(activeGKEntityTable.editRowDataHidden[4]);
-
-        activeGKEntityTable.prepareEntitySelect("customer", "userEditCustomer", activeGKEntityTable.editRowDataHidden[4], new Option("Alle", "0"))
     };
     activeGKEntityTable.prepareSendRowData = function () {
         var sendParams = [];
@@ -97,23 +87,18 @@
         sendParams["gkvPass"] = $("#userEditPass").val();
         sendParams["gkvEmail"] = $("#userEditEmail").val();
         sendParams["gkvRole"] = $("#userEditRole").val();
-        sendParams["gkvCustomerID"] = $("#userEditCustomer").val();
 
         return sendParams;
     };
     activeGKEntityTable.getRowDataFromEntity = function (data) {
         var rowData = [];
-        var roleName = bepo_T_RoleTypes[data.EntityObject.Role]
-        var customerShort = data.EntityObject.Customer.Short
-        if (data.EntityObject.CustomerID < 1) {
-            customerShort = "Alle"
-        }
-        rowData.push(data.EntityObject.Name, "********", data.EntityObject.Email, roleName, customerShort);
+        var roleName = gkwebapp_T_RoleTypes[data.EntityObject.Role]
+        rowData.push(data.EntityObject.Name, "********", data.EntityObject.Email, roleName);
         return rowData;
     };
     activeGKEntityTable.getRowDataHiddenFromEntity = function (data) {
         var rowDataHidden = [];
-        rowDataHidden.push(data.EntityObject.Name, data.EntityObject.Pass, data.EntityObject.Email, data.EntityObject.Role, data.EntityObject.CustomerID);
+        rowDataHidden.push(data.EntityObject.Name, data.EntityObject.Pass, data.EntityObject.Email, data.EntityObject.Role);
         return rowDataHidden;
     };
 

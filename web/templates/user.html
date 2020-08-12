@@ -26,7 +26,6 @@
                     <th scope="col">Passwort</th>
                     <th scope="col">Email</th>
                     <th scope="col">Benutzerrolle</th>
-                    <th scope="col">Anzeige Energiedaten</th>
                     <th scope="col" class="w-5">Aktionen</th>
                 </tr>
             </thead>
@@ -37,13 +36,6 @@
                     <td data-gkvval="{{.Pass}}">********</td>
                     <td data-gkvval="{{.Email}}">{{.Email}}</td>
                     <td data-gkvval="{{.Role.Val}}">{{.Role.Desc}}</td>
-                    <td data-gkvval="{{.CustomerID}}">
-                        {{if gt .CustomerID 0}}
-                        {{.Customer.Short}}
-                        {{else}}
-                        Alle
-                        {{end}}
-                    </td>
                     <td class="">
                         {{if $userIsAdmin}}
                         <div class="btn-group-sm">

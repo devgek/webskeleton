@@ -5,39 +5,39 @@
 
 <!-- Your Block -->
 <div class="block block-rounded">
-    <div class="block-header block-header-default">
-        <h3 class="block-title text-primary">{{.Messages.GetString "form.building.list.header"}}</h3>
-    </div>
-    <div class="block-content block-content-full font-size-sm">
-        <div class="float-right mb-2">
+    <div class="block-header">
+        <h3 class="block-title text-primary">{{.Messages.GetString "form.contact.list.header"}}</h3>
+        <span class="float-right">
             <button type="button" class="btn btn-outline-primary gk-btn-new" data-toggle="modal"
-                data-target="#buildingEditModal">{{.Messages.GetString "form.building.list.buttonnew"}}</button>
-        </div>
-        <div class="pb-3">&nbsp;</div>
+                data-target="#contactEditModal">{{.Messages.GetString "form.contact.list.buttonnew"}}</button>
+        </span>
     </div>
-</div>
-<div class="block block-rounded">
     <div class="block-content font-size-sm">
-        <table class="table table-hover table-sm table-bordered table-striped gk-table js-dataTable-simple dataTable" id="buildingTable">
+        <table class="table table-hover table-sm table-bordered table-striped gk-table js-dataTable-simple dataTable"
+            id="contactTable">
             <thead>
                 <tr>
-                    <th scope="col">{{.Messages.GetString "form.building.list.name"}}</th>
-                    <th scope="col">{{.Messages.GetString "form.building.list.short"}}</th>
-                    <th scope="col">{{.Messages.GetString "form.building.list.desc"}}</th>
-                    <th scope="col" class="w-5">{{.Messages.GetString "form.all.label.actions"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.contact.list.orgtype"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.contact.list.name"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.contact.list.nameext"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.contact.list.contacttype"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.contact.list.id"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.all.label.actions"}}</th>
                 </tr>
             </thead>
             <tbody>
                 {{range .Entities}}
                 <tr data-entityid="{{.ID}}">
+                    <td data-gkvval="{{.OrgType.Val}}">{{.OrgType}}</td>
                     <td data-gkvval="{{.Name}}">{{.Name}}</td>
-                    <td data-gkvval="{{.Short}}">{{.Short}}</td>
-                    <td data-gkvval="{{.Desc}}">{{.Desc}}</td>
+                    <td data-gkvval="{{.NameExt}}">{{.NameExt}}</td>
+                    <td data-gkvval="{{.ContactType.Val}}">{{.ContactType.Desc}}</td>
+                    <td data-gkvval="{{.ID}}">{{.ID}}</td>
                     <td class="">
                         {{if $userIsAdmin}}
                         <div class="btn-group-sm">
                             <button type="button" class="btn btn-sm btn-alt-primary gk-btn-edit" data-toggle="modal"
-                                data-target="#buildingEditModal">
+                                data-target="#contactEditModal">
                                 <i class="fa fa-fw fa-pencil-alt"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-alt-primary gk-btn-delete" data-toggle="modal"
@@ -61,11 +61,11 @@
 <!-- Page Content -->
 <script>
     //create GKTable without inline editing
-    var userTable = new GKEntityTable("building");
+    var userTable = new GKEntityTable("contact");
 </script>
 
 <!-- user-edit -->
-{{template "t_building-edit" .}}
+{{template "t_contact-edit" .}}
 {{template "t_confirm-delete" .}}
 
 {{end}}

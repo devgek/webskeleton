@@ -41,8 +41,14 @@ func runServe(cmd *cobra.Command) {
 	if global.IsDev() {
 		log.Println("Development mode is on")
 	}
+	if global.IsAssetsCache() {
+		log.Println("Assets cache mode is on")
+	}
 	if global.IsServerDebug() {
-		log.Println("Debug mode is on")
+		log.Println("Server debug mode is on")
+	}
+	if global.IsDatastoreLog() {
+		log.Println("Datastore log mode is on")
 	}
 
 	env := config.GetWebEnv()
