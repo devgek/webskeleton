@@ -49,11 +49,10 @@ func TestLoginUserInMemoryOK(t *testing.T) {
 	services := services.NewServices(inMemoryDS)
 
 	// happy test, user with correct password
-	user, err := services.LoginUser("Lionel", "secret")
+	user, err := services.LoginUser("Lionel", data.PassSecret)
 	assert.Nil(t, err, "Login user with error")
 	assert.NotNil(t, user, "User is nil")
 }
-
 func TestLoginUserInMemoryNOK(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
@@ -70,12 +69,12 @@ func TestCreateUser(t *testing.T) {
 	mockedDB := &data.MockedDatastore{}
 	s := services.NewServices(mockedDB)
 
-	passEncrypted := helper.EncryptPassword("secret")
+	passEncrypted := helper.EncryptPassword(data.PassSecret)
 	userRoger := &models.User{Name: "Roger", Pass: passEncrypted, Email: "roger.federer@atp.com", Role: types.RoleTypeUser}
 	// setup expectations
 	mockedDB.On("CreateEntity", mock.Anything).Return(nil)
 
-	userReturned, err := s.CreateUser("Roger", "secret", "roger.federer@atp.com", types.RoleTypeUser)
+	userReturned, err := s.CreateUser("Roger", data.PassSecret, "roger.federer@atp.com", types.RoleTypeUser)
 	assert.Nil(t, err, "No error expected")
 	assert.Equal(t, userRoger.Name, userReturned.Name, "Expected name Roger")
 	assert.Equal(t, userRoger.Email, userReturned.Email, "Expected email not returned")
@@ -99,7 +98,7 @@ func TestDeleteUser(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 	s := services.NewServices(inMemoryDS)
 
-	user, err := s.CreateUser("Rafa", "secret", "rafael.nadal@atp.com", types.RoleTypeUser)
+	user, err := s.CreateUser("Rafa", data.PassSecret, "rafael.nadal@atp.com", types.RoleTypeUser)
 	assert.Nil(t, err, "No error expected")
 	err = s.DS.DeleteEntityByID(user, user.ID)
 	assert.Nil(t, err, "No error expected")

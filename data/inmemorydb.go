@@ -8,7 +8,7 @@ import (
 // ...
 var (
 	MessiName   = "Lionel"
-	MessiPass   = "secret"
+	PassSecret  = "Secret00"
 	MessiEmail  = "lionel.messi@fcb.com"
 	MessiEmail2 = "lm@barcelona.es"
 	MessiID     = uint(0)
@@ -21,7 +21,7 @@ func NewInMemoryDatastore() Datastore {
 		panic(err)
 	}
 	//init the db with test data
-	passEncrypted := helper.EncryptPassword(MessiPass)
+	passEncrypted := helper.EncryptPassword(PassSecret)
 	messi := &models.User{Name: MessiName, Pass: passEncrypted, Email: MessiEmail}
 	err = ds.CreateEntity(messi)
 	if err != nil {

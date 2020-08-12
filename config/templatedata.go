@@ -26,6 +26,8 @@ func NewTemplateData() TData {
 	vd["ProjectName"] = global.ProjectName
 	vd["VersionInfo"] = global.ProjectVersion
 	vd["StartPage"] = global.StartPage
+	//add types for handling in templates
+	vd["EntityTypes"] = types.EntityTypes()
 	vd["OrgTypes"] = types.OrgTypes()
 	vd["RoleTypes"] = types.RoleTypes()
 	vd["ContactTypes"] = types.ContactTypes()
