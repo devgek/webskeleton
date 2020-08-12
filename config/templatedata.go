@@ -25,6 +25,7 @@ func NewTemplateData() TData {
 	vd["Messages"] = GetWebEnv().MessageLocator
 	vd["ProjectName"] = global.ProjectName
 	vd["VersionInfo"] = global.ProjectVersion
+	vd["StartPage"] = global.StartPage
 	vd["OrgTypes"] = types.OrgTypes()
 	vd["RoleTypes"] = types.RoleTypes()
 	vd["ContactTypes"] = types.ContactTypes()
