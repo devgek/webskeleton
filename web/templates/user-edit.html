@@ -26,30 +26,32 @@
                     </div>
                 </div>
                 <div class="block-content font-size-sm">
-                    <div class="form-group">
-                        <label for="userEditName"
-                            class="col-form-label">{{.Messages.GetString "form.user.edit.label.name"}}</label>
-                        <input name="userEditName" class="form-control" id="userEditName" value="" />
-                    </div>
-                    <div class="form-group">
-                        <label for="userEditPass"
-                            class="col-form-label">{{.Messages.GetString "form.user.edit.label.pass"}}</label>
-                        <input type="password" name="userEditPass" class="form-control" id="userEditPass" value=""
-                            autocomplete="new-password" />
-                    </div>
-                    <div class="form-group">
-                        <label for="userEditEmail"
-                            class="col-form-label">{{.Messages.GetString "form.user.edit.label.email"}}</label>
-                        <input name="userEditEmail" class="form-control" id="userEditEmail" value="" />
-                    </div>
-                    <div class="form-group">
-                        <label for="userEditRole"
-                            class="col-form-label">{{.Messages.GetString "form.user.edit.label.role"}}</label>
-                        <select name="userEditRole" class="form-control" id="userEditRole" value="">
-                            <option value="0">{{ ( index .RoleTypes 0).Desc }}</option>
-                            <option value="1">{{ ( index .RoleTypes 1).Desc }}</option>
-                        </select>
-                    </div>
+                    <form>
+                        <div class="form-group">
+                            <label for="userEditName"
+                                class="col-form-label">{{.Messages.GetString "form.user.edit.label.name"}}</label>
+                            <input name="userEditName" class="form-control" id="userEditName" value="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="userEditPass"
+                                class="col-form-label">{{.Messages.GetString "form.user.edit.label.pass"}}</label>
+                            <input type="password" name="userEditPass" class="form-control" id="userEditPass" value=""
+                                autocomplete="new-password" />
+                        </div>
+                        <div class="form-group">
+                            <label for="userEditEmail"
+                                class="col-form-label">{{.Messages.GetString "form.user.edit.label.email"}}</label>
+                            <input name="userEditEmail" class="form-control" id="userEditEmail" value="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="userEditRole"
+                                class="col-form-label">{{.Messages.GetString "form.user.edit.label.role"}}</label>
+                            <select name="userEditRole" class="form-control" id="userEditRole" value="">
+                                <option value="0">{{ ( index .RoleTypes 0).Desc }}</option>
+                                <option value="1">{{ ( index .RoleTypes 1).Desc }}</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
                 <div class="block-content block-content-full text-right border-top">
                     <button type="button" class="btn btn-sm btn-light btn-back-app"

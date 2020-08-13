@@ -14,8 +14,8 @@ import (
 //
 var (
 	ErrorLoginNotAllowed   = &ServiceError{"msg.error.login"}
-	ErrorUserNotCreated    = &ServiceError{"msg.error.entity.create"}
-	ErrorUserNotSaved      = &ServiceError{"msg.error.user.edit"}
+	ErrorUserNotCreated    = &ServiceError{"msg.error.user.create"}
+	ErrorUserNotSaved      = &ServiceError{"msg.error.user.update"}
 	ErrorUserNotDeleted    = &ServiceError{"msg.error.user.delete"}
 	ErrorUserPasswordRules = &ServiceError{"msg.error.user.passwordrules"}
 )

@@ -32,5 +32,8 @@ func NewMessageLocator(messages []byte) *MessageLocator {
 //GetMessageF get the formatted message
 func (ml *MessageLocator) GetMessageF(msgKey string, a ...interface{}) string {
 	format := ml.GetString(msgKey)
+	if len(a) == 0 {
+		return format
+	}
 	return fmt.Sprintf(format, a...)
 }

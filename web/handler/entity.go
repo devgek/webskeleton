@@ -145,6 +145,7 @@ func HandleEntityEdit(c echo.Context) error {
 func HandleEntityNew(c echo.Context) error {
 	ec := c.(*config.EnvContext)
 	entity := ec.Param("entity")
+
 	oEntityObject := ec.Env.EF.Get(entity)
 
 	entityResponse := viewmodel.NewEntityResponse(oEntityObject)
@@ -165,7 +166,7 @@ func HandleEntityNew(c echo.Context) error {
 		user := oEntityObject.(*models.User)
 		entityResponse.EntityObject, err = ec.Env.Services.CreateUser(user.Name, user.Pass, user.Email, user.Role)
 		if err != nil {
-			entityResponse.Message = ec.Env.MessageLocator.GetMessageF(err.Error(), entityName)
+			entityResponse.Message = ec.Env.MessageLocator.GetMessageF(err.Error())
 		} else {
 			entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.success.entity.create", entityName)
 		}

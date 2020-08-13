@@ -17,6 +17,9 @@ msg:
       optionlist: "Optionenliste(%s) kann nicht gelesen werden"
     user:
       passwordrules: "Das Passwort entspricht nicht den Regeln"
+      create: "Der Benutzer kann nicht angelegt werden"
+      update: "Der Benutzer kann nicht geändert werden"
+      delete: "Der Benutzer kann nicht gelöscht werden"
 ckbox:
   true: "ja"
   false: "nein"
