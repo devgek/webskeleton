@@ -1,12 +1,13 @@
 package cmd
 
 import (
-	"github.com/devgek/webskeleton/helper"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+
+	"github.com/spf13/cobra"
+	"kahrersoftware.at/webskeleton/helper"
 )
 
 // serveCmd represents the serve command
@@ -51,7 +52,7 @@ func runBootstrap(cmd *cobra.Command) {
 
 	fullpath := filepath.Join(gopath, "src", packageName)
 	dbName := projectName
-	projectTemplateDir := filepath.Join(gopath, "src", "github.com", "devgek", "webskeleton")
+	projectTemplateDir := filepath.Join(gopath, "src", "kahrersoftware.at", "webskeleton")
 
 	// 1. Create target directory
 	log.Print("Creating " + fullpath + "...")
@@ -82,7 +83,7 @@ func runBootstrap(cmd *cobra.Command) {
 	log.Print("Replacing placeholder variables on " + repoUser + "/" + projectName + "...")
 
 	replacers := make(map[string]string)
-	replacers["github.com/devgek/webskeleton"] = packageName
+	replacers["kahrersoftware.at/webskeleton"] = packageName
 	replacers["webskeleton.db"] = dbName + ".db"
 	replacers["webskeleton-auth"] = projectName + "-auth"
 	replacers[`= "webskeleton" //do not change`] = `= "` + projectName + `"`

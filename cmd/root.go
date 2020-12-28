@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/devgek/webskeleton/global"
 	"os"
 
 	"github.com/spf13/cobra"
+	"kahrersoftware.at/webskeleton/global"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"

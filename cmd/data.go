@@ -1,8 +1,9 @@
 package cmd
 
 import (
-	"github.com/devgek/webskeleton/config"
 	"github.com/spf13/cobra"
+	"kahrersoftware.at/webskeleton/config"
+	"kahrersoftware.at/webskeleton/types"
 )
 
 // serveCmd represents the serve command
@@ -22,9 +23,9 @@ func init() {
 
 func runData(cmd *cobra.Command) {
 	env := config.GetWebEnv()
-	env.Services.CreateUser("user1", "secret", "user1@webskeleton.com", false)
-	env.Services.CreateUser("user2", "secret", "user2@webskeleton.com", false)
-	env.Services.CreateUser("user3", "secret", "user3@webskeleton.com", false)
-	env.Services.CreateUser("user4", "secret", "user4@webskeleton.com", false)
-	env.Services.CreateUser("user5", "secret", "user5@webskeleton.com", false)
+	env.Services.CreateUser("user1", "secret", "user1@webskeleton.com", types.RoleTypeUser)
+	env.Services.CreateUser("user2", "secret", "user2@webskeleton.com", types.RoleTypeUser)
+	env.Services.CreateUser("user3", "secret", "user3@webskeleton.com", types.RoleTypeUser)
+	env.Services.CreateUser("user4", "secret", "user4@webskeleton.com", types.RoleTypeUser)
+	env.Services.CreateUser("user5", "secret", "user5@webskeleton.com", types.RoleTypeUser)
 }

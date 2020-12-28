@@ -3,7 +3,6 @@ module kahrersoftware.at/webskeleton
 go 1.12
 
 require (
-	github.com/devgek/webskeleton v0.0.0-20200417091806-074c5173c788
 	github.com/gobuffalo/packr/v2 v2.8.0
 	github.com/jinzhu/gorm v1.9.15
 	github.com/labstack/echo v3.3.10+incompatible
@@ -14,5 +13,6 @@ require (
 	github.com/stretchr/objx v0.3.0
 	github.com/stretchr/testify v1.5.1
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de
-	golang.org/x/tools v0.0.0-20200809012840-6f4f008689da // indirect
+	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
+	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208 // indirect
 )
