@@ -23,6 +23,7 @@ var bootstrapCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(bootstrapCmd)
 
+	bootstrapCmd.Flags().String("type", "web", "The type of project you want to bootstrap [simple|web|cli]")
 	bootstrapCmd.Flags().String("repository", "github.com", "The git repository for the new project")
 	bootstrapCmd.Flags().String("user", "theuser", "The git user for the new project")
 	bootstrapCmd.Flags().String("project", "theproject", "The project name for the new project")
@@ -30,7 +31,7 @@ func init() {
 }
 
 func runBootstrap(cmd *cobra.Command) {
-	// start the web server
+	// projectType, _ := cmd.Flags().GetString("type")
 	repoName, _ := cmd.Flags().GetString("repository")
 	repoUser, _ := cmd.Flags().GetString("user")
 	projectName, _ := cmd.Flags().GetString("project")
@@ -98,12 +99,25 @@ func runBootstrap(cmd *cobra.Command) {
 	// 4. Setup and bootstrap databases.
 	// nothing to do, yet
 
-	// 5. Get all application dependencies for the first time.
-	log.Print("Running go get ./...")
-	command = exec.Command("go", "get", "./...")
+	// // 5. Get all application dependencies for the first time.
+	// log.Print("Running go get ./...")
+	// command = exec.Command("go", "get", "./...")
+	// command.Dir = fullpath
+	// output, err = command.CombinedOutput()
+	// helper.ExitOnError(err, string(output))
+
+	// 5. Initialize a go module project
+	log.Print("Running go mod init ", packageName)
+	command = exec.Command("go", "mod", "init", packageName)
 	command.Dir = fullpath
-	output, err = command.CombinedOutput()
-	helper.ExitOnError(err, string(output))
+	output, _ = command.CombinedOutput()
+	log.Print(string(output))
+
+	log.Print("Running go mod tidy")
+	command = exec.Command("go", "mod", "tidy")
+	command.Dir = fullpath
+	output, _ = command.CombinedOutput()
+	log.Print(string(output))
 
 	// 6. Run tests on newly generated app.
 	log.Print("Running go test ./...")

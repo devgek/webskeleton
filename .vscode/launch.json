@@ -8,10 +8,10 @@
       "name": "Launch",
       "type": "go",
       "request": "launch",
-      "mode": "auto",
-      "program": "${fileDirname}",
+      "mode": "debug",
+      "program": "${workspaceFolder}",
       "env": {},
-      "args": ["serve", "--config=config-dev.yaml"]
+      "args": ["serve", "--config=_test\\config-webskeleton.yaml"]
       // "args": ["bootstrap", "--user=gek", "--project=mygo2"]
     }
   ]

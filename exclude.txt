@@ -3,3 +3,5 @@
 exclude.txt
 webskeleton
 webstkeleton.exe
+go.mod
+go.sum
