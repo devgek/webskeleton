@@ -1,7 +1,7 @@
 package viewmodel
 
 import (
-	"kahrersoftware.at/webskeleton/dtos"
+	"github.com/devgek/webskeleton/dtos"
 )
 
 //EntityOptionsResponse ...

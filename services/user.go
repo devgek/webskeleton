@@ -3,12 +3,12 @@ package services
 import (
 	"unicode"
 
-	"kahrersoftware.at/webskeleton/helper"
-	"kahrersoftware.at/webskeleton/types"
+	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/types"
 
 	"log"
 
-	"kahrersoftware.at/webskeleton/models"
+	"github.com/devgek/webskeleton/models"
 )
 
 //

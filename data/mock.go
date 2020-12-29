@@ -1,9 +1,9 @@
 package data
 
 import (
+	"github.com/devgek/webskeleton/models"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/mock"
-	"kahrersoftware.at/webskeleton/models"
 )
 
 //MockedDatastore ...

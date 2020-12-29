@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/types"
 	"github.com/spf13/cobra"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/types"
 )
 
 // serveCmd represents the serve command

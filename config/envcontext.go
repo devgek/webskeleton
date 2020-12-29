@@ -3,8 +3,8 @@ package config
 import (
 	"log"
 
+	"github.com/devgek/webskeleton/web/request"
 	"github.com/labstack/echo"
-	"kahrersoftware.at/webskeleton/web/request"
 )
 
 //EnvContext extends echo.Context to provide the application environment

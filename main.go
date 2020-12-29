@@ -5,7 +5,7 @@ Copyright © 2020 Gerald Kahrer <gerald.kahrer@kahrersoftware.at>
 package main
 
 import (
-	"kahrersoftware.at/webskeleton/cmd"
+	"github.com/devgek/webskeleton/cmd"
 )
 
 func main() {

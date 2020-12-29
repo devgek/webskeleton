@@ -1,6 +1,6 @@
 package models
 
-import "kahrersoftware.at/webskeleton/types"
+import "github.com/devgek/webskeleton/types"
 
 //User ...
 type User struct {

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/devgek/webskeleton/helper"
 	"github.com/spf13/viper"
-	"kahrersoftware.at/webskeleton/helper"
 )
 
 //MessageLocator the message locator

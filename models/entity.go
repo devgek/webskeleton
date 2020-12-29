@@ -3,8 +3,8 @@ package models
 import (
 	"strconv"
 
+	"github.com/devgek/webskeleton/dtos"
 	"github.com/jinzhu/gorm"
-	"kahrersoftware.at/webskeleton/dtos"
 )
 
 //Entity ...

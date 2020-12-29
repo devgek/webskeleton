@@ -3,8 +3,8 @@ package data
 import (
 	"errors"
 
+	"github.com/devgek/webskeleton/models"
 	"github.com/jinzhu/gorm"
-	"kahrersoftware.at/webskeleton/models"
 )
 
 //

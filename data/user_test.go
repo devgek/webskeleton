@@ -3,8 +3,8 @@ package data_test
 import (
 	"testing"
 
+	"github.com/devgek/webskeleton/data"
 	"github.com/stretchr/testify/assert"
-	"kahrersoftware.at/webskeleton/data"
 )
 
 func TestGetUserLionel(t *testing.T) {

@@ -4,12 +4,12 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/web"
+	"github.com/devgek/webskeleton/web/request"
 	"github.com/labstack/echo"
 	"github.com/stretchr/objx"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/global"
-	"kahrersoftware.at/webskeleton/web"
-	"kahrersoftware.at/webskeleton/web/request"
 )
 
 //HandleLogin ...

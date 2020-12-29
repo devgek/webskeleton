@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/models"
+	"github.com/devgek/webskeleton/web/viewmodel"
 	"github.com/labstack/echo"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/models"
-	"kahrersoftware.at/webskeleton/web/viewmodel"
 )
 
 //HandleCreateUser own handler instead of using HandleEntityNew

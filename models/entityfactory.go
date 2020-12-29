@@ -1,7 +1,7 @@
 package models
 
 import (
-	"kahrersoftware.at/webskeleton/types"
+	"github.com/devgek/webskeleton/types"
 )
 
 //EntityFactory create Entities by name

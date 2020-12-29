@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/types"
 	"github.com/labstack/echo"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/helper"
-	"kahrersoftware.at/webskeleton/types"
 )
 
 //HandlePage1 ...

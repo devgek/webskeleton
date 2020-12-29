@@ -1,10 +1,10 @@
 package services
 
 import (
-	"kahrersoftware.at/webskeleton/dtos"
-	"kahrersoftware.at/webskeleton/helper"
-	"kahrersoftware.at/webskeleton/models"
-	"kahrersoftware.at/webskeleton/types"
+	"github.com/devgek/webskeleton/dtos"
+	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/models"
+	"github.com/devgek/webskeleton/types"
 )
 
 //CreateEntity create new user

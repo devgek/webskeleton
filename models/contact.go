@@ -1,8 +1,8 @@
 package models
 
 import (
-	"kahrersoftware.at/webskeleton/dtos"
-	"kahrersoftware.at/webskeleton/types"
+	"github.com/devgek/webskeleton/dtos"
+	"github.com/devgek/webskeleton/types"
 )
 
 //Contact ...

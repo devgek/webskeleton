@@ -3,12 +3,12 @@ package echo
 import (
 	"net/http"
 
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/web"
+	"github.com/devgek/webskeleton/web/handler"
+	"github.com/devgek/webskeleton/web/template"
 	"github.com/labstack/echo"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/global"
-	"kahrersoftware.at/webskeleton/web"
-	"kahrersoftware.at/webskeleton/web/handler"
-	"kahrersoftware.at/webskeleton/web/template"
 )
 
 //InitEcho initialize the echo web framework

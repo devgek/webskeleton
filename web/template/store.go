@@ -5,8 +5,8 @@ import (
 	"sync"
 	"text/template"
 
+	"github.com/devgek/webskeleton/global"
 	"github.com/gobuffalo/packr/v2"
-	"kahrersoftware.at/webskeleton/global"
 )
 
 //TemplateRoot rootdir for template files

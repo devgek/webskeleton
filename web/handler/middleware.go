@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/web"
+	"github.com/devgek/webskeleton/web/request"
 	"github.com/labstack/echo"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/web"
-	"kahrersoftware.at/webskeleton/web/request"
 )
 
 //EnvContextMiddleware this is a custom echo context, representing the environment context

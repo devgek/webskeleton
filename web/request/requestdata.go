@@ -3,8 +3,8 @@ package request
 import (
 	"net/http"
 
+	"github.com/devgek/webskeleton/types"
 	"github.com/stretchr/objx"
-	"kahrersoftware.at/webskeleton/types"
 )
 
 //RData the data hold in request context

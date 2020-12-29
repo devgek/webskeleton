@@ -5,16 +5,16 @@ import (
 	"net/http"
 	"sync"
 
+	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/models"
+	"github.com/devgek/webskeleton/msg"
+	"github.com/devgek/webskeleton/web/template"
 	"github.com/gobuffalo/packr/v2"
-	"kahrersoftware.at/webskeleton/global"
-	"kahrersoftware.at/webskeleton/models"
-	"kahrersoftware.at/webskeleton/msg"
-	"kahrersoftware.at/webskeleton/web/template"
 
+	"github.com/devgek/webskeleton/data"
+	"github.com/devgek/webskeleton/services"
 	_ "github.com/jinzhu/gorm/dialects/postgres" // gorm for postgres
 	_ "github.com/jinzhu/gorm/dialects/sqlite"   // gorm for sqlite3
-	"kahrersoftware.at/webskeleton/data"
-	"kahrersoftware.at/webskeleton/services"
 )
 
 //Env the environment

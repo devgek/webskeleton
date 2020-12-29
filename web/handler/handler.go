@@ -3,10 +3,10 @@ package handler
 import (
 	"net/http"
 
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/web"
 	"github.com/labstack/echo"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/global"
-	"kahrersoftware.at/webskeleton/web"
 )
 
 //HandleHealth ...

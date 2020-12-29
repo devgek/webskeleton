@@ -1,9 +1,9 @@
 package config
 
 import (
-	"kahrersoftware.at/webskeleton/global"
-	"kahrersoftware.at/webskeleton/types"
-	"kahrersoftware.at/webskeleton/web/request"
+	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/types"
+	"github.com/devgek/webskeleton/web/request"
 )
 
 //TData map holding data for page templates

@@ -3,11 +3,11 @@ package data_test
 import (
 	"testing"
 
+	"github.com/devgek/webskeleton/data"
+	"github.com/devgek/webskeleton/models"
+	"github.com/devgek/webskeleton/types"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
-	"kahrersoftware.at/webskeleton/data"
-	"kahrersoftware.at/webskeleton/models"
-	"kahrersoftware.at/webskeleton/types"
 )
 
 func TestGetOneEntityBy(t *testing.T) {

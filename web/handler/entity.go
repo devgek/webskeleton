@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/models"
+	"github.com/devgek/webskeleton/types"
+	"github.com/devgek/webskeleton/web/viewmodel"
 	"github.com/labstack/echo"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/models"
-	"kahrersoftware.at/webskeleton/types"
-	"kahrersoftware.at/webskeleton/web/viewmodel"
 )
 
 //HandleOptionListAjax ...

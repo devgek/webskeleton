@@ -3,8 +3,8 @@ package helper_test
 import (
 	"testing"
 
+	"github.com/devgek/webskeleton/helper"
 	"github.com/stretchr/testify/assert"
-	"kahrersoftware.at/webskeleton/helper"
 )
 
 func TestMonthFromDay(t *testing.T) {

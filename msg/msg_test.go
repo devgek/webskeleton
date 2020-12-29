@@ -3,8 +3,8 @@ package msg_test
 import (
 	"testing"
 
+	"github.com/devgek/webskeleton/msg"
 	"github.com/stretchr/testify/assert"
-	"kahrersoftware.at/webskeleton/msg"
 )
 
 func TestGetString(t *testing.T) {

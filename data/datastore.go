@@ -1,12 +1,12 @@
 package data
 
 import (
-	"kahrersoftware.at/webskeleton/global"
-	"kahrersoftware.at/webskeleton/helper"
-	"kahrersoftware.at/webskeleton/types"
+	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/types"
 
+	"github.com/devgek/webskeleton/models"
 	"github.com/jinzhu/gorm"
-	"kahrersoftware.at/webskeleton/models"
 )
 
 //CRUDDatastore CRUD operations with abstract entity type

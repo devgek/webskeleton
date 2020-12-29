@@ -4,14 +4,14 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/devgek/webskeleton/data"
+	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/models"
+	"github.com/devgek/webskeleton/services"
+	"github.com/devgek/webskeleton/types"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"kahrersoftware.at/webskeleton/data"
-	"kahrersoftware.at/webskeleton/helper"
-	"kahrersoftware.at/webskeleton/models"
-	"kahrersoftware.at/webskeleton/services"
-	"kahrersoftware.at/webskeleton/types"
 )
 
 /*

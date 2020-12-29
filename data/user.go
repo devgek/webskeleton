@@ -1,7 +1,7 @@
 package data
 
 import (
-	"kahrersoftware.at/webskeleton/models"
+	"github.com/devgek/webskeleton/models"
 )
 
 //GetUser return User data

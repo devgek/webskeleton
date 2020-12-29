@@ -1,4 +1,4 @@
-module kahrersoftware.at/webskeleton
+module github.com/devgek/webskeleton
 
 go 1.12
 

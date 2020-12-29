@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/models"
 	"github.com/labstack/echo"
-	"kahrersoftware.at/webskeleton/config"
-	"kahrersoftware.at/webskeleton/models"
 )
 
 //HandleAPICreate ...

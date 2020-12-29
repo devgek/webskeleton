@@ -3,11 +3,11 @@ package cmd
 import (
 	"log"
 
-	"kahrersoftware.at/webskeleton/global"
-	"kahrersoftware.at/webskeleton/web/echo"
+	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/web/echo"
 
+	"github.com/devgek/webskeleton/config"
 	"github.com/spf13/cobra"
-	"kahrersoftware.at/webskeleton/config"
 )
 
 // serveCmd represents the serve command
