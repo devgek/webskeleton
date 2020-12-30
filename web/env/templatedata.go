@@ -1,7 +1,7 @@
-package config
+package webenv
 
 import (
-	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/types"
 	"github.com/devgek/webskeleton/web/request"
 )
@@ -23,9 +23,9 @@ func NewTemplateDataWithRequestData(requestData request.RData) TData {
 func NewTemplateData() TData {
 	vd := make(map[string]interface{})
 	vd["Messages"] = GetWebEnv().MessageLocator
-	vd["ProjectName"] = global.ProjectName
-	vd["VersionInfo"] = global.ProjectVersion
-	vd["StartPage"] = global.StartPage
+	vd["ProjectName"] = config.ProjectName
+	vd["VersionInfo"] = config.ProjectVersion
+	vd["StartPage"] = config.StartPage
 	//add types for handling in templates
 	vd["EntityTypes"] = types.EntityTypes()
 	vd["OrgTypes"] = types.OrgTypes()

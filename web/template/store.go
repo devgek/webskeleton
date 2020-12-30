@@ -5,7 +5,7 @@ import (
 	"sync"
 	"text/template"
 
-	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/config"
 	"github.com/gobuffalo/packr/v2"
 )
 
@@ -35,7 +35,7 @@ func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) *template.Template
 	defer ts.Unlock()
 
 	//if dev mode, than parse the template on each request
-	if val, ok := ts.templates[fileName]; ok && !global.IsDev() {
+	if val, ok := ts.templates[fileName]; ok && !config.IsDev() {
 		return val
 	}
 

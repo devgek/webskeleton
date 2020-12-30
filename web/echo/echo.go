@@ -4,18 +4,17 @@ import (
 	"net/http"
 
 	"github.com/devgek/webskeleton/config"
-	"github.com/devgek/webskeleton/global"
-	"github.com/devgek/webskeleton/web"
+	webenv "github.com/devgek/webskeleton/web/env"
 	"github.com/devgek/webskeleton/web/handler"
 	"github.com/devgek/webskeleton/web/template"
 	"github.com/labstack/echo"
 )
 
 //InitEcho initialize the echo web framework
-func InitEcho(env *config.Env) *echo.Echo {
+func InitEcho(env *webenv.Env) *echo.Echo {
 	e := echo.New()
 	e.HideBanner = true
-	if global.IsServerDebug() {
+	if config.IsServerDebug() {
 		e.Debug = true
 		// e.Use(middleware.Recover())
 	}
@@ -36,7 +35,7 @@ func InitEcho(env *config.Env) *echo.Echo {
 
 	assetHandler := http.FileServer(env.Assets)
 	// e.GET(web.AssetHandlerPattern, echo.WrapHandler(http.StripPrefix(web.AssetPattern, assetHandler)))
-	e.GET(web.AssetHandlerPattern, handler.AssetHandlerFunc(http.StripPrefix(web.AssetPattern, assetHandler)))
+	e.GET(webenv.AssetHandlerPattern, handler.AssetHandlerFunc(http.StripPrefix(webenv.AssetPattern, assetHandler)))
 	// e.Static(web.AssetPattern, web.AssetRoot)
 
 	e.POST("/apientitylist:entity", handler.HandleEntityListAjax)

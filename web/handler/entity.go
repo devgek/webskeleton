@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/types"
+	webenv "github.com/devgek/webskeleton/web/env"
 	"github.com/devgek/webskeleton/web/viewmodel"
 	"github.com/labstack/echo"
 )
@@ -18,7 +18,7 @@ func HandleOptionListAjax(c echo.Context) error {
 	entity := c.Param("entity")
 	entityType := types.ParseEntityType(entity)
 
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 
 	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
 
@@ -42,7 +42,7 @@ func HandleEntityListAjax(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
 
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 	entities := ec.Env.EF.GetSlice(entity)
 
 	entityResponse := viewmodel.NewEntityResponse(entities)
@@ -66,12 +66,12 @@ func HandleEntityList(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
 
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 	entities := ec.Env.EF.GetSlice(entity)
 
 	err := ec.Env.DS.GetAllEntities(entities)
 
-	viewData := config.NewTemplateDataWithRequestData(ec.RequestData())
+	viewData := webenv.NewTemplateDataWithRequestData(ec.RequestData())
 	viewData["Entities"] = entities
 	viewData["EditEntityType"] = ec.Env.MessageLocator.GetString("entity." + entity)
 	if entity == "consumptiongroup" {
@@ -85,7 +85,7 @@ func HandleEntityList(c echo.Context) error {
 
 //HandleEntityDelete ...
 func HandleEntityDelete(c echo.Context) error {
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 
 	entity := c.Param("entity")
 	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
@@ -112,7 +112,7 @@ func HandleEntityEdit(c echo.Context) error {
 	oID := c.FormValue("gkvObjId")
 	ioID, _ := strconv.Atoi(oID)
 
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
 	oEntityObject := ec.Env.EF.Get(entity)
 
@@ -143,7 +143,7 @@ func HandleEntityEdit(c echo.Context) error {
 
 //HandleEntityNew ...
 func HandleEntityNew(c echo.Context) error {
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
 
 	oEntityObject := ec.Env.EF.Get(entity)

@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/helper/helper"
 	"github.com/devgek/webskeleton/types"
+	webenv "github.com/devgek/webskeleton/web/env"
 	"github.com/labstack/echo"
 )
 
@@ -18,9 +18,9 @@ func HandlePage1(c echo.Context) error {
 	helper.PanicOnError(err)
 	log.Println("page1FilterContactType", iContactType)
 
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 
-	viewData := config.NewTemplateDataWithRequestData(ec.RequestData())
+	viewData := webenv.NewTemplateDataWithRequestData(ec.RequestData())
 	viewData["FilterContactType"] = contactType
 	viewData["ContactTypes"] = types.ContactTypes()
 

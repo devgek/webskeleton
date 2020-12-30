@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/devgek/webskeleton/config"
-	"github.com/devgek/webskeleton/global"
-	"github.com/devgek/webskeleton/web"
+	webcookie "github.com/devgek/webskeleton/web/cookie"
+	webenv "github.com/devgek/webskeleton/web/env"
 	"github.com/devgek/webskeleton/web/request"
 	"github.com/labstack/echo"
 	"github.com/stretchr/objx"
@@ -18,10 +18,10 @@ func HandleLogin(c echo.Context) error {
 	theUser := c.FormValue("userid")
 	thePass := c.FormValue("password")
 
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 	user, err := ec.Env.Services.LoginUser(theUser, thePass)
 	if err != nil {
-		viewData := config.NewTemplateData()
+		viewData := webenv.NewTemplateData()
 		viewData["LoginUser"] = theUser
 		viewData["LoginPass"] = thePass
 		viewData["ErrorMessage"] = ec.Env.MessageLocator.GetMessageF(err.Error())
@@ -36,14 +36,14 @@ func HandleLogin(c echo.Context) error {
 	requestData.SetUserID(theUser)
 	requestData.SetRole(user.Role)
 
-	cookieData := web.NewCookieData(requestData)
+	cookieData := webcookie.NewCookieData(requestData)
 
 	authCookieValue := objx.New(cookieData).MustBase64()
 
 	c.SetCookie(&http.Cookie{
-		Name:  web.AuthCookieName,
+		Name:  webcookie.AuthCookieName,
 		Value: authCookieValue,
 		Path:  "/"})
 
-	return c.Redirect(http.StatusTemporaryRedirect, global.StartPage)
+	return c.Redirect(http.StatusTemporaryRedirect, config.StartPage)
 }

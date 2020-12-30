@@ -3,8 +3,8 @@ package cmd
 import (
 	"log"
 
-	"github.com/devgek/webskeleton/global"
 	"github.com/devgek/webskeleton/web/echo"
+	webenv "github.com/devgek/webskeleton/web/env"
 
 	"github.com/devgek/webskeleton/config"
 	"github.com/spf13/cobra"
@@ -37,27 +37,27 @@ func init() {
 
 func runServe(cmd *cobra.Command) {
 	// start the web server
-	log.Println("Starting ", global.ProjectName, " server on port ", global.ServerPort())
-	if global.IsDev() {
+	log.Println("Starting ", config.ProjectName, " server on port ", config.ServerPort())
+	if config.IsDev() {
 		log.Println("Development mode is on")
 	}
-	if global.IsAssetsCache() {
+	if config.IsAssetsCache() {
 		log.Println("Assets cache mode is on")
 	}
-	if global.IsServerDebug() {
+	if config.IsServerDebug() {
 		log.Println("Server debug mode is on")
 	}
-	if global.IsDatastoreLog() {
+	if config.IsDatastoreLog() {
 		log.Println("Datastore log mode is on")
 	}
 
-	env := config.GetWebEnv()
+	env := webenv.GetWebEnv()
 
 	e := echo.InitEcho(env)
 
-	if global.IsServerSecure() {
-		log.Fatal(e.StartTLS(":"+global.ServerPort(), global.ServerCert(), global.ServerKey()))
+	if config.IsServerSecure() {
+		log.Fatal(e.StartTLS(":"+config.ServerPort(), config.ServerCert(), config.ServerKey()))
 	} else {
-		log.Fatal(e.Start(":" + global.ServerPort()))
+		log.Fatal(e.Start(":" + config.ServerPort()))
 	}
 }

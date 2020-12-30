@@ -1,4 +1,4 @@
-package config
+package webenv
 
 import (
 	"log"

@@ -3,14 +3,14 @@ package handler
 import (
 	"net/http"
 
-	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/models"
+	webenv "github.com/devgek/webskeleton/web/env"
 	"github.com/labstack/echo"
 )
 
 //HandleAPICreate ...
 func HandleAPICreate(c echo.Context) error {
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
 	oEntityObject := ec.Env.EF.Get(entity)
 
@@ -29,7 +29,7 @@ func HandleAPICreate(c echo.Context) error {
 
 //HandleAPICreateAll ...
 func HandleAPICreateAll(c echo.Context) error {
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
 	oEntityObjects := ec.Env.EF.GetSlice(entity)
 

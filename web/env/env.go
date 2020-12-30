@@ -1,11 +1,11 @@
-package config
+package webenv
 
 import (
 	"log"
 	"net/http"
 	"sync"
 
-	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/msg"
 	"github.com/devgek/webskeleton/web/template"
@@ -56,10 +56,10 @@ func GetWebEnv() *Env {
 		//here we create the datastore
 		//?_foreign_keys=1, neccessary for golang to respect foreign key constraints on sqlite3 db
 		var ds data.Datastore
-		if global.DatastoreSystem() == "postgres" {
+		if config.DatastoreSystem() == "postgres" {
 			ds, err = data.NewPostgres()
 		} else {
-			ds, err = data.NewSqlite(global.DatabaseName)
+			ds, err = data.NewSqlite(config.DatabaseName)
 		}
 		if err != nil {
 			log.Panic(err)

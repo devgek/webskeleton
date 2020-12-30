@@ -1,7 +1,7 @@
 package data
 
 import (
-	"github.com/devgek/webskeleton/global"
+	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/helper/password"
 	"github.com/devgek/webskeleton/types"
 
@@ -38,11 +38,11 @@ func (ds DatastoreImpl) GetDB() *gorm.DB {
 
 //NewPostgres ...
 func NewPostgres() (Datastore, error) {
-	dialectArgs := "host=" + global.DatastoreHost()
-	dialectArgs = dialectArgs + " port=" + global.DatastorePort()
-	dialectArgs = dialectArgs + " user=" + global.DatastoreUser()
-	dialectArgs = dialectArgs + " password=" + global.DatastorePassword()
-	dialectArgs = dialectArgs + " dbname=" + global.DatastoreDb()
+	dialectArgs := "host=" + config.DatastoreHost()
+	dialectArgs = dialectArgs + " port=" + config.DatastorePort()
+	dialectArgs = dialectArgs + " user=" + config.DatastoreUser()
+	dialectArgs = dialectArgs + " password=" + config.DatastorePassword()
+	dialectArgs = dialectArgs + " dbname=" + config.DatastoreDb()
 	dialectArgs = dialectArgs + " sslmode=disable"
 
 	return NewDatastore("postgres", dialectArgs)
@@ -61,7 +61,7 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 		return nil, err
 	}
 
-	if global.IsDatastoreLog() {
+	if config.IsDatastoreLog() {
 		//log gorm db statements
 		db.LogMode(true)
 	}

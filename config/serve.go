@@ -1,16 +1,6 @@
-package global
+package config
 
 import "github.com/spf13/viper"
-
-// ...
-var (
-	ProjectName    = "webskeleton" //do not change
-	ProjectTitle   = "go-webskeleton"
-	ProjectVersion = "V1.0"
-	DatabaseName   = "webskeleton.db"
-	Debug          = false
-	StartPage      = "/page1"
-)
 
 //IsDev ...
 func IsDev() bool {

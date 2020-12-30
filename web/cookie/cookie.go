@@ -1,4 +1,4 @@
-package web
+package webcookie
 
 import (
 	"github.com/devgek/webskeleton/web/request"

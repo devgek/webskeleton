@@ -4,15 +4,15 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/models"
+	webenv "github.com/devgek/webskeleton/web/env"
 	"github.com/devgek/webskeleton/web/viewmodel"
 	"github.com/labstack/echo"
 )
 
 //HandleCreateUser own handler instead of using HandleEntityNew
 func HandleCreateUser(c echo.Context) error {
-	ec := c.(*config.EnvContext)
+	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
 	oEntityObject := ec.Env.EF.Get(entity)
 

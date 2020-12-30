@@ -1,6 +1,7 @@
 copy;.vscode/launch.json;.vscode
 copy;cmd/root.go;cmd
 copy;cmd/cmd1.go;cmd
+copy;config/constants.go;config
 xcopy;helper/helper;helper/helper
 copy;LICENSE
 copy;main.go
