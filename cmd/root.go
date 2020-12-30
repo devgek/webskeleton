@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/devgek/webskeleton/global"
 	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -15,7 +14,7 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   global.ProjectName,
+	Use:   "go-webskeleton",
 	Short: "A brief description of your application",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
@@ -26,7 +25,7 @@ to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("hello from %s root command", global.ProjectName)
+		fmt.Printf("hello from %s root command", "go-webskeleton")
 	},
 }
 

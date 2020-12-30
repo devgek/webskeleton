@@ -133,19 +133,27 @@ func runBootstrap(cmd *cobra.Command) {
 func copySources(sourceLines []string, sourceRoot, destinationRoot string) {
 	for _, line := range sourceLines {
 		parts := strings.Split(line, ";")
-		source := parts[0]
+		cmd := parts[0]
+		source := parts[1]
 		sourcePath := filepath.Join(sourceRoot, source)
 		destinationPath := destinationRoot
-		if len(parts) == 2 {
-			destinationPath = filepath.Join(destinationRoot, parts[1])
-			destinationPath = filepath.FromSlash(destinationPath + "\\")
+		if len(parts) == 3 {
+			destinationPath = filepath.Join(destinationRoot, parts[2])
 		}
+		destinationPath = filepath.FromSlash(destinationPath + "\\")
 
-		log.Print(sourcePath, "--->", destinationPath)
+		log.Print(cmd, sourcePath, "--->", destinationPath)
 
 		var command *exec.Cmd
 		if helper.IsWindows() {
-			command = exec.Command("xcopy", sourcePath, destinationPath, "/S", "/E", "/H", "/Y")
+			if cmd == "copy" {
+				err := os.MkdirAll(destinationPath, 0755)
+				helper.ExitOnError(err, "")
+				command = exec.Command("cmd", "/C", cmd, sourcePath, destinationPath, "/Y")
+			} else {
+				// xcopy
+				command = exec.Command("cmd", "/C", cmd, sourcePath, destinationPath, "/S", "/E", "/Y")
+			}
 		} else {
 			command = exec.Command("cp", "-rf", sourcePath, destinationPath)
 		}
