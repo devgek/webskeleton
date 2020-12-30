@@ -1,7 +1,7 @@
 package data
 
 import (
-	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/helper/password"
 	"github.com/devgek/webskeleton/models"
 )
 
@@ -21,7 +21,7 @@ func NewInMemoryDatastore() Datastore {
 		panic(err)
 	}
 	//init the db with test data
-	passEncrypted := helper.EncryptPassword(PassSecret)
+	passEncrypted := password.EncryptPassword(PassSecret)
 	messi := &models.User{Name: MessiName, Pass: passEncrypted, Email: MessiEmail}
 	err = ds.CreateEntity(messi)
 	if err != nil {

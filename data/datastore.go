@@ -2,7 +2,7 @@ package data
 
 import (
 	"github.com/devgek/webskeleton/global"
-	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/helper/password"
 	"github.com/devgek/webskeleton/types"
 
 	"github.com/devgek/webskeleton/models"
@@ -69,7 +69,7 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.Contact{}, &models.ContactAddress{})
 
-	pass := helper.EncryptPassword("xyz")
+	pass := password.EncryptPassword("xyz")
 	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com", Role: types.RoleTypeAdmin}
 
 	// err = db.FirstOrCreate(admin, &models.User{Name: "admin"}).Error

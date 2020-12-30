@@ -1,12 +1,16 @@
 package cmd
 
 import (
+	"bytes"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
-	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/helper/fileutil"
+	"github.com/devgek/webskeleton/helper/helper"
 	"github.com/spf13/cobra"
 )
 
@@ -31,7 +35,7 @@ func init() {
 }
 
 func runBootstrap(cmd *cobra.Command) {
-	// projectType, _ := cmd.Flags().GetString("type")
+	projectType, _ := cmd.Flags().GetString("type")
 	repoName, _ := cmd.Flags().GetString("repository")
 	repoUser, _ := cmd.Flags().GetString("user")
 	projectName, _ := cmd.Flags().GetString("project")
@@ -41,7 +45,10 @@ func runBootstrap(cmd *cobra.Command) {
 	}
 
 	packageName := repoName + "/" + repoUser + "/" + projectName
-	log.Println("Start bootstraping new project for", "'"+packageName+"' with title", projectTitle)
+	currPath, err := os.Getwd()
+	helper.ExitOnError(err, "Can't get current path!")
+
+	log.Println("Start bootstraping new project for", "'"+packageName+"' with title", projectTitle, "in", currPath)
 
 	// There can be more than one path, separated by colon.
 	gopaths := helper.GoPaths()
@@ -51,34 +58,28 @@ func runBootstrap(cmd *cobra.Command) {
 	// By default, we choose the last GOPATH.
 	gopath := gopaths[len(gopaths)-1]
 
-	fullpath := filepath.Join(gopath, "src", packageName)
+	// projectPath := filepath.Join(gopath, "src", packageName)
+	projectPath := filepath.Join(currPath, projectName)
 	dbName := projectName
 	projectTemplateDir := filepath.Join(gopath, "src", "github.com", "devgek", "webskeleton")
 
-	// 1. Create target directory
-	log.Print("Creating " + fullpath + "...")
-	err := os.MkdirAll(fullpath, 0755)
-	helper.ExitOnError(err, "")
+	// 1. Create project directory
+	// log.Print("Creating " + fullpath + "...")
+	// err = os.MkdirAll(fullpath, 0755)
+	// helper.ExitOnError(err, "")
 
 	// 2. Copy everything under project template directory to target directory.
-	log.Print("Copying project template directory to " + fullpath + "...")
-	currDir, err := os.Getwd()
-	helper.ExitOnError(err, "Can't get current path!")
+	log.Print("Copying project template files and directories to " + projectPath + "...")
+	// currDir, err := os.Getwd()
+	// helper.ExitOnError(err, "Can't get current path!")
 
-	err = os.Chdir(projectTemplateDir)
-	helper.ExitOnError(err, "")
+	// err = os.Chdir(projectTemplateDir)
+	// helper.ExitOnError(err, "")
 
-	var command *exec.Cmd
-	if helper.IsWindows() {
-		command = exec.Command("xcopy", ".", fullpath, "/S", "/E", "/H", "/Y", "/EXCLUDE:exclude.txt")
-	} else {
-		command = exec.Command("cp", "-rf", ".", fullpath)
-	}
-	output, err := command.CombinedOutput()
-	helper.ExitOnError(err, string(output))
+	copySources(getSources(projectTemplateDir, projectType), projectTemplateDir, projectPath)
 
-	err = os.Chdir(currDir)
-	helper.ExitOnError(err, "")
+	// err = os.Chdir(currPath)
+	// helper.ExitOnError(err, "")
 
 	// 3. Interpolate placeholder variables on the new project.
 	log.Print("Replacing placeholder variables on " + repoUser + "/" + projectName + "...")
@@ -93,7 +94,7 @@ func runBootstrap(cmd *cobra.Command) {
 	replacers["webskeleton_T_"] = projectName + "_T_"
 	replacers["webskeleton-types"] = projectName + "-types"
 	replacers["webskeleton.com"] = projectName + ".com"
-	err = helper.RecursiveSearchReplaceFiles(fullpath, replacers)
+	err = recursiveSearchReplaceFiles(projectPath, replacers)
 	helper.ExitOnError(err, "")
 
 	// 4. Setup and bootstrap databases.
@@ -105,24 +106,88 @@ func runBootstrap(cmd *cobra.Command) {
 	// command.Dir = fullpath
 	// output, err = command.CombinedOutput()
 	// helper.ExitOnError(err, string(output))
+	err = os.Chdir(projectPath)
+	helper.ExitOnError(err, "")
 
 	// 5. Initialize a go module project
 	log.Print("Running go mod init ", packageName)
-	command = exec.Command("go", "mod", "init", packageName)
-	command.Dir = fullpath
-	output, _ = command.CombinedOutput()
+	command := exec.Command("go", "mod", "init", packageName)
+	command.Dir = projectPath
+	output, _ := command.CombinedOutput()
 	log.Print(string(output))
 
 	log.Print("Running go mod tidy")
 	command = exec.Command("go", "mod", "tidy")
-	command.Dir = fullpath
+	command.Dir = projectPath
 	output, _ = command.CombinedOutput()
 	log.Print(string(output))
 
 	// 6. Run tests on newly generated app.
 	log.Print("Running go test ./...")
 	command = exec.Command("go", "test", "./...")
-	command.Dir = fullpath
+	command.Dir = projectPath
 	output, _ = command.CombinedOutput()
 	log.Print(string(output))
+}
+
+func copySources(sourceLines []string, sourceRoot, destinationRoot string) {
+	for _, line := range sourceLines {
+		parts := strings.Split(line, ";")
+		source := parts[0]
+		sourcePath := filepath.Join(sourceRoot, source)
+		destinationPath := destinationRoot
+		if len(parts) == 2 {
+			destinationPath = filepath.Join(destinationRoot, parts[1])
+			destinationPath = filepath.FromSlash(destinationPath + "\\")
+		}
+
+		log.Print(sourcePath, "--->", destinationPath)
+
+		var command *exec.Cmd
+		if helper.IsWindows() {
+			command = exec.Command("xcopy", sourcePath, destinationPath, "/S", "/E", "/H", "/Y")
+		} else {
+			command = exec.Command("cp", "-rf", sourcePath, destinationPath)
+		}
+		output, err := command.CombinedOutput()
+		helper.ExitOnError(err, string(output))
+	}
+}
+
+func getSources(rootPath string, projectType string) []string {
+	fileName := filepath.Join(rootPath, "_test", "copy-"+projectType+".txt")
+	fileName = filepath.Clean(fileName)
+
+	sources, err := fileutil.ReadLines(fileName)
+	helper.ExitOnError(err, "getSources")
+
+	return sources
+}
+
+func recursiveSearchReplaceFiles(fullpath string, replacers map[string]string) error {
+	fileOrDirList := []string{}
+	err := filepath.Walk(fullpath, func(path string, f os.FileInfo, err error) error {
+		fileOrDirList = append(fileOrDirList, path)
+		return nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	for _, fileOrDir := range fileOrDirList {
+		fileInfo, _ := os.Stat(fileOrDir)
+		if !fileInfo.IsDir() {
+			for oldString, newString := range replacers {
+				contentBytes, _ := ioutil.ReadFile(fileOrDir)
+				newContentBytes := bytes.Replace(contentBytes, []byte(oldString), []byte(newString), -1)
+
+				err := ioutil.WriteFile(fileOrDir, newContentBytes, fileInfo.Mode())
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+	return nil
 }

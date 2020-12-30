@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/devgek/webskeleton/config"
-	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/helper/helper"
 	"github.com/devgek/webskeleton/types"
 	"github.com/labstack/echo"
 )

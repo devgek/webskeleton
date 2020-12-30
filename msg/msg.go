@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/helper/helper"
 	"github.com/spf13/viper"
 )
 

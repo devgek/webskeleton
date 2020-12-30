@@ -2,7 +2,7 @@ package services
 
 import (
 	"github.com/devgek/webskeleton/dtos"
-	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/helper/password"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/types"
 )
@@ -11,7 +11,7 @@ import (
 func (s Services) CreateEntity(entity interface{}, entityName string) error {
 	if entityName == "user" {
 		user := entity.(*models.User)
-		user.Pass = helper.EncryptPassword(user.Pass)
+		user.Pass = password.EncryptPassword(user.Pass)
 		return s.DS.CreateEntity(user)
 	}
 

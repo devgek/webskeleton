@@ -3,7 +3,7 @@ package services
 import (
 	"unicode"
 
-	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/helper/password"
 	"github.com/devgek/webskeleton/types"
 
 	"log"
@@ -21,10 +21,10 @@ var (
 )
 
 //LoginUser check user and pwd
-func (s Services) LoginUser(username string, password string) (*models.User, error) {
+func (s Services) LoginUser(username string, pass string) (*models.User, error) {
 	user, err := s.DS.GetUser(username)
 	if err == nil {
-		if err = helper.ComparePassword(user.Pass, password); err == nil {
+		if err = password.ComparePassword(user.Pass, pass); err == nil {
 			return user, nil
 		}
 	}
@@ -34,20 +34,20 @@ func (s Services) LoginUser(username string, password string) (*models.User, err
 }
 
 //CreateUser create new user
-func (s Services) CreateUser(username string, password string, email string, role types.RoleType) (*models.User, error) {
+func (s Services) CreateUser(username string, pass string, email string, role types.RoleType) (*models.User, error) {
 	user := &models.User{}
 	user.Name = username
 	user.Email = email
 	user.Role = role
-	user.Pass = password
+	user.Pass = pass
 	var err error
 
-	if !isValidPassword(password) {
+	if !isValidPassword(pass) {
 		log.Println("CreateUser: Password not valid")
 		return user, ErrorUserPasswordRules
 	}
 
-	user.Pass = helper.EncryptPassword(password)
+	user.Pass = password.EncryptPassword(pass)
 
 	if err = s.DS.CreateEntity(user); err == nil {
 		return user, err

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/devgek/webskeleton/data"
-	"github.com/devgek/webskeleton/helper"
+	"github.com/devgek/webskeleton/helper/password"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/services"
 	"github.com/devgek/webskeleton/types"
@@ -29,7 +29,7 @@ func TestLoginUser(t *testing.T) {
 	mockedDB := &data.MockedDatastore{}
 	services := services.NewServices(mockedDB)
 
-	passEncrypted := helper.EncryptPassword("secret")
+	passEncrypted := password.EncryptPassword("secret")
 	userGerald := &models.User{Name: "Gerald", Pass: passEncrypted, Email: "gerald.kahrer@gmail.com"}
 	// setup expectations
 	mockedDB.On("GetUser", "Gerald").Return(userGerald, nil)
@@ -69,7 +69,7 @@ func TestCreateUser(t *testing.T) {
 	mockedDB := &data.MockedDatastore{}
 	s := services.NewServices(mockedDB)
 
-	passEncrypted := helper.EncryptPassword(data.PassSecret)
+	passEncrypted := password.EncryptPassword(data.PassSecret)
 	userRoger := &models.User{Name: "Roger", Pass: passEncrypted, Email: "roger.federer@atp.com", Role: types.RoleTypeUser}
 	// setup expectations
 	mockedDB.On("CreateEntity", mock.Anything).Return(nil)

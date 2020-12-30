@@ -1,0 +1,1 @@
+webskeleton bootstrap --type=web --repository=kahrersoftware.at --user=cwl --project=pr1
