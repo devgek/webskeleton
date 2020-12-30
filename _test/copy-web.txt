@@ -5,7 +5,6 @@ copy;cmd/serve.go;cmd
 copy;config;config
 copy;data;data
 copy;dtos;dtos
-copy;global;global
 xcopy;helper;helper
 copy;models;models
 copy;msg;msg

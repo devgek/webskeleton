@@ -37,13 +37,13 @@ var webEnv *Env
 func GetWebEnv() *Env {
 	once.Do(func() {
 		// ../web/templates important for packr2 to find files
-		origninalTemplateBox := packr.New("templates", "../web/templates")
+		origninalTemplateBox := packr.New("templates", "../templates")
 		// templateBox := packrfix.New(origninalTemplateBox)
 
 		//init TStore
 		tStore := template.NewBoxBasedTemplateStore(origninalTemplateBox)
 
-		origninalAssetBox := packr.New("assets", "../web/assets")
+		origninalAssetBox := packr.New("assets", "../assets")
 		// assetBox := packrfix.New(origninalAssetBox)
 
 		//load locale specific message file, if not default

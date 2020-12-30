@@ -10,7 +10,7 @@ import (
 )
 
 //TemplateRoot rootdir for template files
-var TemplateRoot = "./web/templates/"
+// var TemplateRoot = "./web/templates/"
 
 //TStore ...
 type TStore interface {
