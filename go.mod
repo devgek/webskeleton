@@ -3,6 +3,7 @@ module github.com/devgek/webskeleton
 go 1.12
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gobuffalo/packr/v2 v2.8.0
 	github.com/jinzhu/gorm v1.9.15
 	github.com/labstack/echo v3.3.10+incompatible

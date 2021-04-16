@@ -44,6 +44,11 @@ func HandleFavicon(c echo.Context) error {
 	return c.File(webenv.AssetRoot + "/favicon_kahrersoftware.png")
 }
 
+//HandleSpa start single page app (vue)
+func HandleSpa(c echo.Context) error {
+	return c.Redirect(http.StatusTemporaryRedirect, "/vue/start.html")
+}
+
 //HandlePageDefault ...
 func HandlePageDefault(c echo.Context) error {
 	page := c.Param("page")

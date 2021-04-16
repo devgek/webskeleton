@@ -5,9 +5,11 @@ import (
 	"net/http"
 
 	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/types"
 	webcookie "github.com/devgek/webskeleton/web/cookie"
 	webenv "github.com/devgek/webskeleton/web/env"
 	"github.com/devgek/webskeleton/web/request"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/stretchr/objx"
 )
@@ -46,4 +48,45 @@ func HandleLogin(c echo.Context) error {
 		Path:  "/"})
 
 	return c.Redirect(http.StatusTemporaryRedirect, config.StartPage)
+}
+
+type LoginData struct {
+	User string
+	Pass string
+}
+
+//HandleApiLogin handles login to api and returns a JWT token
+func HandleAPILogin(c echo.Context) error {
+	//do the login
+	loginData := LoginData{}
+	if err := c.Bind(&loginData); err != nil {
+		return err
+	}
+
+	ec := c.(*webenv.EnvContext)
+	user, err := ec.Env.Services.LoginUser(loginData.User, loginData.Pass)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusUnauthorized)
+	}
+
+	//login ok
+	log.Println("User", user.Name, "logged in for api")
+
+	// Create token
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	// Set claims
+	claims := token.Claims.(jwt.MapClaims)
+	claims["admin"] = (user.Role == types.RoleTypeAdmin)
+
+	// Generate encoded token and send it as response.
+	t, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{
+		"token": t,
+		"name":  user.Name,
+	})
 }

@@ -28,15 +28,22 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 	e.GET("/health", handler.HandleHealth)
 
 	e.POST("/loginuser", handler.HandleLogin)
+	e.POST("/loginapi", handler.HandleAPILogin)
 
 	e.GET("/logout", handler.HandleLogout)
 
 	e.GET("/favicon.ico", handler.HandleFavicon)
 
+	// starting point of single page app
+	e.GET("/vue", handler.HandleSpa)
+
 	assetHandler := http.FileServer(env.Assets)
 	// e.GET(web.AssetHandlerPattern, echo.WrapHandler(http.StripPrefix(web.AssetPattern, assetHandler)))
 	e.GET(webenv.AssetHandlerPattern, handler.AssetHandlerFunc(http.StripPrefix(webenv.AssetPattern, assetHandler)))
 	// e.Static(web.AssetPattern, web.AssetRoot)
+	// serve all vue files
+	vueHandler := http.FileServer(env.VueFiles)
+	e.GET("/vue/*", handler.AssetHandlerFunc(http.StripPrefix("/vue", vueHandler)))
 
 	e.POST("/apientitylist:entity", handler.HandleEntityListAjax)
 	e.POST("/apioptionlist:entity", handler.HandleOptionListAjax)

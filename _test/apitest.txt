@@ -1,0 +1,4 @@
+curl -X POST \
+  -H 'Content-Type: application/json' \
+  -d '{"user":"admin", "pass": "xyz"}' \
+  localhost:8080/loginapi

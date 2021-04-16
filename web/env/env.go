@@ -22,6 +22,7 @@ type Env struct {
 	TStore         template.TStore
 	Templates      *packr.Box
 	Assets         http.FileSystem
+	VueFiles       http.FileSystem
 	DS             data.Datastore
 	Services       *services.Services
 	MessageLocator *msg.MessageLocator
@@ -46,6 +47,8 @@ func GetWebEnv() *Env {
 		origninalAssetBox := packr.New("assets", "../assets")
 		// assetBox := packrfix.New(origninalAssetBox)
 
+		origninalVueBox := packr.New("vue", "../../vue")
+
 		//load locale specific message file, if not default
 		// messages, err := assetBox.Find("msg/messages-en.yaml")
 		messages, err := origninalAssetBox.Find("msg/messages.yaml")
@@ -67,7 +70,7 @@ func GetWebEnv() *Env {
 
 		services := services.NewServices(ds)
 
-		webEnv = &Env{TStore: tStore, Templates: origninalTemplateBox, Assets: origninalAssetBox, DS: ds, Services: services, MessageLocator: ml}
+		webEnv = &Env{TStore: tStore, Templates: origninalTemplateBox, Assets: origninalAssetBox, VueFiles: origninalVueBox, DS: ds, Services: services, MessageLocator: ml}
 	})
 
 	return webEnv

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Icons -->
+    <link rel="shortcut icon" href="/assets/favicon_kahrersoftware.png">
+
+    <!-- Stylesheets -->
+    <!-- Fonts and OneUI framework -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
+
+    <!-- Page JS Plugins CSS -->
+    <link rel="stylesheet" href="/assets/js/plugins/datatables/dataTables.bootstrap4.css" type="text/css">
+    <link rel="stylesheet" href="/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" type="text/css">
+
+    <!-- OneUI CSS -->
+    <link rel="stylesheet" id="css-main" href="/assets/css/oneui.min.css" type="text/css">
+    <!-- bepo app CSS -->
+    <link rel="stylesheet" id="css-bepo" href="/assets/css/gkwebapp.css" type="text/css">
+
+    <script src="/assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script>
+    <!-- bootstrap comes with oneui -->
+    <!--script src="assets/js/bootstrap-4.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script-->
+    <!-- OneUI JS -->
+    <script src="/assets/js/oneui.core.min-4.6.js"></script>
+    <script src="/assets/js/oneui.app.min-4.6.js"></script>
+
+    <!-- app JavaScript -->
+    <script src="/assets/js/gkwebapp.js" crossorigin="anonymous" type="text/javascript"></script>
+
+    <!-- Import Vue.js -->
+    <script src="https://unpkg.com/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@2.6.0/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/vuex@3.6.2/dist/vuex.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+    <script src="https://unpkg.com/axios@0.21.1/dist/axios.js"></script>
+
+    <title>Vue webskeleton</title>
+  </head>
+  <body>
+    <!-- Import Layouts -->
+    <script src="./views/gekLayout.js"></script>
+    <!-- Import Views -->
+    <script src="./views/gekApp.js"></script>
+    <script src="./views/gekLogin.js"></script>
+    <script src="./views/gekNotFound.js"></script>
+    <script src="./views/gekHome.js"></script>
+    <script src="./views/gekPage1.js"></script>
+    <!-- Import Components -->
+    <script src="./components/gekHeader.js"></script>
+    <script src="./components/gekNav.js"></script>
+    <script src="./components/ProductDisplay.js"></script>
+    <script src="./components/ReviewForm.js"></script>
+    <script src="./components/ReviewList.js"></script>
+
+    <!-- Import Store -->
+    <script src="./store.js"></script>
+
+    <!-- Import Router -->
+    <script src="./router.js"></script>
+
+    <div id="app">
+      <gek-app></gek-app>
+    </div>
+
+    <!-- Import App -->
+    <script src="./main.js"></script>
+
+  </body>
+</html>
