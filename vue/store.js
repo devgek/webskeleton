@@ -21,7 +21,7 @@ const store = new Vuex.Store({
     actions: {
       login ({ commit }, credentials) {
         return axios
-          .post('//localhost:8080/loginapi', credentials)
+          .post('//localhost:8080/apilogin', credentials)
           .then(({ data }) => {
             commit('SET_USER_DATA', data)
           })

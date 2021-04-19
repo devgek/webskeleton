@@ -13,7 +13,7 @@ const gekPage1View = Vue.component("gek-page1", {
     <!-- Page Content -->
     <div class="content content-full">
       <!-- Your Block -->
-      Main content
+      Main content Page1
       <!-- END Your Block -->
     </div>
     <!-- END Page Content -->

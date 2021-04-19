@@ -28,7 +28,7 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 	e.GET("/health", handler.HandleHealth)
 
 	e.POST("/loginuser", handler.HandleLogin)
-	e.POST("/loginapi", handler.HandleAPILogin)
+	e.POST("/apilogin", handler.HandleAPILogin)
 
 	e.GET("/logout", handler.HandleLogout)
 
