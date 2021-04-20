@@ -1,19 +1,21 @@
 curl -X POST \
   -H 'Content-Type: application/json' \
   -d '{"user":"admin", "pass": "xyz"}' \
-  localhost:8080/apilogin
+  localhost:8080/api/login
 
 curl -X POST \
   -H 'Content-Type: application/json' \
-  -d '{"user":"admin", "pass": "xyz"}' \
-  localhost:8080/apientitylistuser
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.fXypkBFuqt1YgTjy6DWKdlZY-4ikLwJ0CtAhG472rvY" \
+   localhost:8080/api/entitylistuser
+
 
 curl -X POST \
   -H 'Content-Type: application/json' \
-  -d '{"user":"admin", "pass": "xyz"}' \
-  localhost:8080/entitylistuser
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.fXypkBFuqt1YgTjy6DWKdlZY-4ikLwJ0CtAhG472rvY" \
+   localhost:8080/api/entitylistcontact
 
-curl -X POST \
+curl -X PUT \
   -H 'Content-Type: application/json' \
-  -d '{"user":"admin", "pass": "xyz"}' \
-  localhost:8080/apientitylistcontact
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.fXypkBFuqt1YgTjy6DWKdlZY-4ikLwJ0CtAhG472rvY" \
+  -d '{"name":"Gerald", "pass": "xyz", "email":"gerald.kahrer@gmail.com", "role": 0}' \
+   localhost:8080/api/newuser

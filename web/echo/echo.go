@@ -8,6 +8,7 @@ import (
 	"github.com/devgek/webskeleton/web/handler"
 	"github.com/devgek/webskeleton/web/template"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 //InitEcho initialize the echo web framework
@@ -21,14 +22,26 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 
 	e.Renderer = template.NewRenderer(env.TStore)
 
-	//api tests
-	e.PUT("/apinew:entity", handler.HandleAPICreate)
-	e.PUT("/apiallnew:entity", handler.HandleAPICreateAll)
+	// api
+	apiGroup := e.Group("/api")
+	apiGroup.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		SigningKey: []byte("secret"),
+		ContextKey: "token",
+		Skipper:    handler.JWTAuthSkipper,
+	}))
 
+	apiGroup.POST("/login", handler.HandleAPILogin)
+
+	apiGroup.POST("/entitylist:entity", handler.HandleEntityListAjax)
+	apiGroup.POST("/optionlist:entity", handler.HandleOptionListAjax)
+
+	apiGroup.PUT("/new:entity", handler.HandleAPICreate)
+	apiGroup.PUT("/allnew:entity", handler.HandleAPICreateAll)
+
+	//
 	e.GET("/health", handler.HandleHealth)
 
 	e.POST("/loginuser", handler.HandleLogin)
-	e.POST("/apilogin", handler.HandleAPILogin)
 
 	e.GET("/logout", handler.HandleLogout)
 
@@ -44,9 +57,6 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 	// serve all vue files
 	vueHandler := http.FileServer(env.VueFiles)
 	e.GET("/vue/*", handler.AssetHandlerFunc(http.StripPrefix("/vue", vueHandler)))
-
-	e.POST("/apientitylist:entity", handler.HandleEntityListAjax)
-	e.POST("/apioptionlist:entity", handler.HandleOptionListAjax)
 
 	e.Match([]string{"GET", "POST"}, "/entitylist:entity", handler.HandleEntityList)
 	e.POST("/entityedit:entity", handler.HandleEntityEdit)

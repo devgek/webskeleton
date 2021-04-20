@@ -62,35 +62,12 @@ func CookieAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-//JWTAuthMiddleware middleware handler for JWT authentication
-func JWTAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		r := c.Request()
-		//don't check token with this requests
-		if r.URL.Path == "/favicon.ico" || r.URL.Path == "/login" || r.URL.Path == "/loginuser" || r.URL.Path == "/health" || strings.Contains(r.URL.Path, "api") || strings.Contains(r.URL.Path, webenv.AssetPattern) || strings.Contains(r.URL.Path, "/vue") {
-			return next(c)
-		}
-
-		cookie, err := r.Cookie(webcookie.AuthCookieName)
-
-		if err == http.ErrNoCookie {
-			// not authenticated
-			log.Println("a: ", r.URL.Path, " not authenticated!")
-			return c.Redirect(http.StatusTemporaryRedirect, "/login")
-		}
-		if err != nil {
-			// some other error
-			return echo.NewHTTPError(http.StatusUnauthorized)
-		}
-
-		//get request data from cookie and save to context
-		rData, ok := request.FromCookie(cookie)
-		if !ok {
-			return echo.NewHTTPError(http.StatusUnauthorized, "illegal auth data")
-		}
-
-		c.Set(request.ContextKeyRequestData, rData)
-
-		return next(c)
+// JWTAuthSkipper returns true for URL's, that do not need token authentication
+func JWTAuthSkipper(c echo.Context) bool {
+	r := c.Request()
+	//don't check token for this URL's
+	if r.URL.Path == "/api/login" {
+		return true
 	}
+	return false
 }

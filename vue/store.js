@@ -33,7 +33,7 @@ const store = new Vuex.Store({
   actions: {
     login({ commit }, credentials) {
       return axios
-        .post("//localhost:8080/apilogin", credentials)
+        .post("//localhost:8080/api/login", credentials)
         .then(({ data }) => {
           commit("SET_USER_DATA", data);
         });
@@ -43,14 +43,14 @@ const store = new Vuex.Store({
     },
     loadUsers({ commit }) {
       return axios
-        .post("//localhost:8080/apientitylistuser")
+        .post("//localhost:8080/api/entitylistuser")
         .then(({ data }) => {
           commit("SET_USERS", data.EntityObject);
         });
     },
     loadContacts({ commit }) {
       return axios
-        .post("//localhost:8080/apientitylistcontact")
+        .post("//localhost:8080/api/entitylistcontact")
         .then(({ data }) => {
           commit("SET_CONTACTS", data.EntityObject);
         });
