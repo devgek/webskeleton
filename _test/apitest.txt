@@ -2,3 +2,18 @@ curl -X POST \
   -H 'Content-Type: application/json' \
   -d '{"user":"admin", "pass": "xyz"}' \
   localhost:8080/apilogin
+
+curl -X POST \
+  -H 'Content-Type: application/json' \
+  -d '{"user":"admin", "pass": "xyz"}' \
+  localhost:8080/apientitylistuser
+
+curl -X POST \
+  -H 'Content-Type: application/json' \
+  -d '{"user":"admin", "pass": "xyz"}' \
+  localhost:8080/entitylistuser
+
+curl -X POST \
+  -H 'Content-Type: application/json' \
+  -d '{"user":"admin", "pass": "xyz"}' \
+  localhost:8080/apientitylistcontact

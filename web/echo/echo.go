@@ -59,7 +59,7 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 
 	e.Use(handler.EnvContextMiddleware)
 	e.Use(handler.RequestLoggingMiddleware)
-	e.Use(handler.AuthMiddleware)
+	e.Use(handler.CookieAuthMiddleware)
 
 	return e
 }

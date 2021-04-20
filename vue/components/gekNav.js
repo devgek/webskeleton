@@ -9,7 +9,7 @@ Vue.component('gek-nav', {
               <ul class="nav-main nav-main-horizontal nav-main-hover">
                   <li class="nav-main-item">
                       <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
-                          aria-haspopup="true" aria-expanded="false" href="#">
+                          aria-haspopup="true" aria-expanded="false" >
                           <i class="nav-main-link-icon si si-speedometer"></i>
                           <span
                               class="nav-main-link-name">{{$t("nav.pages.header")}}</span>
@@ -23,7 +23,7 @@ Vue.component('gek-nav', {
                   <li class="nav-main-heading">Heading</li>
                   <li class="nav-main-item">
                       <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
-                          aria-haspopup="true" aria-expanded="false" href="#">
+                          aria-haspopup="true" aria-expanded="false" >
                           <i class="nav-main-link-icon si si-settings"></i>
                           <span
                               class="nav-main-link-name">{{$t("nav.admin.header")}}</span>
@@ -32,13 +32,13 @@ Vue.component('gek-nav', {
                           <li class="nav-main-item">
                               <a class="nav-main-link" href="/entitylistuser">
                                   <span
-                                      class="nav-main-link-name">{{$t("nav.admin.user")}}</span>
+                                      class="nav-main-link-name"><router-link to="/admin/user" class="nav-main-link">{{$t("nav.admin.user")}}</router-link></span>
                               </a>
                           </li>
                           <li class="nav-main-item">
                               <a class="nav-main-link" href="/entitylistcontact">
                                   <span
-                                      class="nav-main-link-name">{{$t("nav.admin.contact")}}t</span>
+                                      class="nav-main-link-name"><router-link to="/admin/contact" class="nav-main-link">{{$t("nav.admin.contact")}}</router-link></span>
                               </a>
                           </li>
                       </ul>
