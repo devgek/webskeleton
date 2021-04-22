@@ -29,13 +29,17 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 		ContextKey: "token",
 		Skipper:    handler.JWTAuthSkipper,
 	}))
+	apiGroup.Use(handler.TokenLoggingMiddleware)
 
 	apiGroup.POST("/login", handler.HandleAPILogin)
 
 	apiGroup.POST("/entitylist:entity", handler.HandleEntityListAjax)
 	apiGroup.POST("/optionlist:entity", handler.HandleOptionListAjax)
 
-	apiGroup.PUT("/new:entity", handler.HandleAPICreate)
+	apiGroup.POST("/entitynew:entity", handler.HandleAPICreate)
+	apiGroup.PUT("/entityedit:entity", handler.HandleEntityEdit)
+	apiGroup.PUT("/entitydelete:entity", handler.HandleEntityDelete)
+
 	apiGroup.PUT("/allnew:entity", handler.HandleAPICreateAll)
 
 	//
@@ -69,7 +73,7 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 
 	e.Use(handler.EnvContextMiddleware)
 	e.Use(handler.RequestLoggingMiddleware)
-	e.Use(handler.CookieAuthMiddleware)
+	// e.Use(handler.CookieAuthMiddleware)
 
 	return e
 }

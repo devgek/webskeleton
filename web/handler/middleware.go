@@ -16,6 +16,7 @@ import (
 func EnvContextMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cc := &webenv.EnvContext{Context: c, Env: webenv.GetWebEnv()}
+		log.Println("ec:", cc.Env.Templates.ResolutionDir)
 		return next(cc)
 	}
 }
@@ -24,6 +25,15 @@ func EnvContextMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 func RequestLoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		log.Println("r:", c.Request().RequestURI)
+		// Call the next handler, which can be another middleware in the chain, or the final handler.
+		return next(c)
+	}
+}
+
+//TokenLoggingMiddleware ...
+func TokenLoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		log.Println("t:", c.Request().RequestURI, "token:", c.Get("token"))
 		// Call the next handler, which can be another middleware in the chain, or the final handler.
 		return next(c)
 	}
@@ -65,6 +75,7 @@ func CookieAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 // JWTAuthSkipper returns true for URL's, that do not need token authentication
 func JWTAuthSkipper(c echo.Context) bool {
 	r := c.Request()
+	log.Println("JWTAuthSkipper", r.URL.Path, "token:", c.Get("token"))
 	//don't check token for this URL's
 	if r.URL.Path == "/api/login" {
 		return true

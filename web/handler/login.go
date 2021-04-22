@@ -87,5 +87,6 @@ func HandleAPILogin(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]string{
 		"token": t,
+		"name":  loginData.User,
 	})
 }

@@ -3,12 +3,10 @@ const app = new Vue({
   store: store,
   router: router,
   el: "#app",
-  data() {
-    return {
-      user: "",
-      token: "",
-      isAdmin: false,
-    };
+  data: {
+    user: "",
+    token: "",
+    isAdmin: false,
   },
   created() {
     const userString = localStorage.getItem('user')

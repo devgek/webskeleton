@@ -6,11 +6,31 @@ const store = new Vuex.Store({
       isAdmin: true,
       users: [],
       contacts: [],
+      editUser: {},
+      editContact: {}
     };
   },
   mutations: {
+    SET_EDIT_USER_ROLE(state, role) {
+      state.editUser.Role = role;
+    },
+    SET_EDIT_USER_EMAIL(state, email) {
+      state.editUser.Email = email;
+    },
+    SET_EDIT_USER_PASS(state, pass) {
+      state.editUser.Pass = pass;
+    },
+    SET_EDIT_USER_NAME(state, name) {
+      state.editUser.Name = name;
+    },
+    SET_EDIT_USER(state, user) {
+      state.editUser = user;
+    },
     SET_USERS(state, users) {
       state.users = users;
+    },
+    SET_EDIT_CONTACT(state, contact) {
+      state.editContact = contact;
     },
     SET_CONTACTS(state, contacts) {
       state.contacts = contacts;
@@ -55,6 +75,9 @@ const store = new Vuex.Store({
           commit("SET_CONTACTS", data.EntityObject);
         });
     },
+    updateEditUser({commit}, userObject) {
+      commit("SET_EDIT_USER", userObject)
+    }
   },
   getters: {},
 });
