@@ -1,8 +1,14 @@
-var forceKey = 17;
-var editName = "";
-var editPass = "";
-var editEmail = "";
-var editRole = 0;
+function newEntityObject() {
+  console.log("newEntityObject called");
+  return {
+    id: 0,
+    name: "",
+    pass: "",
+    email: "",
+    role: 0,
+  };
+}
+var forceKey = 14;
 
 const gekUserView = Vue.component("gek-user", {
   template:
@@ -25,8 +31,8 @@ const gekUserView = Vue.component("gek-user", {
     </div>
     <div class="block-content block-content-full font-size-sm">
         <div class="float-right mb-2">
-            <button type="button" class="btn btn-outline-primary gk-btn-new" data-toggle="modal"
-                 @click="prepareNew">{{$t("form.user.list.buttonnew")}}</button>
+            <button type="button" class="btn btn-outline-primary gk-btn-new" data-toggle="modal" data-target="#userEditModal" 
+                 @click="prepareNew($event.target)">{{$t("form.user.list.buttonnew")}}</button>
         </div>
         <div class="pb-3">&nbsp;</div>
     </div>
@@ -53,11 +59,11 @@ const gekUserView = Vue.component("gek-user", {
                     <td class="">
                         <div class="btn-group-sm" v-if="isAdminUser">
                             <button type="button" class="btn btn-sm btn-alt-primary gk-btn-edit" data-toggle="modal"
-                                data-target="#userEditModal" @click="prepareEdit">
+                                data-target="#userEditModal" @click="prepareEdit($event.target)">
                                 <i class="fa fa-fw fa-pencil-alt"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-alt-primary gk-btn-delete" data-toggle="modal"
-                                data-target="#confirmDeleteModal" @click="prepareDelete">
+                                data-target="#confirmDeleteModal" @click="prepareDelete($event.target)">
                                 <i class="fa fa-fw fa-times"></i>
                             </button>
                         </div>
@@ -69,15 +75,6 @@ const gekUserView = Vue.component("gek-user", {
             </tbody>
         </table>
     </div>
-    <div class="block-content font-size-sm">
-    <form>
-        <div class="form-group">
-            <label for="userTestName"
-                class="col-form-label">TestName</label>
-            <input name="userTestName" class="form-control" id="userTestName" :value="name" />
-        </div>
-    </form>
-</div>
 
 </div>
 <!-- END Your Block -->
@@ -94,15 +91,7 @@ aria-labelledby="userEditModalLabel" aria-hidden="true">
         <div class="block block-themed block-transparent mb-0">
             <div class="block-header bg-primary">
                 <h3 class="block-title" id="userEditModalLabel">Modal Title</h3>
-                <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true"
-                    data-delay="3000" data-tableId="userTable">
-                    <div class="toast-header">
-                        <span class="gk-toast-text">Toast Text</span>
-                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
+                <div v-if="message">{{ message.msg }}</div>
                 <div class="block-options">
                     <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                         <i class="fa fa-fw fa-times"></i>
@@ -114,23 +103,23 @@ aria-labelledby="userEditModalLabel" aria-hidden="true">
                     <div class="form-group">
                         <label for="userEditName"
                             class="col-form-label">{{$t("form.user.edit.label.name")}}</label>
-                        <input name="userEditName" class="form-control" id="userEditName" :value="editName"/>
+                        <input name="userEditName" class="form-control" id="userEditName" v-model="entityObject.name"/>
                     </div>
                     <div class="form-group">
                         <label for="userEditPass"
                             class="col-form-label">{{$t("form.user.edit.label.pass")}}</label>
                         <input type="password" name="userEditPass" class="form-control" id="userEditPass" 
-                            autocomplete="new-password" :value="editPass"/>
+                            autocomplete="new-password" v-model="entityObject.pass"/>
                     </div>
                     <div class="form-group">
                         <label for="userEditEmail"
                             class="col-form-label">{{$t("form.user.edit.label.email")}}</label>
-                        <input name="userEditEmail" class="form-control" id="userEditEmail"  :value="editEmail"/>
+                        <input name="userEditEmail" class="form-control" id="userEditEmail"  v-model="entityObject.email"/>
                     </div>
                     <div class="form-group">
                         <label for="userEditRole"
                             class="col-form-label">{{$t("form.user.edit.label.role")}}</label>
-                        <select name="userEditRole" class="form-control" id="userEditRole"  :value="editRole">
+                        <select name="userEditRole" class="form-control" id="userEditRole"  v-model="entityObject.role">
                           <option v-for="(option, key) in getRoleTypes" :value="key">{{ option }}</option>  
                         </select>
                     </div>
@@ -138,7 +127,7 @@ aria-labelledby="userEditModalLabel" aria-hidden="true">
             </div>
             <div class="block-content block-content-full text-right border-top">
                 <button type="button" class="btn btn-sm btn-light btn-back-app"
-                    data-dismiss="modal">{{$t("form.all.btn.abort")}}</button>
+                    data-dismiss="modal">{{$t("form.all.btn.back")}}</button>
                 <button type="button" class="btn btn-sm btn-primary btn-save-app" @click="doSave">
                     <i class="fa fa-check mr-1"></i>{{$t("form.all.btn.save")}}
                 </button>
@@ -148,49 +137,140 @@ aria-labelledby="userEditModalLabel" aria-hidden="true">
 </div>
 </div>
 <!-- END Modal Dialog -->
+<!-- Modal Dialog-->
+<div class="modal fade" id="confirmDeleteModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary">
+                    <h3 class="block-title" id="confirmDeleteModalLabel">
+                        Benutzer löschen</h3>
+                        <div v-if="message">{{ message.msg }}</div>
+                        <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content font-size-sm">
+                    <div>Benutzer wirklich löschen?</diV>
+                </div>
+
+                <div class="block-content block-content-full text-right border-top">
+                    <button type="button" class="btn btn-sm btn-light btn-back-app"
+                        data-dismiss="modal">{{$t("form.all.btn.abort")}}</button>
+                    <button type="button" class="btn btn-sm btn-primary btn-delete-app" @click="doDelete">
+                        <i class="fa fa-check mr-1"></i>{{$t("form.all.btn.delete")}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>
 <!-- END Page Container -->
 `,
   data() {
     return {
-      editName,
-      editPass,
-      editEmail,
-      editRole
+      userTable: new GKEntityTable("user"),
+      entityObject: newEntityObject(),
+      forceKey: forceKey,
     };
   },
   created() {
+    console.log("user created");
     this.$store.dispatch("loadUsers");
+
+    this.userTable.prepareEditDialog = function () {
+      if (this.isEditNew()) {
+        $("#userEditModalLabel").html("Benutzer neu anlegen");
+        $("#userEditName").prop("readonly", false);
+        $("#userEditPass").prop("readonly", false);
+      } else {
+        $("#userEditModalLabel").html("Benutzer ändern xxx");
+        $("#userEditName").prop("readonly", true);
+        $("#userEditPass").prop("readonly", true);
+      }
+    };
+    this.userTable.getRowDataFromEntity = function (data) {
+      var rowData = [];
+      var roleName = gkwebapp_T_RoleTypes[data.EntityObject.Role];
+      rowData.push(
+        data.EntityObject.Name,
+        "********",
+        data.EntityObject.Email,
+        roleName
+      );
+      return rowData;
+    };
+    this.userTable.getRowDataHiddenFromEntity = function (data) {
+      var rowDataHidden = [];
+      rowDataHidden.push(
+        data.EntityObject.Name,
+        data.EntityObject.Pass,
+        data.EntityObject.Email,
+        data.EntityObject.Role
+      );
+      return rowDataHidden;
+    };
+
+    this.editName = this.editName + "created";
   },
   updated() {
     console.log("user updated");
-    // console.log(this.$el.innerHTML);
-    userTable.initialize();
+    this.userTable.initialize();
+  },
+  mounted() {
+    console.log("user mounted");
   },
   methods: {
     roleDesc(role) {
       return this.getRoleTypes[role];
     },
     doSave() {
-      console.log("doSave:" + this.entityObject.Name + "," + this.entityObject.Pass + "," + this.entityObject.Email + "," + this.entityObject.Role)
-      this.$store.state.editUser = this.entityObject
+      this.$store.commit("SET_EDIT_USER", this.entityObject);
+      if (this.userTable.isEditNew()) {
+        this.$store.dispatch("createUser", this.entityObject);
+      } else {
+        this.$store.dispatch("updateUser", this.entityObject);
+      }
     },
-    prepareNew() {
-      this.$store.commit('SET_EDIT_USER_NAME', "new")
-      this.$store.commit('SET_EDIT_USER_PASS', "xxx")
+    doDelete() {
+        this.$store.dispatch("deleteUser", this.entityObject);
     },
-    prepareEdit() {
-      this.$store.commit('SET_EDIT_USER_NAME', this.editName)
-      this.$store.commit('SET_EDIT_USER_PASS', this.editPass)
-      this.forceKey++;
+    prepareNew(eventTarget) {
+      console.log("prepareNew");
+
+      this.userTable.onStartRowEditing(eventTarget);
+      console.log("prepareNew after onStartRowEditing");
+      this.enityObject = newEntityObject();
     },
-    prepareDelete() {
+    prepareEdit(eventTarget) {
+      console.log("prepareEdit");
+
+      this.userTable.onStartRowEditing(eventTarget);
+      console.log("prepareEdit after onStartRowEditing");
+
+      this.entityObject.id = parseInt(this.userTable.editRowKey);
+      this.entityObject.name = this.userTable.editRowData[0];
+      this.entityObject.pass = this.userTable.editRowDataHidden[1];
+      this.entityObject.email = this.userTable.editRowDataHidden[2];
+      this.entityObject.role = parseInt(this.userTable.editRowDataHidden[3]);
     },
-    storeName(event) {
-      this.$store.commit('SET_EDIT_USER_NAME', "krxmxr")
-    }
+    prepareDelete(eventTarget) {
+      console.log("prepareDelete");
+
+      this.userTable.onStartRowEditing(eventTarget);
+
+      this.entityObject.id = parseInt(this.userTable.editRowKey);
+    },
   },
   computed: {
+    message() {
+      return this.$store.state.message;
+    },
     getRoleTypes() {
       return gkwebapp_T_RoleTypes;
     },
@@ -203,89 +283,5 @@ aria-labelledby="userEditModalLabel" aria-hidden="true">
     Entities() {
       return this.$store.state.users;
     },
-    name: {
-      get () {
-        return this.$store.state.editUser.Name
-      },
-      set(value) {
-        this.$store.commit('SET_EDIT_USER_NAME', value)
-      }
-    },
-    pass: {
-      get () {
-        return this.$store.state.editUser.Pass
-      },
-      set(value) {
-        this.$store.commit('SET_EDIT_USER_PASS', value)
-      }
-    },
-    email: {
-      get () {
-        return this.$store.state.editUser.Email
-      },
-      set(value) {
-        this.$store.commit('SET_EDIT_USER_EMAIL', value)
-      }
-    },
-    role: {
-      get () {
-        return this.$store.state.editUser.Role
-      },
-      set(value) {
-        this.$store.commit('SET_EDIT_USER_ROLE', value)
-      }
-    }
-  
   },
 });
-
-//create GKTable without inline editing
-var userTable = new GKEntityTable("user");
-
-userTable.prepareEditDialog = function () {
-  if (activeGKEntityTable.isEditNew()) {
-    $("#userEditModalLabel").html("Benutzer neu anlegen");
-    $("#userEditName").prop("readonly", false);
-    $("#userEditPass").prop("readonly", false);
-  } else {
-    $("#userEditModalLabel").html("Benutzer ändern");
-    $("#userEditName").prop("readonly", true);
-    $("#userEditPass").prop("readonly", true);
-  }
-
-    console.log("rowData:" + activeGKEntityTable.editRowData[0] + "," + activeGKEntityTable.editRowData[1]);
-    console.log("rowDataHidden:" + activeGKEntityTable.editRowDataHidden[0] + "," + activeGKEntityTable.editRowDataHidden[1]);
-    console.log("store:" + JSON.stringify(store.state.editUser))
-
-    editName = activeGKEntityTable.editRowData[0];
-    editPass = activeGKEntityTable.editRowDataHidden[1];
-    editEmail = activeGKEntityTable.editRowDataHidden[2];
-    editRole = activeGKEntityTable.editRowDataHidden[3];
-
-    forceKey++;
-};
-userTable.prepareSendRowData = function () {
-  console.log("getUserView:prepareSendRowData:" + JSON.stringify(store.state.editUser))
-  return store.state.editUser
-};
-userTable.getRowDataFromEntity = function (data) {
-  var rowData = [];
-  var roleName = gkwebapp_T_RoleTypes[data.EntityObject.Role];
-  rowData.push(
-    data.EntityObject.Name,
-    "********",
-    data.EntityObject.Email,
-    roleName
-  );
-  return rowData;
-};
-userTable.getRowDataHiddenFromEntity = function (data) {
-  var rowDataHidden = [];
-  rowDataHidden.push(
-    data.EntityObject.Name,
-    data.EntityObject.Pass,
-    data.EntityObject.Email,
-    data.EntityObject.Role
-  );
-  return rowDataHidden;
-};

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/devgek/webskeleton/models"
 	webenv "github.com/devgek/webskeleton/web/env"
@@ -22,6 +23,41 @@ func HandleAPICreate(c echo.Context) error {
 
 	if err == nil {
 		return c.JSON(http.StatusOK, oEntityObject)
+	}
+
+	return c.JSON(http.StatusInternalServerError, err.Error())
+}
+
+//HandleAPIEdit ...
+func HandleAPIEdit(c echo.Context) error {
+	ec := c.(*webenv.EnvContext)
+	entity := ec.Param("entity")
+	oEntityObject := ec.Env.EF.Get(entity)
+
+	if err := c.Bind(oEntityObject); err != nil {
+		return err
+	}
+
+	err := ec.Env.DS.SaveEntity(oEntityObject)
+
+	if err == nil {
+		return c.JSON(http.StatusOK, oEntityObject)
+	}
+
+	return c.JSON(http.StatusInternalServerError, err.Error())
+}
+
+//HandleAPIEdit ...
+func HandleAPIDelete(c echo.Context) error {
+	ec := c.(*webenv.EnvContext)
+	entity := ec.Param("entity")
+	id := ec.Param("id")
+	ioID, _ := strconv.Atoi(id)
+	entityModel := ec.Env.EF.Get(entity)
+	err := ec.Env.DS.DeleteEntityByID(entityModel, uint(ioID))
+
+	if err == nil {
+		return c.JSON(http.StatusOK, "Entity deleted")
 	}
 
 	return c.JSON(http.StatusInternalServerError, err.Error())

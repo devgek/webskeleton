@@ -18,6 +18,7 @@ const messages = {
           actions: "Aktionen",
         },
         btn: {
+          back: "Zurück",
           abort: "Abbrechen",
           save: "Speichern",
           delete: "Löschen",

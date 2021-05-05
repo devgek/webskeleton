@@ -23,7 +23,7 @@ function GKEntityTable(entity, entityEmbedded) {
   this.editRowData = [];
   this.editRowDataHidden = [];
   this.editRow = {};
-  this.editRowKey = "";
+  this.editRowKey = 0;
   this.editNew = false;
 
   if (entityEmbedded == undefined) {
@@ -39,7 +39,7 @@ function GKEntityTable(entity, entityEmbedded) {
   this.editRowDataEmbedded = [];
   this.editRowDataHiddenEmbedded = [];
   this.editRowEmbedded = {};
-  this.editRowKeyEmbedded = "";
+  this.editRowKeyEmbedded = 0;
   this.editNewEmbedded = false;
 
   this.entityOptionsArray = [];
@@ -53,9 +53,7 @@ function GKEntityTable(entity, entityEmbedded) {
   activeGKEntityTable = this;
 
   this.initialize = function () {
-    // if (this.initialized) {
-    //   return;
-    // }
+    console.log("initialize GKEntityTable " + this.tableId)
 
     this.root = $("table.gk-table[id=" + this.tableId + "]");
 
@@ -63,6 +61,17 @@ function GKEntityTable(entity, entityEmbedded) {
     const $rows = $(this.root).find(
       "tbody tr:not(.gk-row-section)[data-entityid]"
     );
+    if ($rows.length < 1) {
+      // table rows not loaded yet, so return
+      console.log("table rows not loaded yet")
+      return;
+    }
+
+    if (this.initialized) {
+      console.log("already initialized");
+      return;
+    }
+
     $rows.each(function (index, element) {
       $(element).addClass("gk-row-edit");
 
@@ -88,27 +97,26 @@ function GKEntityTable(entity, entityEmbedded) {
     const $editButtons = $(
       "button.gk-btn-edit, button.gk-btn-new, button.gk-btn-delete"
     );
+    /*
     $editButtons.each(function (index, element) {
       $(element).click(function () {
         activeGKEntityTable.onStartRowEditing(this);
       });
     });
-
+    */
     //prepare modal dialog for row editing
     $("#" + this.dialogId).on("shown.bs.modal", function (event) {
+      console.log("on shown.bs.modal before prepareEditDialog")
       activeGKEntityTable.prepareEditDialog();
     });
 
-    $("#" + this.dialogId + " .btn-save-app").click(function () {
-      var sendParams = activeGKEntityTable.prepareSendRowData();
-      activeGKEntityTable.sendRowData(sendParams);
-    });
-
     //prepare modal dialog for deleting
+    /*
     $("#confirmDeleteModal .btn-delete-app").click(function () {
       activeGKEntityTable.deleteRowData();
     });
-
+    */
+   
     if (this.dialogIdEmbedded != "") {
       //prepare new embedded entities buttons
       const $newEmbeddedButtons = $("button.gk-btn-new-embedded");
@@ -435,6 +443,7 @@ function GKEntityTable(entity, entityEmbedded) {
   };
 
   this.onStartRowEditing = function (trigger) {
+    console.log("onStartRowEditing")
     //trigger = button, that started row editing
     var rowKey = this.getRowKeyFromParent(trigger); //get the rowKey -> entityId
     this.setEditRowKey(rowKey);

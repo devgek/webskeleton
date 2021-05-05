@@ -14,8 +14,20 @@ curl -X POST \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.fXypkBFuqt1YgTjy6DWKdlZY-4ikLwJ0CtAhG472rvY" \
    localhost:8080/api/entitylistcontact
 
-curl -X PUT \
+curl -X POST \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.fXypkBFuqt1YgTjy6DWKdlZY-4ikLwJ0CtAhG472rvY" \
   -d '{"name":"Gerald", "pass": "xyz", "email":"gerald.kahrer@gmail.com", "role": 0}' \
-   localhost:8080/api/newuser
+   localhost:8080/api/entitynewuser
+
+curl -X POST \
+  -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.fXypkBFuqt1YgTjy6DWKdlZY-4ikLwJ0CtAhG472rvY" \
+  -d '{"id": 19, "name":"Tsitsipas", "pass": "xyz", "email":"tsitsi@gmail.com", "role": 0}' \
+   localhost:8080/api/entityedituser
+
+curl -X POST \
+  -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.fXypkBFuqt1YgTjy6DWKdlZY-4ikLwJ0CtAhG472rvY" \
+  -d '{"id": 19, "name":"Tsitsipas", "pass": "xyz", "email":"tsitsi@gmail.com", "role": 0}' \
+   localhost:8080/api/entitydeleteuser/19

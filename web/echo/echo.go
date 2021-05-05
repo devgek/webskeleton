@@ -37,8 +37,8 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 	apiGroup.POST("/optionlist:entity", handler.HandleOptionListAjax)
 
 	apiGroup.POST("/entitynew:entity", handler.HandleAPICreate)
-	apiGroup.PUT("/entityedit:entity", handler.HandleEntityEdit)
-	apiGroup.PUT("/entitydelete:entity", handler.HandleEntityDelete)
+	apiGroup.POST("/entityedit:entity", handler.HandleAPIEdit)
+	apiGroup.POST("/entitydelete:entity/:id", handler.HandleAPIDelete)
 
 	apiGroup.PUT("/allnew:entity", handler.HandleAPICreateAll)
 
@@ -73,7 +73,7 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 
 	e.Use(handler.EnvContextMiddleware)
 	e.Use(handler.RequestLoggingMiddleware)
-	// e.Use(handler.CookieAuthMiddleware)
+	e.Use(handler.CookieAuthMiddleware)
 
 	return e
 }
