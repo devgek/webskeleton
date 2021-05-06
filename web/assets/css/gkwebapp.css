@@ -57,3 +57,7 @@ tr.gk-row-section>td {
   padding-left: 30px;
   padding-right: 30px;
 }
+
+.error-message-container {
+  margin-top: -50px!important;
+}

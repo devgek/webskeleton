@@ -1,7 +1,7 @@
-Vue.component('gek-nav', {
-  template: 
-  /*html*/
-  `            <!-- Navigation -->
+Vue.component("gek-nav", {
+  template:
+    /*html*/
+    `            <!-- Navigation -->
   <div class="bg-white">
       <div class="content py-3">
           <!-- Main Navigation -->
@@ -44,35 +44,21 @@ Vue.component('gek-nav', {
                       </ul>
                   </li>
               </ul>
+              <div class="float-right error-message-container">
+                <gek-error-message/>
+              </div>
           </div>
           <!-- END Main Navigation -->
+
       </div>
   </div>
   <!-- END Navigation -->
 `,
   data() {
-    return {
-        product: 'Socks',
-        brand: 'Vue Mastery',
-        selectedVariant: 0,
-        details: ['50% cotton', '30% wool', '20% polyester'],
-        variants: [
-          { id: 2234, color: 'green', image: './assets/images/socks_green.jpg', quantity: 50 },
-          { id: 2235, color: 'blue', image: './assets/images/socks_blue.jpg', quantity: 0 },
-        ],
-        reviews: []
-    }
+      return {}
   },
   methods: {
-      addToCart() {
-          this.$emit('add-to-cart', this.variants[this.selectedVariant].id)
-      },
-      updateVariant(index) {
-          this.selectedVariant = index
-      },
-      addReview(review) {
-        this.reviews.push(review)
-      }
-  }
-
-})
+  },
+  computed: {
+  },
+});
