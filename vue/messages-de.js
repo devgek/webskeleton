@@ -56,9 +56,20 @@ const messages = {
           contacttype: "Kontakttyp",
           id: "Id",
         },
+        edit: {
+        header: "Kontakt bearbeiten",
+        headernew: "Kontakt neu anlegen",
+        label: {
+          orgtype: "Organisationstyp:",
+          name: "Name:",
+          nameext: "Namenszusatz:",
+          contacttype: "Kontakttyp:",
+          id: "Id:",
+        }
       },
     },
   },
+}
 };
 
 // Create VueI18n instance with options

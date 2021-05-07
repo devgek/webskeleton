@@ -103,7 +103,6 @@ function GKEntityTable(entity, entityEmbedded) {
         activeGKEntityTable.onStartRowEditing(this);
       });
     });
-    */
     //prepare modal dialog for row editing
     $("#" + this.dialogId).on("shown.bs.modal", function (event) {
       console.log("on shown.bs.modal before prepareEditDialog")
@@ -111,12 +110,11 @@ function GKEntityTable(entity, entityEmbedded) {
     });
 
     //prepare modal dialog for deleting
-    /*
     $("#confirmDeleteModal .btn-delete-app").click(function () {
       activeGKEntityTable.deleteRowData();
     });
     */
-   
+
     if (this.dialogIdEmbedded != "") {
       //prepare new embedded entities buttons
       const $newEmbeddedButtons = $("button.gk-btn-new-embedded");

@@ -20,7 +20,7 @@ const gekUserView = Vue.component("gek-user", {
     <div class="block-content block-content-full font-size-sm">
         <div class="float-right mb-2">
             <button type="button" class="btn btn-outline-primary gk-btn-new" data-toggle="modal" data-target="#userEditModal" 
-                 @click="prepareNew($event.target)">{{$t("form.user.list.buttonnew")}}</button>
+                 @click="prepareNew">{{$t("form.user.list.buttonnew")}}</button>
         </div>
         <div class="pb-3">&nbsp;</div>
     </div>
@@ -39,7 +39,7 @@ const gekUserView = Vue.component("gek-user", {
                 </tr>
             </thead>
             <tbody>
-                <tr :data-entityid="entity.ID" v-for="entity in Entities" class="gk-row-edit">
+                <tr :data-entityid="entity.ID" :data-entityindex="index" v-for="(entity, index) in Entities" class="gk-row-edit">
                     <td :data-gkvval="entity.Name" class="gk-col-edit">{{entity.Name}}</td>
                     <td :data-gkvval="entity.Pass" class="gk-col-edit">********</td>
                     <td :data-gkvval="entity.Email" class="gk-col-edit">{{entity.Email}}</td>
@@ -47,11 +47,11 @@ const gekUserView = Vue.component("gek-user", {
                     <td class="gk-col-edit">
                         <div class="btn-group-sm" v-if="isAdminUser">
                             <button type="button" class="btn btn-sm btn-alt-primary gk-btn-edit" data-toggle="modal"
-                                data-target="#userEditModal" @click="prepareEdit($event.target)">
+                                data-target="#userEditModal" @click="prepareEntity(index)">
                                 <i class="fa fa-fw fa-pencil-alt"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-alt-primary gk-btn-delete" data-toggle="modal"
-                                data-target="#confirmDeleteModal" @click="prepareDelete($event.target)">
+                                data-target="#confirmDeleteModal" @click="prepareEntity(index)">
                                 <i class="fa fa-fw fa-times"></i>
                             </button>
                         </div>
@@ -90,23 +90,23 @@ aria-labelledby="userEditModalLabel" aria-hidden="true">
                     <div class="form-group">
                         <label for="userEditName"
                             class="col-form-label">{{$t("form.user.edit.label.name")}}</label>
-                        <input name="userEditName" class="form-control" id="userEditName" v-model="entityObject.name" :readonly="isEditEdit"/>
+                        <input name="userEditName" class="form-control" id="userEditName" v-model="entityObject.Name" :readonly="isEditEdit"/>
                     </div>
                     <div class="form-group">
                         <label for="userEditPass"
                             class="col-form-label">{{$t("form.user.edit.label.pass")}}</label>
                         <input type="password" name="userEditPass" class="form-control" id="userEditPass" 
-                            autocomplete="new-password" v-model="entityObject.pass" :readonly="isEditEdit"/>
+                            autocomplete="new-password" v-model="entityObject.Pass" :readonly="isEditEdit"/>
                     </div>
                     <div class="form-group">
                         <label for="userEditEmail"
                             class="col-form-label">{{$t("form.user.edit.label.email")}}</label>
-                        <input name="userEditEmail" class="form-control" id="userEditEmail"  v-model="entityObject.email"/>
+                        <input name="userEditEmail" class="form-control" id="userEditEmail"  v-model="entityObject.Email"/>
                     </div>
                     <div class="form-group">
                         <label for="userEditRole"
                             class="col-form-label">{{$t("form.user.edit.label.role")}}</label>
-                        <select name="userEditRole" class="form-control" id="userEditRole"  v-model="entityObject.role">
+                        <select name="userEditRole" class="form-control" id="userEditRole"  v-model="entityObject.Role">
                           <option v-for="(option, key) in getRoleTypes" :value="key">{{ option }}</option>  
                         </select>
                     </div>
@@ -133,43 +133,16 @@ aria-labelledby="userEditModalLabel" aria-hidden="true">
 `,
   data() {
     return {
-      userTable: new GKEntityTable("user"),
       entityObject: this.newEntityObject(),
+      editNew: false,
     };
   },
   created() {
     console.log("user created");
     this.$store.dispatch("loadUsers");
-
-    this.userTable.prepareEditDialog = function () {
-    };
-    this.userTable.getRowDataFromEntity = function (data) {
-      var rowData = [];
-      var roleName = gkwebapp_T_RoleTypes[data.EntityObject.Role];
-      rowData.push(
-        data.EntityObject.Name,
-        "********",
-        data.EntityObject.Email,
-        roleName
-      );
-      return rowData;
-    };
-    this.userTable.getRowDataHiddenFromEntity = function (data) {
-      var rowDataHidden = [];
-      rowDataHidden.push(
-        data.EntityObject.Name,
-        data.EntityObject.Pass,
-        data.EntityObject.Email,
-        data.EntityObject.Role
-      );
-      return rowDataHidden;
-    };
-
-    this.editName = this.editName + "created";
   },
   updated() {
     console.log("user updated");
-    this.userTable.initialize();
   },
   mounted() {
     console.log("user mounted");
@@ -179,8 +152,7 @@ aria-labelledby="userEditModalLabel" aria-hidden="true">
       return this.getRoleTypes[role];
     },
     doSave() {
-      this.$store.commit("SET_EDIT_USER", this.entityObject);
-      if (this.userTable.isEditNew()) {
+      if (this.editNew) {
         this.$store.dispatch("createUser", this.entityObject);
       } else {
         this.$store.dispatch("updateUser", this.entityObject);
@@ -191,46 +163,28 @@ aria-labelledby="userEditModalLabel" aria-hidden="true">
         this.$store.dispatch("deleteUser", this.entityObject);
       }
     },
-    prepareNew(eventTarget) {
-      console.log("prepareNew");
-
-      this.userTable.onStartRowEditing(eventTarget);
-      console.log("prepareNew after onStartRowEditing");
+    prepareEntity(index) {
+      this.entityObject = this.$store.state.users[index];
+      this.editNew = false;
+    },
+    prepareNew() {
       this.entityObject = this.newEntityObject();
-    },
-    prepareEdit(eventTarget) {
-      console.log("prepareEdit");
-
-      this.userTable.onStartRowEditing(eventTarget);
-      console.log("prepareEdit after onStartRowEditing");
-
-      this.entityObject.id = parseInt(this.userTable.editRowKey);
-      this.entityObject.name = this.userTable.editRowData[0];
-      this.entityObject.pass = this.userTable.editRowDataHidden[1];
-      this.entityObject.email = this.userTable.editRowDataHidden[2];
-      this.entityObject.role = parseInt(this.userTable.editRowDataHidden[3]);
-    },
-    prepareDelete(eventTarget) {
-      console.log("prepareDelete");
-
-      this.userTable.onStartRowEditing(eventTarget);
-
-      this.entityObject.id = parseInt(this.userTable.editRowKey);
+      this.editNew = true;
     },
     newEntityObject() {
       console.log("newEntityObject user called");
       return {
-        id: 0,
-        name: "",
-        pass: "",
-        email: "",
-        role: 0,
+        ID: 0,
+        Name: "",
+        Pass: "",
+        Email: "",
+        Role: 0,
       };
         }
   },
   computed: {
     header() {
-      if (this.userTable.isEditNew()) {
+      if (this.editNew) {
         return 'Benutzer neu anlegen'
       }
       else {
@@ -238,7 +192,7 @@ aria-labelledby="userEditModalLabel" aria-hidden="true">
       }
     },
     isEditEdit() {
-      return !this.userTable.isEditNew()
+      return !this.editNew
     },
     message() {
       return this.$store.state.message;

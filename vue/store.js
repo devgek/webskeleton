@@ -8,21 +8,15 @@ const store = new Vuex.Store({
       contacts: [],
       editUser: {},
       editContact: {},
-      message: null
+      message: null,
     };
   },
   mutations: {
     SET_MESSAGE(state, message) {
       state.message = message;
     },
-    SET_EDIT_USER(state, user) {
-      state.editUser = user;
-    },
     SET_USERS(state, users) {
       state.users = users;
-    },
-    SET_EDIT_CONTACT(state, contact) {
-      state.editContact = contact;
     },
     SET_CONTACTS(state, contacts) {
       state.contacts = contacts;
@@ -43,7 +37,7 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    setMessage({commit}, message) {
+    setMessage({ commit }, message) {
       commit("SET_MESSAGE", message);
     },
     login({ commit }, credentials) {
@@ -57,77 +51,29 @@ const store = new Vuex.Store({
       commit("LOGOUT");
     },
     loadUsers({ commit }) {
-      return axios
-        .post("//localhost:8080/api/entitylistuser")
-        .then(({ data }) => {
-          commit("SET_USERS", data.EntityObject);
-        });
+      UserService.getUsers(commit)
+    },
+    createUser({ dispatch }, userObject) {
+      UserService.createUser(dispatch, userObject);
+    },
+    updateUser({ dispatch }, userObject) {
+      UserService.updateUser(dispatch, userObject);
+    },
+    deleteUser({ dispatch }, userObject) {
+      UserService.deleteUser(dispatch, userObject);
     },
     loadContacts({ commit }) {
-      return axios
-        .post("//localhost:8080/api/entitylistcontact")
-        .then(({ data }) => {
-          commit("SET_CONTACTS", data.EntityObject);
-        });
+      ContactService.getContacts(commit)
     },
-    createUser({commit, dispatch}, userObject) {
-      return axios
-        .post("//localhost:8080/api/entitynewuser", userObject)
-        .then(({ data }) => {
-          commit("SET_EDIT_USER", data.EntityObject);
-          const message = {
-            type: "success",
-            msg: "Benutzer wurde angelegt"
-          }
-          dispatch("setMessage", message);
-          dispatch("loadUsers");
-        })
-        .catch((error) => {
-          const message = {
-            type: "error",
-            msg: "Benutzer wurde nicht angelegt:" + error.message
-          }
-          dispatch("setMessage", message);
-        });
-      },
-      updateUser({commit, dispatch}, userObject) {
-        return axios
-          .post("//localhost:8080/api/entityedituser", userObject)
-          .then(({ data }) => {
-            commit("SET_EDIT_USER", data.EntityObject);
-            const message = {
-              type: "success",
-              msg: "Benutzer wurde geändert"
-            }
-            dispatch("setMessage", message);
-            dispatch("loadUsers");
-          })
-          .catch((error) => {
-            const message = {
-              type: "error",
-              msg: "Benutzer wurde nicht geändert:" + error.message
-            }
-            dispatch("setMessage", message);
-          });
-        },
-        deleteUser({commit, dispatch}, userObject) {
-          return axios
-            .post("//localhost:8080/api/entitydeleteuser/" + userObject.id)
-            .then(({ data }) => {
-              const message = {
-                type: "success",
-                msg: "Benutzer wurde gelöscht"
-              }
-              dispatch("setMessage", message);
-              dispatch("loadUsers");
-            })
-            .catch((error) => {
-              const message = {
-                type: "error",
-                msg: "Benutzer wurde nicht gelöscht:" + error.message
-              }
-              dispatch("setMessage", message);
-            });
-          },      },
-  getters: {}
+    createContact({ dispatch }, contactObject) {
+      ContactService.createContact(dispatch, contactObject);
+    },
+    updateContact({ dispatch }, contactObject) {
+      ContactService.updateContact(dispatch, contactObject);
+    },
+    deleteContact({ dispatch }, contactObject) {
+      ContactService.deleteContact(dispatch, contactObject);
+    },
+  },
+  getters: {},
 });
