@@ -43,15 +43,14 @@ aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
 `,
   data() {
     return {
-      confirmation: false,
     };
   },
   methods: {
     abort() {
-      this.$emit("confirm-delete-" + this.entity, false);
+      this.$emit("entity-delete-abort-" + this.entity);
     },
     confirmDelete() {
-      this.$emit("confirm-delete-" + this.entity, true);
+      this.$emit("entity-delete-confirm-" + this.entity);
     },
   },
   computed: {

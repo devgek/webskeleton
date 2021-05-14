@@ -43,6 +43,10 @@
     <title>Vue webskeleton</title>
   </head>
   <body>
+    <!-- Import EntityView -->
+    <script src="./gkEntityView.js"></script>
+    <script src="./gkEntityStore.js"></script>
+
     <!-- Import Layouts -->
     <script src="./views/gekLayout.js"></script>
     <!-- Import Views -->
@@ -56,12 +60,18 @@
     <!-- Import Components -->
     <script src="./components/gekHeader.js"></script>
     <script src="./components/gekNav.js"></script>
-    <script src="./components/gekConfirmDelete.js"></script>
+    <script src="./components/gekEntityConfirmDelete.js"></script>
     <script src="./components/gekErrorMessage.js"></script>
+    <script src="./components/gekEntityEditDialog.js"></script>
+    <script src="./components/gekEntityEditList.js"></script>
+    <script src="./components/gekEntityListTableColAction.js"></script>
+    <!-- Import Components/Entities -->
+    <script src="./components/entities/gekEntityEditFormUser.js"></script>
+    <script src="./components/entities/gekEntityListTableHeaderUser.js"></script>
+    <script src="./components/entities/gekEntityListTableRowUser.js"></script>
 
     <!-- Import Services-->
-    <script src="./services/UserService.js"></script>
-    <script src="./services/ContactService.js"></script>
+    <script src="./services/EntityService.js"></script>
  
     <!-- Import i18n messages -->
     <script src="./messages-de.js"></script>

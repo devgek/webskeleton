@@ -3,7 +3,7 @@ const UserService = {
     return axios
       .post("//localhost:8080/api/entitylistuser")
       .then(({ data }) => {
-        commit("SET_USERS", data.EntityObject);
+        commit("SET_ENTITY_LIST", {entityName: 'User', entityList: data.EntityObject});
       });
   },
   createUser(dispatch, userObject) {
@@ -15,7 +15,7 @@ const UserService = {
           msg: "Benutzer wurde angelegt",
         };
         dispatch("setMessage", message);
-        dispatch("loadUsers");
+        dispatch("loadEntities", {entityName: 'User'});
       })
       .catch((error) => {
         const message = {
@@ -34,7 +34,7 @@ const UserService = {
           msg: "Benutzer wurde geändert",
         };
         dispatch("setMessage", message);
-        dispatch("loadUsers");
+        dispatch("loadEntities", {entityName: 'User'});
       })
       .catch((error) => {
         const message = {
@@ -53,7 +53,7 @@ const UserService = {
           msg: "Benutzer wurde gelöscht",
         };
         dispatch("setMessage", message);
-        dispatch("loadUsers");
+        dispatch("loadEntities", {entityName: 'User'});
       })
       .catch((error) => {
         const message = {

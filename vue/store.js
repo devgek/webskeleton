@@ -4,22 +4,28 @@ const store = new Vuex.Store({
     return {
       user: null,
       isAdmin: true,
-      users: [],
-      contacts: [],
-      editUser: {},
-      editContact: {},
       message: null,
+      entityStores: {"User": null, "Contact": null}
     };
   },
   mutations: {
     SET_MESSAGE(state, message) {
       state.message = message;
     },
-    SET_USERS(state, users) {
-      state.users = users;
+    NEW_ENTITY_STORE(state, payload) {
+      state.entityStores[payload.entityName] = new EntityStore(payload.entityName, payload.newEntityObjectFn, this);
     },
-    SET_CONTACTS(state, contacts) {
-      state.contacts = contacts;
+    SET_ENTITY_NEW(state, payload) {
+      state.entityStores[payload.entityName].entityObject = state.entityStores[payload.entityName].newEntityObjectFn();
+      state.entityStores[payload.entityName].editNew = true;
+    },
+    SET_ENTITY_EDIT(state, payload) {
+      entityObjectRef = state.entityStores[payload.entityName].entityList[payload.entityIndex]
+      state.entityStores[payload.entityName].entityObject = JSON.parse(JSON.stringify(entityObjectRef));
+      state.entityStores[payload.entityName].editNew = false;
+    },
+    SET_ENTITY_LIST(state, payload) {
+      state.entityStores[payload.entityName].entityList = payload.entityList;
     },
     SET_USER_DATA(state, userData) {
       localStorage.setItem("user", JSON.stringify(userData));
@@ -50,30 +56,43 @@ const store = new Vuex.Store({
     logout({ commit }) {
       commit("LOGOUT");
     },
-    loadUsers({ commit }) {
-      UserService.getUsers(commit)
+    startEntityStore({ commit, dispatch }, payload) {
+      commit("NEW_ENTITY_STORE", payload)
+
+      dispatch("loadEntities", payload)
     },
-    createUser({ dispatch }, userObject) {
-      UserService.createUser(dispatch, userObject);
+    loadEntities({ commit }, payload) {
+      EntityService.getEntities(commit, payload);
     },
-    updateUser({ dispatch }, userObject) {
-      UserService.updateUser(dispatch, userObject);
+    saveEntity({ dispatch, getters }, payload) {
+      payload.entityObject = getters.getEditEntityObjectByEntityName(payload.entityName);
+      if (getters.getEditNewByEntityName(payload.entityName)) {
+        EntityService.createEntity(dispatch, payload);
+      }
+      else {
+        EntityService.updateEntity(dispatch, payload);
+      }
     },
-    deleteUser({ dispatch }, userObject) {
-      UserService.deleteUser(dispatch, userObject);
-    },
-    loadContacts({ commit }) {
-      ContactService.getContacts(commit)
-    },
-    createContact({ dispatch }, contactObject) {
-      ContactService.createContact(dispatch, contactObject);
-    },
-    updateContact({ dispatch }, contactObject) {
-      ContactService.updateContact(dispatch, contactObject);
-    },
-    deleteContact({ dispatch }, contactObject) {
-      ContactService.deleteContact(dispatch, contactObject);
-    },
+    deleteEntity({ dispatch, getters }, payload) {
+      payload.entityObject = getters.getEditEntityObjectByEntityName(payload.entityName);
+      EntityService.deleteEntity(dispatch, payload);
+    }
   },
-  getters: {},
+  getters: {
+    isAdminUser(state) {
+      return state.isAdmin;
+    },
+    getEntityListByEntityName: (state) => (entityName) => {
+      return state.entityStores[entityName].entityList;
+    },
+    getEditEntityObjectByEntityName: (state) => (entityName) => {
+      return state.entityStores[entityName].entityObject;
+    },
+    getEditNewByEntityName: (state) => (entityName) => {
+      return state.entityStores[entityName].editNew;
+    },
+    getUser(state) {
+      return state.user;
+    }
+  },
 });
