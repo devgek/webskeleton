@@ -1,6 +1,20 @@
 // Ready translated locale messages
 const messages = {
   de: {
+    msg: {
+      entity: {
+        success: {
+          create: "{entityDesc} wurde angelegt",
+          update: "{entityDesc} wurde geändert",
+          delete: "{entityDesc} wurde gelöscht"
+        },
+        error: {
+          create: "{entityDesc} konnte nicht angelegt werden",
+          update: "{entityDesc} konnte nicht geändert werden",
+          delete: "{entityDesc} konnte nicht gelöscht werden"
+        }
+      }
+    },
     nav: {
       pages: {
         header: "Benutzerfunktionen",

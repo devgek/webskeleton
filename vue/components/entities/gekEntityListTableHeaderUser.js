@@ -1,4 +1,5 @@
 Vue.component("gek-entity-list-table-header-user", {
+  name: "gek-entity-list-table-header-user",
   props: {
   },
   template:
@@ -15,14 +16,10 @@ Vue.component("gek-entity-list-table-header-user", {
 `,
   data() {
     return {
-      editNew: false,
     };
   },
   methods: {
   },
   computed: {
-    getRoleTypes() {
-      return gkwebapp_T_RoleTypes;
-    },
   },
 });

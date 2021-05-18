@@ -18,21 +18,33 @@ Vue.component("gek-error-message", {
   created() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "SET_MESSAGE") {
-        console.log(`catching message from store: ${state.message.msg}`);
+        console.log(`catching message from store: ${state.message}`);
 
-        const $toast = $(".toast[data-toastid='errorMessageToast']");
-        $toast.toast("show");
+        this.showMessage();
       }
     });
+
+    if (this.$store.state.message) {
+      this.showMessage();
+    }
   },
   beforeDestroy() {
     this.unsubscribe();
   },
   methods: {
+    showMessage() {
+      const $toast = $(".toast[data-toastid='errorMessageToast']");
+      $toast.toast("show");
+    },
   },
   computed: {
     message() {
-      return this.$store.state.message;
+      var msg = this.$store.state.message;
+      if (msg && msg.i18n) {
+        msg.msg = this.$t(msg.i18n, msg.i18nArgs);
+      }
+
+      return msg;
     },
   },
 });

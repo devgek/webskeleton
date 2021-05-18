@@ -14,13 +14,11 @@ const app = new Vue({
       const userData = JSON.parse(userString)
       this.$store.commit('SET_USER_DATA', userData)
     }
-    //
     axios.interceptors.response.use(
       response => response,
       error => {
-        console.log(error.response)
+        console.log("axios error: " + error.response.status + error.response.data)
         if (error.response.status === 401) {
-          this.$router.push('/')
           this.$store.dispatch('logout')
         }
         return Promise.reject(error)

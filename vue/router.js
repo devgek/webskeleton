@@ -3,7 +3,7 @@ const routes = [
   {
     path: "/login",
     component: gekLoginView,
-    props: { mainHeader: "Bitte anmelden" },
+    props: { mainHeader: "Bitte anmelden", startPage: "Page1" },
   },
   {
     path: "/",

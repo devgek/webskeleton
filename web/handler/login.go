@@ -66,7 +66,8 @@ func HandleAPILogin(c echo.Context) error {
 	ec := c.(*webenv.EnvContext)
 	user, err := ec.Env.Services.LoginUser(loginData.User, loginData.Pass)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusUnauthorized)
+		// return echo.NewHTTPError(http.StatusUnauthorized)
+		return c.JSON(http.StatusUnauthorized, ec.Env.MessageLocator.GetMessageF(err.Error()))
 	}
 
 	//login ok

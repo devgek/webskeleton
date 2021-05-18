@@ -8,6 +8,10 @@ Vue.component("gek-entity-edit-dialog", {
       type: String,
       required: true,
     },
+    entityDesc: {
+      type: String,
+      required: true,
+    }
   },
   template:
     /*html*/
@@ -17,16 +21,16 @@ Vue.component("gek-entity-edit-dialog", {
         <div class="modal-content">
             <div class="block block-themed block-transparent mb-0">
                 <div class="block-header bg-primary">
-                    <h3 class="block-title">{{ entityStores['User'].getEditHeader() }}</h3>
+                    <h3 class="block-title">{{ entityStores[entityName].getEditHeader(entityDesc) }}</h3>
                     <div class="block-options">
                         <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                             <i class="fa fa-fw fa-times"></i>
                         </button>
                     </div>
                 </div>
-                <div class="block-content font-size-sm">
-                  <component :is="editFormComponent"></component>
-                </div>
+                <!-- include the edit fields here -->
+                <component :is="editFormComponent"></component>
+
                 <div class="block-content block-content-full text-right border-top">
                     <button type="button" class="btn btn-sm btn-light btn-back-app" @click="abort" 
                         data-dismiss="modal">{{$t("form.all.btn.back")}}</button>

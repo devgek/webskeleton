@@ -12,7 +12,8 @@ const EntityService = {
       .then(({ data }) => {
         const message = {
           type: "success",
-          msg: "Entität wurde angelegt",
+          i18n: "msg.entity.success.create",
+          i18nArgs: {"entityDesc": payload.entityDesc}
         };
         dispatch("setMessage", message);
         dispatch("loadEntities", {entityName: payload.entityName});
@@ -20,7 +21,8 @@ const EntityService = {
       .catch((error) => {
         const message = {
           type: "error",
-          msg: "Entität wurde nicht angelegt:" + error.message,
+          i18n: "msg.entity.error.create" + error.message,
+          i18nArgs: {"entityDesc": payload.entityDesc}
         };
         dispatch("setMessage", message);
       });
@@ -31,7 +33,8 @@ const EntityService = {
       .then(({ data }) => {
         const message = {
           type: "success",
-          msg: "Entität wurde geändert",
+          i18n: "msg.entity.success.update",
+          i18nArgs: {"entityDesc": payload.entityDesc}
         };
         dispatch("setMessage", message);
         dispatch("loadEntities", {entityName: payload.entityName});
@@ -39,7 +42,8 @@ const EntityService = {
       .catch((error) => {
         const message = {
           type: "error",
-          msg: "Entität wurde nicht geändert:" + error.message,
+          i18n: "msg.entity.error.update",
+          i18nArgs: {"entityDesc": payload.entityDesc}
         };
         dispatch("setMessage", message);
       });
@@ -50,7 +54,8 @@ const EntityService = {
       .then(({ data }) => {
         const message = {
           type: "success",
-          msg: "Entität wurde gelöscht",
+          i18n: "msg.entity.success.delete",
+          i18nArgs: {"entityDesc": payload.entityDesc}
         };
         dispatch("setMessage", message);
         dispatch("loadEntities", {entityName: payload.entityName});
@@ -58,7 +63,8 @@ const EntityService = {
       .catch((error) => {
         const message = {
           type: "error",
-          msg: "Entität wurde nicht gelöscht:" + error.message,
+          i18n: "msg.entity.error.delete" + error.message,
+          i18nArgs: {"entityDesc": payload.entityDesc}
         };
         dispatch("setMessage", message);
       });

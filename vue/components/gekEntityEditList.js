@@ -16,12 +16,12 @@ Vue.component("gek-entity-edit-list", {
     <!-- Your Block -->
     <div class="block block-rounded">
     <div class="block-header block-header-default">
-        <h3 class="block-title text-primary">{{$t("form.user.list.header")}}</h3>
+        <h3 class="block-title text-primary">{{$t("form." + entity + ".list.header")}}</h3>
     </div>
     <div class="block-content block-content-full font-size-sm">
         <div class="float-right mb-2">
             <button type="button" class="btn btn-outline-primary gk-btn-new" data-toggle="modal" :data-target="editModalIdRef" 
-                @click="SET_ENTITY_NEW({entityName: 'User'})">{{$t("form.user.list.buttonnew")}}</button>
+                @click="SET_ENTITY_NEW({entityName: entityName, entityDesc: 'Benutzer'})">{{$t("form." + entity + ".list.buttonnew")}}</button>
         </div>
         <div class="pb-3">&nbsp;</div>
     </div>
@@ -33,7 +33,7 @@ Vue.component("gek-entity-edit-list", {
               <component :is="entityListTableHeaderComponent"></component>
             </thead>
             <tbody>
-              <component :is="entityListTableRowComponent" v-for="(entityObject, index) in getEntityListByEntityName('User')" :entityObject="entityObject" :entityIndex="index"></component>
+              <component :is="entityListTableRowComponent" v-for="(entityObject, index) in getEntityListByEntityName(entityName)" :entityObject="entityObject" :entityIndex="index"></component>
             </tbody>
         </table>
     </div>
@@ -43,7 +43,6 @@ Vue.component("gek-entity-edit-list", {
 `,
   data() {
     return {
-      editNew: false,
       entityListTableHeaderComponent: "gek-entity-list-table-header-" + this.entity,
       entityListTableRowComponent: "gek-entity-list-table-row-" + this.entity,
     };

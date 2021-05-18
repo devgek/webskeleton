@@ -4,7 +4,7 @@ Vue.component("gek-confirm-delete", {
       type: String,
       required: true,
     },
-    entityName: {
+    entityDesc: {
       type: String,
       required: true,
     },
@@ -55,10 +55,10 @@ aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
   },
   computed: {
     title() {
-      return this.entityName + " löschen";
+      return this.entityDesc + " löschen";
     },
     confirmationMessage() {
-      return this.entityName + " wirklich löschen?";
+      return this.entityDesc + " wirklich löschen?";
     },
   },
 });

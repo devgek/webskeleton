@@ -19,7 +19,13 @@ func HandleAPICreate(c echo.Context) error {
 		return err
 	}
 
-	err := ec.Env.DS.CreateEntity(oEntityObject)
+	var err error
+	if entity == "User" {
+		user := oEntityObject.(*models.User)
+		oEntityObject, err = ec.Env.Services.CreateUser(user.Name, user.Pass, user.Email, user.Role)
+	} else {
+		err = ec.Env.DS.CreateEntity(oEntityObject)
+	}
 
 	if err == nil {
 		return c.JSON(http.StatusOK, oEntityObject)

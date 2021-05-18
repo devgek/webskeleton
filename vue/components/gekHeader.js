@@ -14,7 +14,7 @@ Vue.component("gek-header", {
           <!-- Left Section -->
           <div class="d-flex align-items-center">
               <!-- Logo -->
-                <span class="font-w700 font-size-h5 text-dual"><router-link to="/home" class="font-w700 font-size-h5">{{ mainHeader }} - {{ $store.state.user.name }}</router-link></span>
+                <span class="font-w700 font-size-h5 text-dual"><router-link to="/home" class="font-w700 font-size-h5">{{ mainHeader }}</router-link></span>
               <!-- END Logo -->
 
           </div>

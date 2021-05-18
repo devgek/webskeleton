@@ -22,18 +22,14 @@ function EntityStore(entityName, newEntityObjectFn, vuex) {
       }
     };
 
-    var getEditHeader = entityStore.getEditHeader;
-    this.getEditHeader = function boundGetEditHeader() {
-        return getEditHeader.call(entityStore)
-    }
     
 };
 
-EntityStore.prototype.getEditHeader = function getEditHeader() {
+EntityStore.prototype.getEditHeader = function getEditHeader(entityDesc) {
   if (this.editNew) {
-    return this.entityName + " neu anlegen"
+    return entityDesc + " neu anlegen"
   }
   else {
-    return this.entityName + " ändern"
+    return entityDesc + " ändern"
   }
 }

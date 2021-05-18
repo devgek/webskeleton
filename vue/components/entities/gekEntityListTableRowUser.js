@@ -1,4 +1,5 @@
 Vue.component("gek-entity-list-table-row-user", {
+  name: "gek-entity-list-table-row-user",
   props: {
     entityObject: {
       type: Object,
@@ -19,7 +20,7 @@ Vue.component("gek-entity-list-table-row-user", {
     <td :data-gkvval="entityObject.Email" class="gk-col-edit">{{entityObject.Email}}</td>
     <td :data-gkvval="entityObject.Role" class="gk-col-edit">{{ roleDesc(entityObject.Role) }}</td>
 
-    <gek-entity-list-table-col-action entity="user" :index="entityIndex"/>
+    <gek-entity-list-table-col-action entity="user" entityName="User" :index="entityIndex"/>
   </tr>
 <!-- END EntityListTableHeaderUser -->
 `,

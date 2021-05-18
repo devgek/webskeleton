@@ -3,6 +3,10 @@ const gekLoginView = Vue.component("gek-login-view", {
     mainHeader: {
       type: String,
       default: "",
+    },
+    startPage: {
+      type: String,
+      default: "/noStartPage",
     }
   },
   template:
@@ -83,11 +87,13 @@ const gekLoginView = Vue.component("gek-login-view", {
           pass: this.pass,
         })
         .then(() => {
-          this.$router.push({ name: "Page1" });
+          this.$router.push({ name: this.startPage });
         })
         .catch((err) => {
-          this.errorMessage = err.message;
+          this.errorMessage = err.response.data;
         });
     },
   },
+  computed: {
+  }
 });
