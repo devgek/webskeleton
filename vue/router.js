@@ -1,16 +1,16 @@
 // Routes
 const routes = [
   {
+    path: "/login",
+    alias: "",
+    component: gekLoginView,
+    name: "Login",
+    props: { mainHeader: "Bitte anmelden", startPage: "Page1" },
+  },
+  {
     path: "/",
     component: gekLayoutView,
     children: [
-      {
-        path: "login",
-        alias: "",
-        component: gekLoginView,
-        name: "Login",
-        props: { mainHeader: "Bitte anmelden", startPage: "Page1" },
-      },
       {
         path: "home",
         component: gekHomeView,

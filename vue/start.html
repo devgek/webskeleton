@@ -43,36 +43,40 @@
     <title>Vue webskeleton</title>
   </head>
   <body>
-    <!-- Import EntityView -->
+    <!-- Import EntityStore -->
     <script src="./gkEntityStore.js"></script>
 
     <!-- Import Layouts -->
-    <script src="./views/gekLayout.js"></script>
-    <!-- Import Views -->
-    <script src="./views/gekApp.js"></script>
-    <script src="./views/gekLogin.js"></script>
-    <script src="./views/gekNotFound.js"></script>
-    <script src="./views/gekHome.js"></script>
-    <script src="./views/gekPage1.js"></script>
-    <script src="./views/gekUser.js"></script>
-    <script src="./views/gekContact.js"></script>
+    <script src="./layouts/gekApp.js"></script>
+    <script src="./layouts/gekPageLayout.js"></script>
+
+    <!-- Import Pages -->
+    <script src="./pages/gekLogin.js"></script>
+    <script src="./pages/gekNotFound.js"></script>
+    <script src="./pages/gekHome.js"></script>
+    <script src="./pages/gekPage1.js"></script>
+    <!-- Import EntityPages -->
+    <script src="./pages/entities/gekUser.js"></script>
+    <script src="./pages/entities/gekContact.js"></script>
+
     <!-- Import Components -->
     <script src="./components/gekHeader.js"></script>
     <script src="./components/gekNav.js"></script>
-    <script src="./components/gekEntityConfirmDelete.js"></script>
     <script src="./components/gekErrorMessage.js"></script>
-    <script src="./components/gekEntityEditDialog.js"></script>
-    <script src="./components/gekEntityEditList.js"></script>
-    <script src="./components/gekEntityListTableColAction.js"></script>
     <!-- Import Components/Entities -->
-    <!-- User-->
-    <script src="./components/entities/gekEntityEditFormUser.js"></script>
-    <script src="./components/entities/gekEntityListTableHeaderUser.js"></script>
-    <script src="./components/entities/gekEntityListTableRowUser.js"></script>
+    <script src="./components/entities/gekEntityConfirmDelete.js"></script>
+    <script src="./components/entities/gekEntityEditDialog.js"></script>
+    <script src="./components/entities/gekEntityEditList.js"></script>
+    <script src="./components/entities/gekEntityListTableColAction.js"></script>
+
+    <!-- Import Components/Entities/User-->
+    <script src="./components/entities/editform/gekEntityEditFormUser.js"></script>
+    <script src="./components/entities/tableheader/gekEntityListTableHeaderUser.js"></script>
+    <script src="./components/entities/tablerow/gekEntityListTableRowUser.js"></script>
     <!-- Contact-->
-    <script src="./components/entities/gekEntityEditFormContact.js"></script>
-    <script src="./components/entities/gekEntityListTableHeaderContact.js"></script>
-    <script src="./components/entities/gekEntityListTableRowContact.js"></script>
+    <script src="./components/entities/editform/gekEntityEditFormContact.js"></script>
+    <script src="./components/entities/tableheader/gekEntityListTableHeaderContact.js"></script>
+    <script src="./components/entities/tablerow/gekEntityListTableRowContact.js"></script>
 
     <!-- Import Services-->
     <script src="./services/EntityService.js"></script>

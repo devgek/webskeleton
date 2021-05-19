@@ -12,7 +12,7 @@ Vue.component("gek-entity-edit-list", {
   template:
     /*html*/
   `
-  <div class="content content-full">
+  <div>
     <!-- Your Block -->
     <div class="block block-rounded">
     <div class="block-header block-header-default">
