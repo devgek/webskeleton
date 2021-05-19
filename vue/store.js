@@ -51,14 +51,9 @@ const store = new Vuex.Store({
         .post("//localhost:8080/api/login", credentials)
         .then(({ data }) => {
           commit("SET_USER_DATA", data);
-          commit("SET_MESSAGE", {msg: "Das ist eine besonders lange Nachricht, ha, ha, ha, ha"});
-        }).catch((error) => {
-          console.log(error);
-          throw error;
         });
     },
     logout({ commit }) {
-      commit("SET_MESSAGE", {msg: "Das ist eine besonders lange Nachricht, ha, ha, ha, ha, logout"});
       commit("LOGOUT");
     },
     startEntityStore({ commit, dispatch }, payload) {

@@ -19,23 +19,23 @@ const gekLoginView = Vue.component("gek-login-view", {
                       <div class="col-md-8 col-lg-6 col-xl-4">
                           <div class="block block-themed block-fx-shadow mb-0">
                               <div class="block-header">
-                                  <h3 class="block-title">Login</h3>
+                                  <h3 class="block-title">{{$t("app.title")}}</h3>
                               </div>
                               <div class="block-content">
                                   <div class="p-sm-3 px-lg-4 py-lg-5">
                                       <p><span
-                                              class="font-w700 font-size-h5">{{ mainHeader }}</span>
+                                              class="font-w700 font-size-h5">{{ $t("form.login.header") }}</span>
                                       </p>
                                       <form class="" @submit.prevent="onSubmit">
                                           <div class="py-3">
                                               <div class="form-group">
-                                                  <label for="login-username">Benutzer</label>
+                                                  <label for="login-username">{{ $t("form.login.label.user") }}</label>
                                                   <input type="text" v-model="user" 
                                                       class="form-control form-control-alt form-control-lg"
                                                       id="login-username" name="userid">
                                               </div>
                                               <div class="form-group">
-                                                  <label for="login-password">Passwort</label>
+                                                  <label for="login-password">{{ $t("form.login.label.password") }}</label>
                                                   <input type="password" v-model="pass" 
                                                       class="form-control form-control-alt form-control-lg"
                                                       id="login-password" name="password">
@@ -45,7 +45,7 @@ const gekLoginView = Vue.component("gek-login-view", {
                                               <div class="col-md-6 col-xl-5">
                                                   <button type="submit" class="btn btn-block btn-primary">
                                                       <i class="fa fa-fw fa-sign-in-alt mr-1"></i>
-                                                      Anmelden
+                                                      {{ $t("form.login.button.login") }}
                                                   </button>
                                               </div>
                                           </div>
@@ -75,7 +75,7 @@ const gekLoginView = Vue.component("gek-login-view", {
   methods: {
     onSubmit() {
       if (this.user === "" || this.pass === "") {
-        this.errorMessage = "Username und Passwort müssen angegeben werden.";
+        this.errorMessage = this.$t("form.login.msg.inputrequired");
         return;
       }
 

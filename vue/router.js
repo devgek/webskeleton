@@ -1,20 +1,15 @@
 // Routes
 const routes = [
   {
-    path: "/login",
-    component: gekLoginView,
-    props: { mainHeader: "Bitte anmelden", startPage: "Page1" },
-  },
-  {
     path: "/",
     component: gekLayoutView,
     children: [
       {
-        path: "start.html",
+        path: "login",
         alias: "",
-        component: gekHomeView,
-        name: "Start",
-        meta: { description: "start app" },
+        component: gekLoginView,
+        name: "Login",
+        props: { mainHeader: "Bitte anmelden", startPage: "Page1" },
       },
       {
         path: "home",
@@ -61,13 +56,13 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if user is not logged in and trying to access a restricted page
-  const publicPages = ["/", "/login", "/page2"];
+  const publicPages = ["/", "/page2", "/login"];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem("user");
 
   if (authRequired && !loggedIn) {
-    return next("/login");
+    console.log("route to Login from " + to.path);
+    return next({ name: "Login" });
   }
-
   next();
 });

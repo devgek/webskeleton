@@ -1,6 +1,9 @@
 // Ready translated locale messages
 const messages = {
   de: {
+    app: {
+      title: "Webskeleton Vue"
+    },
     msg: {
       entity: {
         success: {
@@ -37,6 +40,19 @@ const messages = {
           save: "Speichern",
           delete: "Löschen",
         },
+      },
+      login: {
+        header: "Bitte anmelden",
+        label: {
+          user: "Benutzer",
+          password: "Passwort",
+        },
+        button: {
+          login: "Anmelden"
+        },
+        msg: {
+          inputrequired: "Username und Passwort müssen angegeben werden."
+        }
       },
       page1: {
         header: "Seite 1",
