@@ -11,7 +11,7 @@ Vue.component("gek-entity-edit-list", {
   },
   template:
     /*html*/
-  `
+    `
   <div>
     <!-- Your Block -->
     <div class="block block-rounded">
@@ -28,7 +28,7 @@ Vue.component("gek-entity-edit-list", {
   </div>
   <div class="block block-rounded">
     <div class="block-content font-size-sm">
-        <table class="table table-hover table-sm table-bordered table-striped gk-table js-dataTable-simple dataTable">
+        <table class="table table-hover table-sm table-bordered table-striped gk-table js-dataTable-simple dataTable" :id="entityTableId">
             <thead>
               <component :is="entityListTableHeaderComponent"></component>
             </thead>
@@ -43,26 +43,22 @@ Vue.component("gek-entity-edit-list", {
 `,
   data() {
     return {
-      entityListTableHeaderComponent: "gek-entity-list-table-header-" + this.entity,
+      entityListTableHeaderComponent:
+        "gek-entity-list-table-header-" + this.entity,
       entityListTableRowComponent: "gek-entity-list-table-row-" + this.entity,
     };
   },
   methods: {
-    ...Vuex.mapMutations([
-      'SET_ENTITY_NEW'
-    ])
+    ...Vuex.mapMutations(["SET_ENTITY_NEW"]),
   },
   computed: {
-    ...Vuex.mapState([
-      'entityStores'
-    ]),
-    ...Vuex.mapGetters([
-      'isAdminUser',
-      'getEntityListByEntityName',
-      'getUser'
-    ]),
+    ...Vuex.mapState(["entityStores"]),
+    ...Vuex.mapGetters(["isAdminUser", "getEntityListByEntityName", "getUser"]),
     editModalIdRef() {
-      return "#" + this.entity + "EditModal"
-    }
+      return "#" + this.entity + "EditModal";
+    },
+    entityTableId() {
+      return this.entity + "Table";
+    },
   },
 });
