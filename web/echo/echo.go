@@ -34,8 +34,6 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 	apiGroup.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete, http.MethodOptions, http.MethodHead},
-		// AllowHeaders: []string{"Authorization", "Content-Type", "Origin"},
-		// AllowCredentials: true,
 	}))
 
 	// OPTIONS because of CORS Preflight requests sent from axios
