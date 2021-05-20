@@ -31,14 +31,22 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 	}))
 	apiGroup.Use(handler.TokenLoggingMiddleware)
 
-	apiGroup.POST("/login", handler.HandleAPILogin)
+	apiGroup.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete, http.MethodOptions, http.MethodHead},
+		// AllowHeaders: []string{"Authorization", "Content-Type", "Origin"},
+		// AllowCredentials: true,
+	}))
 
-	apiGroup.POST("/entitylist:entity", handler.HandleEntityListAjax)
-	apiGroup.POST("/optionlist:entity", handler.HandleOptionListAjax)
+	// OPTIONS because of CORS Preflight requests sent from axios
+	apiGroup.Match([]string{"OPTIONS", "POST"}, "/login", handler.HandleAPILogin)
 
-	apiGroup.POST("/entitynew:entity", handler.HandleAPICreate)
-	apiGroup.POST("/entityedit:entity", handler.HandleAPIEdit)
-	apiGroup.POST("/entitydelete:entity/:id", handler.HandleAPIDelete)
+	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entitylist:entity", handler.HandleEntityListAjax)
+	apiGroup.Match([]string{"OPTIONS", "POST"}, "/optionlist:entity", handler.HandleOptionListAjax)
+
+	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entitynew:entity", handler.HandleAPICreate)
+	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entityedit:entity", handler.HandleAPIEdit)
+	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entitydelete:entity/:id", handler.HandleAPIDelete)
 
 	apiGroup.PUT("/allnew:entity", handler.HandleAPICreateAll)
 
@@ -73,7 +81,7 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 
 	e.Use(handler.EnvContextMiddleware)
 	e.Use(handler.RequestLoggingMiddleware)
-	e.Use(handler.CookieAuthMiddleware)
+	// e.Use(handler.CookieAuthMiddleware)
 
 	return e
 }

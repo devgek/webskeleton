@@ -57,6 +57,7 @@ type LoginData struct {
 
 //HandleApiLogin handles login to api and returns a JWT token
 func HandleAPILogin(c echo.Context) error {
+	log.Println("HandleApiLogin")
 	//do the login
 	loginData := LoginData{}
 	if err := c.Bind(&loginData); err != nil {

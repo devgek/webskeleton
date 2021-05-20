@@ -75,9 +75,10 @@ func CookieAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 // JWTAuthSkipper returns true for URL's, that do not need token authentication
 func JWTAuthSkipper(c echo.Context) bool {
 	r := c.Request()
-	log.Println("JWTAuthSkipper", r.URL.Path, "token:", c.Get("token"))
+	log.Println("JWTAuthSkipper", r.URL.Path, "token:", c.Get("token"), "method:", r.Method)
 	//don't check token for this URL's
-	if r.URL.Path == "/api/login" {
+	// method OPTIONS because of CORS Preflight requests from axios, they do not have Authorization token
+	if r.URL.Path == "/api/login" || r.Method == "OPTIONS" {
 		return true
 	}
 	return false
