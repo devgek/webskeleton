@@ -77,9 +77,11 @@ func HandleAPILogin(c echo.Context) error {
 	// Create token
 	token := jwt.New(jwt.SigningMethodHS256)
 
-	// Set claims
+	// Set claims into webtoken, content can be checked on further requests with token
 	claims := token.Claims.(jwt.MapClaims)
-	claims["admin"] = (user.Role == types.RoleTypeAdmin)
+	isAdmin := (user.Role == types.RoleTypeAdmin)
+	claims["name"] = loginData.User
+	claims["admin"] = isAdmin
 
 	// Generate encoded token and send it as response.
 	t, err := token.SignedString([]byte("secret"))
@@ -87,8 +89,9 @@ func HandleAPILogin(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{
+	return c.JSON(http.StatusOK, map[string]interface{}{
 		"token": t,
 		"name":  loginData.User,
+		"admin": isAdmin,
 	})
 }

@@ -38,6 +38,9 @@ func init() {
 func runServe(cmd *cobra.Command) {
 	// start the web server
 	log.Println("Starting ", config.ProjectName, " server on port ", config.ServerPort())
+	if config.IsServerSecure() {
+		log.Println("Secure (TLS) mode is on")
+	}
 	if config.IsDev() {
 		log.Println("Development mode is on")
 	}

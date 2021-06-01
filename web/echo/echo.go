@@ -57,17 +57,6 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 
 	e.GET("/favicon.ico", handler.HandleFavicon)
 
-	// starting point of single page app
-	e.GET("/vue", handler.HandleSpa)
-
-	assetHandler := http.FileServer(env.Assets)
-	// e.GET(web.AssetHandlerPattern, echo.WrapHandler(http.StripPrefix(web.AssetPattern, assetHandler)))
-	e.GET(webenv.AssetHandlerPattern, handler.AssetHandlerFunc(http.StripPrefix(webenv.AssetPattern, assetHandler)))
-	// e.Static(web.AssetPattern, web.AssetRoot)
-	// serve all vue files
-	vueHandler := http.FileServer(env.VueFiles)
-	e.GET("/vue/*", handler.AssetHandlerFunc(http.StripPrefix("/vue", vueHandler)))
-
 	e.Match([]string{"GET", "POST"}, "/entitylist:entity", handler.HandleEntityList)
 	e.POST("/entityedit:entity", handler.HandleEntityEdit)
 	e.POST("/entitynew:entity", handler.HandleEntityNew)
@@ -79,7 +68,7 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 
 	e.Use(handler.EnvContextMiddleware)
 	e.Use(handler.RequestLoggingMiddleware)
-	// e.Use(handler.CookieAuthMiddleware)
+	e.Use(handler.CookieAuthMiddleware)
 
 	return e
 }
