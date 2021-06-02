@@ -48,6 +48,9 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 
 	apiGroup.PUT("/allnew:entity", handler.HandleAPICreateAll)
 
+	// resoure files
+	assetHandler := http.FileServer(env.Assets)
+	e.GET(webenv.AssetHandlerPattern, handler.AssetHandlerFunc(http.StripPrefix(webenv.AssetPattern, assetHandler)))
 	//
 	e.GET("/health", handler.HandleHealth)
 

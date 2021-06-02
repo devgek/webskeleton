@@ -22,7 +22,6 @@ type Env struct {
 	TStore         template.TStore
 	Templates      *packr.Box
 	Assets         http.FileSystem
-	VueFiles       http.FileSystem
 	DS             data.Datastore
 	Services       *services.Services
 	MessageLocator *msg.MessageLocator
@@ -38,20 +37,18 @@ var webEnv *Env
 func GetWebEnv() *Env {
 	once.Do(func() {
 		// ../web/templates important for packr2 to find files
-		origninalTemplateBox := packr.New("templates", "../templates")
+		originalTemplateBox := packr.New("templates", "../templates")
 		// templateBox := packrfix.New(origninalTemplateBox)
 
 		//init TStore
-		tStore := template.NewBoxBasedTemplateStore(origninalTemplateBox)
+		tStore := template.NewBoxBasedTemplateStore(originalTemplateBox)
 
-		origninalAssetBox := packr.New("assets", "../assets")
+		originalAssetBox := packr.New("assets", "../assets")
 		// assetBox := packrfix.New(origninalAssetBox)
-
-		origninalVueBox := packr.New("vue", "../../vue")
 
 		//load locale specific message file, if not default
 		// messages, err := assetBox.Find("msg/messages-en.yaml")
-		messages, err := origninalAssetBox.Find("msg/messages.yaml")
+		messages, err := originalAssetBox.Find("msg/messages.yaml")
 
 		//load messages
 		ml := msg.NewMessageLocator(messages)
@@ -70,7 +67,7 @@ func GetWebEnv() *Env {
 
 		services := services.NewServices(ds)
 
-		webEnv = &Env{TStore: tStore, Templates: origninalTemplateBox, Assets: origninalAssetBox, VueFiles: origninalVueBox, DS: ds, Services: services, MessageLocator: ml}
+		webEnv = &Env{TStore: tStore, Templates: originalTemplateBox, Assets: originalAssetBox, DS: ds, Services: services, MessageLocator: ml}
 	})
 
 	return webEnv

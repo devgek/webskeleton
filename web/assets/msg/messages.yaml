@@ -29,7 +29,7 @@ entity:
   contactaddress: "Kontaktadresse"
 layout:
   page:
-    header: "webskeleton Webapp mit Golang backend"
+    header: "webskeleton Webapp mit Oneui-Golang-Templates und Golang backend"
     logout: "Abmelden"
     nav:
       pages:

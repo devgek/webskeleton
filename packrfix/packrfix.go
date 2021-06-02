@@ -1,6 +1,7 @@
 package packrfix
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -8,7 +9,8 @@ import (
 	"github.com/gobuffalo/packr/v2"
 )
 
-//BoxExtended ...
+// BoxExtended Extension for packr.Box handling creationTime of box.
+// CreationTime of box is taken as modTime for each file (important for caching resource files in webapps)
 type BoxExtended struct {
 	packr.Box
 	createTime time.Time
@@ -25,6 +27,7 @@ func New(originalBox *packr.Box) *BoxExtended {
 
 // Open returns a File using the http.File interface
 func (be BoxExtended) Open(name string) (http.File, error) {
+	fmt.Println("BoxExtended opening file", name)
 	theFile, err := be.Box.Open(name)
 	if err != nil {
 		panic(err)
