@@ -29,6 +29,11 @@ func (s Services) GetEntityOptions(entityType types.EntityType) ([]dtos.EntityOp
 	}
 
 	switch entityType := entities.(type) {
+	case *[]models.User:
+		for _, e := range *entityType {
+			option := e.BuildEntityOption()
+			options = append(options, option)
+		}
 	case *[]models.Contact:
 		for _, e := range *entityType {
 			option := e.BuildEntityOption()

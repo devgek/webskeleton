@@ -5,9 +5,13 @@ curl -X POST \
 
 curl -X POST \
   -H 'Content-Type: application/json' \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZX0.fXypkBFuqt1YgTjy6DWKdlZY-4ikLwJ0CtAhG472rvY" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwibmFtZSI6ImFkbWluIn0.BbGKax52n_5pqsutfKF62Gz6RdXHTJ9LPd9onWm8HuE" \
    localhost:8080/api/entitylistuser
 
+curl -X POST \
+  -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwibmFtZSI6ImFkbWluIn0.BbGKax52n_5pqsutfKF62Gz6RdXHTJ9LPd9onWm8HuE" \
+   localhost:8080/api/optionlistuser
 
 curl -X POST \
   -H 'Content-Type: application/json' \

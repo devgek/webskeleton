@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/types"
@@ -16,7 +17,7 @@ import (
 func HandleOptionListAjax(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
-	entityType := types.ParseEntityType(entity)
+	entityType := types.ParseEntityType(strings.ToLower(entity))
 
 	ec := c.(*webenv.EnvContext)
 
