@@ -23,7 +23,7 @@ func (ds *DatastoreImpl) GetOneEntityBy(entity interface{}, key string, val inte
 		return err
 	}
 
-	return ds.LoadRelated(entity)
+	return ds.LoadRelatedEntities(entity)
 }
 
 //GetEntityByID ...
@@ -32,7 +32,7 @@ func (ds *DatastoreImpl) GetEntityByID(entity interface{}, id uint) error {
 		return err
 	}
 
-	return ds.LoadRelated(entity)
+	return ds.LoadRelatedEntities(entity)
 }
 
 //GetAllEntities select * from table
@@ -44,7 +44,11 @@ func (ds *DatastoreImpl) GetAllEntities(entitySlice interface{}) error {
 	switch entityType := entitySlice.(type) {
 	case *[]models.User:
 		for idx := range *entityType {
-			ds.LoadRelated(&((*entityType)[idx]))
+			ds.LoadRelatedEntities(&((*entityType)[idx]))
+		}
+	case *[]models.Contact:
+		for idx := range *entityType {
+			ds.LoadRelatedEntities(&((*entityType)[idx]))
 		}
 	}
 
@@ -94,7 +98,7 @@ func (ds *DatastoreImpl) CreateEntity(entity interface{}) error {
 	if err := ds.Create(entity).Error; err != nil {
 		return err
 	}
-	return ds.LoadRelated(entity)
+	return ds.LoadRelatedEntities(entity)
 }
 
 //SaveEntity update entity table
@@ -103,7 +107,7 @@ func (ds *DatastoreImpl) SaveEntity(entity interface{}) error {
 	if err := ds.Save(entity).Error; err != nil {
 		return err
 	}
-	return ds.LoadRelated(entity)
+	return ds.LoadRelatedEntities(entity)
 }
 
 //DeleteEntityByID delete entity by id (primary key)
@@ -124,7 +128,7 @@ func (ds *DatastoreImpl) DeleteEntityByID(entity interface{}, id uint) error {
 }
 
 //LoadRelated load embedded entities
-func (ds *DatastoreImpl) LoadRelated(i interface{}) error {
+func (ds *DatastoreImpl) LoadRelatedEntities(i interface{}) error {
 	if val, ok := i.(models.EntityHolder); ok {
 		if val != nil {
 			return val.LoadRelated(ds.DB)

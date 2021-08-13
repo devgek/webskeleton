@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/devgek/webskeleton/dtos"
 	"github.com/devgek/webskeleton/types"
+	"github.com/jinzhu/gorm"
 )
 
 //Contact ...
@@ -22,4 +23,12 @@ func (c *Contact) BuildEntityOption() dtos.EntityOption {
 	o.Value = c.Name
 
 	return o
+}
+
+//LoadRelated load related entities (implements EntityHolder)
+func (c *Contact) LoadRelated(db *gorm.DB) error {
+	c.ContactAddresses = []ContactAddress{}
+	db.Model(c).Related(&c.ContactAddresses)
+
+	return nil
 }

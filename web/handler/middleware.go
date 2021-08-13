@@ -24,7 +24,7 @@ func EnvContextMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 //RequestLoggingMiddleware ...
 func RequestLoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		log.Println("r:", c.Request().RequestURI)
+		log.Println("r:", c.Request().RequestURI, c.Request().Method)
 		// Call the next handler, which can be another middleware in the chain, or the final handler.
 		return next(c)
 	}
@@ -42,9 +42,11 @@ func TokenLoggingMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 //CookieAuthMiddleware middleware handler for cookie authentication
 func CookieAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		log.Println("ca:", c.Request().RequestURI, c.Request().Method)
 		r := c.Request()
 		//don't check auth cookie with this requests
 		if r.URL.Path == "/favicon.ico" || r.URL.Path == "/login" || r.URL.Path == "/loginuser" || r.URL.Path == "/health" || strings.Contains(r.URL.Path, "api") || strings.Contains(r.URL.Path, webenv.AssetPattern) || strings.Contains(r.URL.Path, "/assets") {
+			log.Println("ca: skipped because of url exception")
 			return next(c)
 		}
 
@@ -79,6 +81,7 @@ func JWTAuthSkipper(c echo.Context) bool {
 	//don't check token for this URL's
 	// method OPTIONS because of CORS Preflight requests from axios, they do not have Authorization token
 	if r.URL.Path == "/api/login" || r.Method == "OPTIONS" {
+		log.Println("JWTAuthSkipper: skipped because of url or method exception")
 		return true
 	}
 	return false
