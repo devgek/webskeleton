@@ -20,8 +20,11 @@ func NewRenderer(store TStore) *Renderer {
 
 // Render renders a template document
 func (r *Renderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	log.Println("render template", name)
-	templ := r.TStore.GetTemplate(name)
-	//important templ.Execute not templ.ExecuteTemplate(w, name, data)
-	return templ.Execute(w, data)
+	log.Println("Renderer::Render: template", name)
+	if templ, err := r.TStore.GetTemplate(name); err == nil {
+		//important templ.Execute not templ.ExecuteTemplate(w, name, data)
+		return templ.Execute(w, data)
+	} else {
+		return err
+	}
 }

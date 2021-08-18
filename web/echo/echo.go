@@ -21,7 +21,7 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 	}
 
 	e.Renderer = template.NewRenderer(env.TStore)
-	e.HTTPErrorHandler = handler.SimpleLoggingHTTPErrorHandler
+	e.HTTPErrorHandler = handler.LoggingDefaultHTTPErrorHandler
 
 	// api
 	apiGroup := e.Group("/api")

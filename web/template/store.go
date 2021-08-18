@@ -14,7 +14,7 @@ import (
 
 //TStore ...
 type TStore interface {
-	GetTemplate(name string) *template.Template
+	GetTemplate(name string) (*template.Template, error)
 }
 
 // BoxBasedTemplateStore ...
@@ -30,31 +30,32 @@ func NewBoxBasedTemplateStore(box *packr.Box) TStore {
 }
 
 //GetTemplate ...
-func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) *template.Template {
+func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) (*template.Template, error) {
 	ts.Lock()
 	defer ts.Unlock()
 
-	//if dev mode, than parse the template on each request
+	//if dev mode, then parse the template on each request
 	if val, ok := ts.templates[fileName]; ok && !config.IsDev() {
-		return val
+		return val, nil
 	}
 
 	var templ *template.Template
+	var err error
 
 	switch {
 	case fileName == "login":
-		templ = template.Must(parsePacked(ts.Box, fileName+".html"))
+		templ, err = parsePacked(ts.Box, fileName+".html")
 	case strings.Contains(fileName, "page"):
-		templ = template.Must(parsePacked(ts.Box, "layout.html", fileName+".html"))
-	case strings.Contains(fileName, "consumptiongroup"):
-		templ = template.Must(parsePacked(ts.Box, "layout.html", fileName+".html", fileName+"-edit.html", "confirm-delete.html", "energymetermapping-edit-embedded.html", "confirm-delete-embedded.html"))
+		templ, err = parsePacked(ts.Box, "layout.html", fileName+".html")
 	default:
-		templ = template.Must(parsePacked(ts.Box, "layout.html", fileName+".html", fileName+"-edit.html", "confirm-delete.html"))
+		templ, err = parsePacked(ts.Box, "layout.html", fileName+".html", fileName+"-edit.html", "confirm-delete.html")
 	}
 
-	ts.templates[fileName] = templ
+	if err == nil {
+		ts.templates[fileName] = templ
+	}
 
-	return templ
+	return templ, err
 }
 
 // ParsePacked parses html templates from packr box
