@@ -68,7 +68,9 @@ func HandleAPILogin(c echo.Context) error {
 	user, err := ec.Env.Services.LoginUser(loginData.User, loginData.Pass)
 	if err != nil {
 		// return echo.NewHTTPError(http.StatusUnauthorized)
-		return c.JSON(http.StatusUnauthorized, ec.Env.MessageLocator.GetMessageF(err.Error()))
+		msg := ec.Env.MessageLocator.GetMessageF(err.Error())
+		log.Println("HandleApiLogin return:", http.StatusUnauthorized, msg)
+		return c.JSON(http.StatusUnauthorized, msg)
 	}
 
 	//login ok
