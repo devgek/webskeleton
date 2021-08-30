@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/golang-jwt/jwt"
 	"log"
 	"net/http"
 
@@ -9,7 +10,6 @@ import (
 	webcookie "github.com/devgek/webskeleton/web/cookie"
 	webenv "github.com/devgek/webskeleton/web/env"
 	"github.com/devgek/webskeleton/web/request"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/stretchr/objx"
 )
