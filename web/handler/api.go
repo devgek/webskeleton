@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -31,7 +32,9 @@ func HandleAPICreate(c echo.Context) error {
 		return c.JSON(http.StatusOK, oEntityObject)
 	}
 
-	return c.JSON(http.StatusInternalServerError, err.Error())
+	msg := ec.Env.MessageLocator.GetMessageF(err.Error())
+	log.Println("HandleAPICreate::", http.StatusInternalServerError, msg)
+	return c.JSON(http.StatusInternalServerError, msg)
 }
 
 //HandleAPIEdit ...
@@ -50,10 +53,12 @@ func HandleAPIEdit(c echo.Context) error {
 		return c.JSON(http.StatusOK, oEntityObject)
 	}
 
-	return c.JSON(http.StatusInternalServerError, err.Error())
+	msg := ec.Env.MessageLocator.GetMessageF(err.Error())
+	log.Println("HandleAPIEdit::", http.StatusInternalServerError, msg)
+	return c.JSON(http.StatusInternalServerError, msg)
 }
 
-//HandleAPIEdit ...
+//HandleAPIDelete ...
 func HandleAPIDelete(c echo.Context) error {
 	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
@@ -66,7 +71,9 @@ func HandleAPIDelete(c echo.Context) error {
 		return c.JSON(http.StatusOK, "Entity deleted")
 	}
 
-	return c.JSON(http.StatusInternalServerError, err.Error())
+	msg := ec.Env.MessageLocator.GetMessageF(err.Error())
+	log.Println("HandleAPIDelete::", http.StatusInternalServerError, msg)
+	return c.JSON(http.StatusInternalServerError, msg)
 }
 
 //HandleAPICreateAll ...
@@ -94,5 +101,7 @@ func HandleAPICreateAll(c echo.Context) error {
 		return c.JSON(http.StatusOK, "Entities created.")
 	}
 
-	return c.JSON(http.StatusInternalServerError, err.Error())
+	msg := ec.Env.MessageLocator.GetMessageF(err.Error())
+	log.Println("HandleAPICreateAll::", http.StatusInternalServerError, msg)
+	return c.JSON(http.StatusInternalServerError, msg)
 }
