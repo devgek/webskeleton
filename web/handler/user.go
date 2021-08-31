@@ -14,7 +14,10 @@ import (
 func HandleCreateUser(c echo.Context) error {
 	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
-	oEntityObject := ec.Env.EF.Get(entity)
+	oEntityObject, err := ec.Env.EF.Get(entity)
+	if err != nil {
+		return err
+	}
 
 	entityResponse := viewmodel.NewEntityResponse(oEntityObject)
 	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
@@ -29,7 +32,6 @@ func HandleCreateUser(c echo.Context) error {
 		return err
 	}
 
-	var err error
 	if entity == "user" {
 		user := oEntityObject.(*models.User)
 		entityResponse.EntityObject, err = ec.Env.Services.CreateUser(user.Name, user.Pass, user.Email, user.Role)

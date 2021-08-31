@@ -44,7 +44,7 @@ func InitEcho(env *webenv.Env) *echo.Echo {
 	apiGroup.Match([]string{"OPTIONS", "POST"}, "/optionlist:entity", handler.HandleOptionListAjax)
 
 	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entitynew:entity", handler.HandleAPICreate)
-	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entityedit:entity", handler.HandleAPIEdit)
+	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entityedit:entity", handler.HandleAPIUpdate)
 	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entitydelete:entity/:id", handler.HandleAPIDelete)
 
 	apiGroup.PUT("/allnew:entity", handler.HandleAPICreateAll)

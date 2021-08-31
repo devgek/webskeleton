@@ -22,8 +22,12 @@ func (s Services) CreateEntity(entity interface{}, entityName string) error {
 func (s Services) GetEntityOptions(entityType types.EntityType) ([]dtos.EntityOption, error) {
 	options := []dtos.EntityOption{}
 
-	entities := s.EF.GetSlice(entityType.Val())
-	err := s.DS.GetAllEntities(entities)
+	entities, err := s.EF.GetSlice(entityType.Val())
+	if err != nil {
+		return options, err
+	}
+
+	err = s.DS.GetAllEntities(entities)
 	if err != nil {
 		return options, err
 	}
@@ -47,8 +51,11 @@ func (s Services) GetEntityOptions(entityType types.EntityType) ([]dtos.EntityOp
 func (s Services) GetEntityOptionsByID(entityType types.EntityType, id uint) ([]dtos.EntityOption, error) {
 	options := []dtos.EntityOption{}
 
-	entity := s.EF.Get(entityType.Val())
-	err := s.DS.GetEntityByID(entity, id)
+	entity, err := s.EF.Get(entityType.Val())
+	if err != nil {
+		return options, err
+	}
+	err = s.DS.GetEntityByID(entity, id)
 	if err != nil {
 		return options, err
 	}

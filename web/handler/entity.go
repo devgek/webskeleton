@@ -44,12 +44,15 @@ func HandleEntityListAjax(c echo.Context) error {
 	entity := c.Param("entity")
 
 	ec := c.(*webenv.EnvContext)
-	entities := ec.Env.EF.GetSlice(entity)
+	entities, err := ec.Env.EF.GetSlice(entity)
+	if err != nil {
+		return err
+	}
 
 	entityResponse := viewmodel.NewEntityResponse(entities)
 	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
 
-	err := ec.Env.DS.GetAllEntities(entities)
+	err = ec.Env.DS.GetAllEntities(entities)
 
 	if err != nil {
 		entityResponse.IsError = true
@@ -68,9 +71,12 @@ func HandleEntityList(c echo.Context) error {
 	entity := c.Param("entity")
 
 	ec := c.(*webenv.EnvContext)
-	entities := ec.Env.EF.GetSlice(entity)
+	entities, err := ec.Env.EF.GetSlice(entity)
+	if err != nil {
+		return err
+	}
 
-	err := ec.Env.DS.GetAllEntities(entities)
+	err = ec.Env.DS.GetAllEntities(entities)
 
 	viewData := webenv.NewTemplateDataWithRequestData(ec.RequestData())
 	viewData["Entities"] = entities
@@ -94,8 +100,12 @@ func HandleEntityDelete(c echo.Context) error {
 	oID := c.FormValue("gkvObjId")
 	ioID, _ := strconv.Atoi(oID)
 
-	entityModel := ec.Env.EF.Get(entity)
-	err := ec.Env.DS.DeleteEntityByID(entityModel, uint(ioID))
+	entityModel, err := ec.Env.EF.Get(entity)
+	if err != nil {
+		return err
+	}
+
+	err = ec.Env.DS.DeleteEntityByID(entityModel, uint(ioID))
 
 	baseResponse := &viewmodel.BaseResponse{}
 	if err != nil {
@@ -115,12 +125,15 @@ func HandleEntityEdit(c echo.Context) error {
 
 	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
-	oEntityObject := ec.Env.EF.Get(entity)
+	oEntityObject, err := ec.Env.EF.Get(entity)
+	if err != nil {
+		return err
+	}
 
 	entityResponse := viewmodel.NewEntityResponse(oEntityObject)
 	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
 
-	err := ec.Env.DS.GetEntityByID(oEntityObject, uint(ioID))
+	err = ec.Env.DS.GetEntityByID(oEntityObject, uint(ioID))
 	if err == nil {
 		//Attention!! embedded structs with same field names are also populated with form values (e.g. consumptiongroup.name and customer.name)
 		//TODO: find a solution for this problem
@@ -147,7 +160,10 @@ func HandleEntityNew(c echo.Context) error {
 	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
 
-	oEntityObject := ec.Env.EF.Get(entity)
+	oEntityObject, err := ec.Env.EF.Get(entity)
+	if err != nil {
+		return err
+	}
 
 	entityResponse := viewmodel.NewEntityResponse(oEntityObject)
 	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
@@ -162,7 +178,6 @@ func HandleEntityNew(c echo.Context) error {
 		return err
 	}
 
-	var err error
 	if entity == "user" {
 		user := oEntityObject.(*models.User)
 		entityResponse.EntityObject, err = ec.Env.Services.CreateUser(user.Name, user.Pass, user.Email, user.Role)

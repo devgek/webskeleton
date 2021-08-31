@@ -27,7 +27,7 @@ var bootstrapCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(bootstrapCmd)
 
-	bootstrapCmd.Flags().String("type", "web", "The type of project you want to bootstrap [simple|web|cli]")
+	bootstrapCmd.Flags().String("type", "web", "The type of project you want to bootstrap [api|web|cli]")
 	bootstrapCmd.Flags().String("repository", "github.com", "The git repository for the new project")
 	bootstrapCmd.Flags().String("user", "theuser", "The git user for the new project")
 	bootstrapCmd.Flags().String("project", "theproject", "The project name for the new project")

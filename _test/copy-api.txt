@@ -1,0 +1,16 @@
+copy;_test/config-serve.yaml;_test
+copy;.vscode/launch.json;.vscode
+copy;cmd/root.go;cmd
+copy;cmd/serve.go;cmd
+copy;config;config
+copy;data;data
+copy;dtos;dtos
+xcopy;helper;helper
+copy;models;models
+copy;msg;msg
+copy;packrfix;packrfix
+copy;services;services
+copy;types;types
+xcopy;web;web
+copy;LICENSE
+copy;main.go
