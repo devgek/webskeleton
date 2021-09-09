@@ -8,6 +8,7 @@ copy;dtos;dtos
 xcopy;helper;helper
 copy;models;models
 copy;msg;msg
+copy;packrd;packrd
 copy;packrfix;packrfix
 copy;services;services
 copy;types;types
