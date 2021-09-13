@@ -21,6 +21,15 @@
       "program": "${workspaceFolder}",
       "env": {},
       "args": ["cmd1"]
+    },
+    {
+      "name": "test bootstrap",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}",
+      "env": {},
+      "args": ["bootstrap", "--type=api", "--repository=github.com", "--user=devgek", "--project=testproject", "--title=thetestproject"]
     }
   ]
 }

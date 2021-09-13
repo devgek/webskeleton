@@ -11,6 +11,7 @@ import (
 
 	"github.com/devgek/webskeleton/helper/fileutil"
 	"github.com/devgek/webskeleton/helper/helper"
+	"github.com/otiai10/copy"
 	"github.com/spf13/cobra"
 )
 
@@ -140,25 +141,10 @@ func copySources(sourceLines []string, sourceRoot, destinationRoot string) {
 		if len(parts) == 3 {
 			destinationPath = filepath.Join(destinationRoot, parts[2])
 		}
-		destinationPath = filepath.FromSlash(destinationPath + "\\")
 
 		log.Print(cmd, sourcePath, "--->", destinationPath)
-
-		var command *exec.Cmd
-		if helper.IsWindows() {
-			if cmd == "copy" {
-				err := os.MkdirAll(destinationPath, 0755)
-				helper.ExitOnError(err, "")
-				command = exec.Command("cmd", "/C", cmd, sourcePath, destinationPath, "/Y")
-			} else {
-				// xcopy
-				command = exec.Command("cmd", "/C", cmd, sourcePath, destinationPath, "/S", "/E", "/Y")
-			}
-		} else {
-			command = exec.Command("cp", "-rf", sourcePath, destinationPath)
-		}
-		output, err := command.CombinedOutput()
-		helper.ExitOnError(err, string(output))
+		err := copy.Copy(sourcePath, destinationPath)
+		helper.ExitOnError(err, "Error while copying source [files]cd")
 	}
 }
 
