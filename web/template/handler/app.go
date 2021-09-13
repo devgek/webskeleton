@@ -44,27 +44,10 @@ func HandleFavicon(c echo.Context) error {
 	return c.File(webenv.AssetRoot + "/favicon_kahrersoftware.png")
 }
 
-//HandleSpa start single page app (vue)
-func HandleSpa(c echo.Context) error {
-	return c.Redirect(http.StatusTemporaryRedirect, "/vue/start.html")
-}
-
 //HandlePageDefault ...
 func HandlePageDefault(c echo.Context) error {
 	page := c.Param("page")
 
 	ec := c.(*webenv.EnvContext)
 	return c.Render(http.StatusOK, page, webenv.NewTemplateDataWithRequestData(ec.RequestData()))
-}
-
-//AssetHandlerFunc handles asset files
-func AssetHandlerFunc(h http.Handler) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		//cache assets in browser for one day
-		if config.IsAssetsCache() {
-			c.Response().Header().Set("Cache-Control", "public, max-age=86400")
-		}
-		h.ServeHTTP(c.Response(), c.Request())
-		return nil
-	}
 }

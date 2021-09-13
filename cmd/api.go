@@ -11,17 +11,17 @@ import (
 )
 
 // serveCmd represents the serve command
-var serveCmd = &cobra.Command{
-	Use:   "serve --config=configfile.yaml",
-	Short: "start web server and serve html with echo http server",
+var apiCmd = &cobra.Command{
+	Use:   "api --config=configfile.yaml",
+	Short: "start web server and serve json API with echo http server",
 	Long:  `bla bla`,
 	Run: func(cmd *cobra.Command, args []string) {
-		runServe(cmd)
+		runApi(cmd)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(serveCmd)
+	rootCmd.AddCommand(apiCmd)
 
 	// Here you will define your flags and configuration settings.
 
@@ -35,9 +35,9 @@ func init() {
 	// serveCmd.Flags().Bool("debug", false, "debug mode on/off")
 }
 
-func runServe(cmd *cobra.Command) {
+func runApi(cmd *cobra.Command) {
 	// start the web server
-	log.Println("Starting ", config.ProjectName, " server on port ", config.ServerPort())
+	log.Println("Starting ", config.ProjectName, " API on port ", config.ServerPort())
 	if config.IsServerSecure() {
 		log.Println("Secure (TLS) mode is on")
 	}
@@ -54,9 +54,9 @@ func runServe(cmd *cobra.Command) {
 		log.Println("Datastore log mode is on")
 	}
 
-	env := webenv.GetWebEnv()
+	env := webenv.GetApiEnv()
 
-	e := echo.InitEchoWebApp(env)
+	e := echo.InitEchoApi(env)
 
 	if config.IsServerSecure() {
 		log.Fatal(e.StartTLS(":"+config.ServerPort(), config.ServerCert(), config.ServerKey()))

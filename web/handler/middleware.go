@@ -15,8 +15,13 @@ import (
 //it must be the first middleware, which is registered
 func EnvContextMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		cc := &webenv.EnvContext{Context: c, Env: webenv.GetWebEnv()}
-		log.Println("ec:", cc.Env.Templates.ResolutionDir)
+		env := webenv.GetEnv()
+		cc := &webenv.EnvContext{Context: c, Env: env}
+		if env.Api {
+			log.Println("ec: api env")
+		} else {
+			log.Println("ec: template resolution dir:", cc.Env.Templates.ResolutionDir)
+		}
 		return next(cc)
 	}
 }
@@ -77,10 +82,9 @@ func CookieAuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 // JWTAuthSkipper returns true for URL's, that do not need token authentication
 func JWTAuthSkipper(c echo.Context) bool {
 	r := c.Request()
-	log.Println("JWTAuthSkipper", r.URL.Path, "token:", c.Get("token"), "method:", r.Method)
 	//don't check token for this URL's
 	// method OPTIONS because of CORS Preflight requests from axios, they do not have Authorization token
-	if r.URL.Path == "/api/login" || r.Method == "OPTIONS" {
+	if r.URL.Path == "/api/login" || r.URL.Path == "/api/health" || r.Method == "OPTIONS" {
 		log.Println("JWTAuthSkipper: skipped because of url or method exception")
 		return true
 	}

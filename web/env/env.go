@@ -19,6 +19,7 @@ import (
 
 //Env the environment
 type Env struct {
+	Api            bool
 	TStore         template.TStore
 	Templates      *packr.Box
 	Assets         http.FileSystem
@@ -30,8 +31,45 @@ type Env struct {
 
 var once sync.Once
 
-//WebEnv singleton instance for the app env
-var webEnv *Env
+//theEnv singleton instance for the app env
+var theEnv *Env
+
+func GetEnv() *Env {
+	return theEnv
+}
+
+//GetApiEnv return new initialized environment for serving api
+func GetApiEnv() *Env {
+	once.Do(func() {
+		originalAssetBox := packr.New("assets", "../assets")
+		// assetBox := packrfix.New(origninalAssetBox)
+
+		//load locale specific message file, if not default
+		// messages, err := assetBox.Find("msg/messages-en.yaml")
+		messages, err := originalAssetBox.Find("msg/messages.yaml")
+
+		//load messages
+		ml := msg.NewMessageLocator(messages)
+
+		//here we create the datastore
+		//?_foreign_keys=1, neccessary for golang to respect foreign key constraints on sqlite3 db
+		var ds data.Datastore
+		if config.DatastoreSystem() == "postgres" {
+			ds, err = data.NewPostgres()
+		} else {
+			ds, err = data.NewSqlite(config.DatabaseName)
+		}
+		if err != nil {
+			log.Panic(err)
+		}
+
+		s := services.NewServices(ds)
+
+		theEnv = &Env{Api: true, TStore: nil, Templates: nil, Assets: originalAssetBox, DS: ds, Services: s, MessageLocator: ml}
+	})
+
+	return GetEnv()
+}
 
 //GetWebEnv return new initialized environment
 func GetWebEnv() *Env {
@@ -65,10 +103,10 @@ func GetWebEnv() *Env {
 			log.Panic(err)
 		}
 
-		services := services.NewServices(ds)
+		s := services.NewServices(ds)
 
-		webEnv = &Env{TStore: tStore, Templates: originalTemplateBox, Assets: originalAssetBox, DS: ds, Services: services, MessageLocator: ml}
+		theEnv = &Env{Api: false, TStore: tStore, Templates: originalTemplateBox, Assets: originalAssetBox, DS: ds, Services: s, MessageLocator: ml}
 	})
 
-	return webEnv
+	return GetEnv()
 }

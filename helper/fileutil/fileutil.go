@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-// ReadLines Reads a file line per line and return all the lines.
+// ReadLines Reads a file line per line and returns all the lines.
 func ReadLines(path string) ([]string, error) {
 	file, err := os.Open(path)
 	if err != nil {
