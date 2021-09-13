@@ -1,4 +1,4 @@
-package data
+package entitydata
 
 import (
 	"errors"
@@ -13,8 +13,13 @@ var (
 	ErrorEntityNotDeleted = errors.New("Entity not deleted")
 )
 
+//GormEntityDatastoreImpl the EntityDatastore implementation using gorm.DB for database operations
+type GormEntityDatastoreImpl struct {
+	*gorm.DB
+}
+
 //GetOneEntityBy select * from table where key = value
-func (ds *DatastoreImpl) GetOneEntityBy(entity interface{}, key string, val interface{}) error {
+func (ds *GormEntityDatastoreImpl) GetOneEntityBy(entity interface{}, key string, val interface{}) error {
 	if err := ds.Where(key+" = ?", val).First(entity).Error; err != nil {
 		if gorm.IsRecordNotFoundError(err) {
 			return ErrorEntityNotFountBy
@@ -27,7 +32,7 @@ func (ds *DatastoreImpl) GetOneEntityBy(entity interface{}, key string, val inte
 }
 
 //GetEntityByID ...
-func (ds *DatastoreImpl) GetEntityByID(entity interface{}, id uint) error {
+func (ds *GormEntityDatastoreImpl) GetEntityByID(entity interface{}, id uint) error {
 	if err := ds.First(entity, id).Error; err != nil {
 		return err
 	}
@@ -36,7 +41,7 @@ func (ds *DatastoreImpl) GetEntityByID(entity interface{}, id uint) error {
 }
 
 //GetAllEntities select * from table
-func (ds *DatastoreImpl) GetAllEntities(entitySlice interface{}) error {
+func (ds *GormEntityDatastoreImpl) GetAllEntities(entitySlice interface{}) error {
 	if err := ds.Order("id").Find(entitySlice).Error; err != nil {
 		return err
 	}
@@ -93,7 +98,7 @@ func (ds *DatastoreImpl) GetAllEntities(entitySlice interface{}) error {
 }
 
 //CreateEntity insert into entity table
-func (ds *DatastoreImpl) CreateEntity(entity interface{}) error {
+func (ds *GormEntityDatastoreImpl) CreateEntity(entity interface{}) error {
 	// return ds.Create(entity).Error
 	if err := ds.Create(entity).Error; err != nil {
 		return err
@@ -102,7 +107,7 @@ func (ds *DatastoreImpl) CreateEntity(entity interface{}) error {
 }
 
 //SaveEntity update entity table
-func (ds *DatastoreImpl) SaveEntity(entity interface{}) error {
+func (ds *GormEntityDatastoreImpl) SaveEntity(entity interface{}) error {
 	// return ds.Save(entity).Error
 	if err := ds.Save(entity).Error; err != nil {
 		return err
@@ -113,7 +118,7 @@ func (ds *DatastoreImpl) SaveEntity(entity interface{}) error {
 //DeleteEntityByID delete entity by id (primary key)
 //ID must be provided
 //Attention ds is not the same as db!
-func (ds *DatastoreImpl) DeleteEntityByID(entity interface{}, id uint) error {
+func (ds *GormEntityDatastoreImpl) DeleteEntityByID(entity interface{}, id uint) error {
 	db := ds.Unscoped().Delete(entity, id)
 
 	if db.Error != nil {
@@ -127,8 +132,8 @@ func (ds *DatastoreImpl) DeleteEntityByID(entity interface{}, id uint) error {
 	return nil
 }
 
-//LoadRelated load embedded entities
-func (ds *DatastoreImpl) LoadRelatedEntities(i interface{}) error {
+//LoadRelatedEntities load embedded entities
+func (ds *GormEntityDatastoreImpl) LoadRelatedEntities(i interface{}) error {
 	if val, ok := i.(models.EntityHolder); ok {
 		if val != nil {
 			return val.LoadRelated(ds.DB)

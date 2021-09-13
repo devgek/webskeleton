@@ -1,21 +1,20 @@
 package services
 
 import (
-	"errors"
-
 	"github.com/devgek/webskeleton/data"
-	"github.com/devgek/webskeleton/models"
+	entityservices "github.com/devgek/webskeleton/services/entity"
+	"github.com/pkg/errors"
 )
 
-//Services the business serives
+//Services the business services
 type Services struct {
+	ES entityservices.EntityServices
 	DS data.Datastore
-	EF models.EntityFactory
 }
 
 //NewServices ...
-func NewServices(ds data.Datastore) *Services {
-	return &Services{ds, models.EntityFactory{}}
+func NewServices(es entityservices.EntityServices, ds data.Datastore) *Services {
+	return &Services{es, ds}
 }
 
 //Do ... just for test mocking

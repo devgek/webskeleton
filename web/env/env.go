@@ -1,6 +1,9 @@
 package webenv
 
 import (
+	"github.com/devgek/webskeleton/data"
+	"github.com/devgek/webskeleton/services"
+	entityservices "github.com/devgek/webskeleton/services/entity"
 	"log"
 	"net/http"
 	"sync"
@@ -11,8 +14,6 @@ import (
 	"github.com/devgek/webskeleton/web/template"
 	"github.com/gobuffalo/packr/v2"
 
-	"github.com/devgek/webskeleton/data"
-	"github.com/devgek/webskeleton/services"
 	_ "github.com/jinzhu/gorm/dialects/postgres" // gorm for postgres
 	_ "github.com/jinzhu/gorm/dialects/sqlite"   // gorm for sqlite3
 )
@@ -63,7 +64,8 @@ func GetApiEnv() *Env {
 			log.Panic(err)
 		}
 
-		s := services.NewServices(ds)
+		es := entityservices.EntityServices{ds, models.EntityFactory{}}
+		s := services.NewServices(es, ds)
 
 		theEnv = &Env{Api: true, TStore: nil, Templates: nil, Assets: originalAssetBox, DS: ds, Services: s, MessageLocator: ml}
 	})
@@ -103,7 +105,8 @@ func GetWebEnv() *Env {
 			log.Panic(err)
 		}
 
-		s := services.NewServices(ds)
+		es := entityservices.EntityServices{ds, models.EntityFactory{}}
+		s := services.NewServices(es, ds)
 
 		theEnv = &Env{Api: false, TStore: tStore, Templates: originalTemplateBox, Assets: originalAssetBox, DS: ds, Services: s, MessageLocator: ml}
 	})

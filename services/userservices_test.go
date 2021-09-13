@@ -2,6 +2,7 @@ package services_test
 
 import (
 	"errors"
+	entitydata "github.com/devgek/webskeleton/data/entity"
 	"testing"
 
 	"github.com/devgek/webskeleton/data"
@@ -109,7 +110,7 @@ func TestDeleteUserError(t *testing.T) {
 	s := services.NewServices(inMemoryDS)
 
 	err := s.DS.DeleteEntityByID(&models.User{}, 99)
-	assert.Equal(t, data.ErrorEntityNotDeleted, err, "Expected error not returned")
+	assert.Equal(t, entitydata.ErrorEntityNotDeleted, err, "Expected error not returned")
 }
 func TestDoTableBased(t *testing.T) {
 	tests := map[string]struct {

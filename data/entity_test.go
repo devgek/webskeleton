@@ -1,6 +1,7 @@
 package data_test
 
 import (
+	"github.com/devgek/webskeleton/data/entity"
 	"testing"
 
 	"github.com/devgek/webskeleton/data"
@@ -22,7 +23,7 @@ func TestGetOneEntityBy(t *testing.T) {
 
 	err = inMemoryDS.GetOneEntityBy(&user, "name", "Lionex")
 	assert.NotNil(t, err, "Error expected")
-	assert.Equal(t, data.ErrorEntityNotFountBy, err, "ErrorEntityNotFoundBy expected")
+	assert.Equal(t, entity.ErrorEntityNotFountBy, err, "ErrorEntityNotFoundBy expected")
 }
 
 func TestGetAllEntities(t *testing.T) {
@@ -90,5 +91,5 @@ func TestDeleteEntityById(t *testing.T) {
 	notExistingUser := &models.User{}
 	err = inMemoryDS.DeleteEntityByID(notExistingUser, 99)
 	assert.NotNil(t, err, "Error expected")
-	assert.Equal(t, data.ErrorEntityNotDeleted, err, "Expected dedicated error ErrorEntityNotDeleted")
+	assert.Equal(t, entity.ErrorEntityNotDeleted, err, "Expected dedicated error ErrorEntityNotDeleted")
 }

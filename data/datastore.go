@@ -2,33 +2,23 @@ package data
 
 import (
 	"github.com/devgek/webskeleton/config"
+	data "github.com/devgek/webskeleton/data/entity"
 	"github.com/devgek/webskeleton/helper/password"
-	"github.com/devgek/webskeleton/types"
-
 	"github.com/devgek/webskeleton/models"
+	"github.com/devgek/webskeleton/types"
 	"github.com/jinzhu/gorm"
 )
 
-//CRUDDatastore CRUD operations with abstract entity type
-type CRUDDatastore interface {
-	GetOneEntityBy(entity interface{}, key string, val interface{}) error
-	GetEntityByID(entity interface{}, id uint) error
-	GetAllEntities(entitySlice interface{}) error
-	CreateEntity(entity interface{}) error
-	SaveEntity(entity interface{}) error
-	DeleteEntityByID(entity interface{}, id uint) error
-}
-
 //Datastore interface to datastore
 type Datastore interface {
-	CRUDDatastore
+	data.EntityDatastore
 	GetUser(name string) (*models.User, error)
 	GetDB() *gorm.DB
 }
 
 //DatastoreImpl the Datastore implementation
 type DatastoreImpl struct {
-	*gorm.DB
+	*data.GormEntityDatastoreImpl
 }
 
 //GetDB ...
@@ -83,5 +73,5 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 
 	err = db.FirstOrCreate(contact, "name = ?", "Mustermann GesmbH").Error
 
-	return &DatastoreImpl{db}, err
+	return &DatastoreImpl{GormEntityDatastoreImpl: &data.GormEntityDatastoreImpl{db}}, err
 }

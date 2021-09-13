@@ -181,7 +181,7 @@ func HandleAPIOptionList(c echo.Context) error {
 
 	entityResponse := viewmodel.NewEntityOptionsResponse(nil)
 	var err error
-	entityResponse.EntityOptions, err = ec.Env.Services.GetEntityOptions(entityType)
+	entityResponse.EntityOptions, err = ec.Env.Services.ES.GetEntityOptions(entityType)
 	if err == nil {
 		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.success.entity.optionlist", entityName)
 	} else {

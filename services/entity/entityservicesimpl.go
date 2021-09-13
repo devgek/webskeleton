@@ -1,4 +1,4 @@
-package services
+package entityservices
 
 import (
 	"github.com/devgek/webskeleton/dtos"
@@ -8,7 +8,7 @@ import (
 )
 
 //CreateEntity create new user
-func (s Services) CreateEntity(entity interface{}, entityName string) error {
+func (s EntityServices) CreateEntity(entity interface{}, entityName string) error {
 	if entityName == "user" {
 		user := entity.(*models.User)
 		user.Pass = password.EncryptPassword(user.Pass)
@@ -19,7 +19,7 @@ func (s Services) CreateEntity(entity interface{}, entityName string) error {
 }
 
 //GetEntityOptions ...
-func (s Services) GetEntityOptions(entityType types.EntityType) ([]dtos.EntityOption, error) {
+func (s EntityServices) GetEntityOptions(entityType types.EntityType) ([]dtos.EntityOption, error) {
 	options := []dtos.EntityOption{}
 
 	entities, err := s.EF.GetSlice(entityType.Val())
@@ -48,7 +48,7 @@ func (s Services) GetEntityOptions(entityType types.EntityType) ([]dtos.EntityOp
 }
 
 //GetEntityOptionsByID ...
-func (s Services) GetEntityOptionsByID(entityType types.EntityType, id uint) ([]dtos.EntityOption, error) {
+func (s EntityServices) GetEntityOptionsByID(entityType types.EntityType, id uint) ([]dtos.EntityOption, error) {
 	options := []dtos.EntityOption{}
 
 	entity, err := s.EF.Get(entityType.Val())
