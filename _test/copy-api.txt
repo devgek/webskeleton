@@ -1,5 +1,4 @@
 copy;_test/config-serve.yaml;_test/config-serve.yaml
-copy;.vscode/launch.json;.vscode
 copy;cmd/root.go;cmd/root.go
 copy;cmd/serve.go;cmd/serve.go
 copy;config;config
