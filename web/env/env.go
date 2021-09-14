@@ -3,7 +3,6 @@ package webenv
 import (
 	"github.com/devgek/webskeleton/data"
 	"github.com/devgek/webskeleton/services"
-	entityservices "github.com/devgek/webskeleton/services/entity"
 	"log"
 	"net/http"
 	"sync"
@@ -64,8 +63,7 @@ func GetApiEnv() *Env {
 			log.Panic(err)
 		}
 
-		es := entityservices.EntityServices{ds, models.EntityFactory{}}
-		s := services.NewServices(es, ds)
+		s := services.NewServices(models.EntityFactory{}, ds)
 
 		theEnv = &Env{Api: true, TStore: nil, Templates: nil, Assets: originalAssetBox, DS: ds, Services: s, MessageLocator: ml}
 	})
@@ -105,8 +103,7 @@ func GetWebEnv() *Env {
 			log.Panic(err)
 		}
 
-		es := entityservices.EntityServices{ds, models.EntityFactory{}}
-		s := services.NewServices(es, ds)
+		s := services.NewServices(models.EntityFactory{}, ds)
 
 		theEnv = &Env{Api: false, TStore: tStore, Templates: originalTemplateBox, Assets: originalAssetBox, DS: ds, Services: s, MessageLocator: ml}
 	})

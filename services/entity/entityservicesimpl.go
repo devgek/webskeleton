@@ -2,25 +2,13 @@ package entityservices
 
 import (
 	"github.com/devgek/webskeleton/dtos"
-	"github.com/devgek/webskeleton/helper/password"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/types"
 )
 
-//CreateEntity create new user
-func (s EntityServices) CreateEntity(entity interface{}, entityName string) error {
-	if entityName == "user" {
-		user := entity.(*models.User)
-		user.Pass = password.EncryptPassword(user.Pass)
-		return s.DS.CreateEntity(user)
-	}
-
-	return s.DS.CreateEntity(entity)
-}
-
 //GetEntityOptions ...
-func (s EntityServices) GetEntityOptions(entityType types.EntityType) ([]dtos.EntityOption, error) {
-	options := []dtos.EntityOption{}
+func (s EntityService) GetEntityOptions(entityType types.EntityType) ([]dtos.EntityOption, error) {
+	var options []dtos.EntityOption
 
 	entities, err := s.EF.GetSlice(entityType.Val())
 	if err != nil {
@@ -48,9 +36,8 @@ func (s EntityServices) GetEntityOptions(entityType types.EntityType) ([]dtos.En
 }
 
 //GetEntityOptionsByID ...
-func (s EntityServices) GetEntityOptionsByID(entityType types.EntityType, id uint) ([]dtos.EntityOption, error) {
-	options := []dtos.EntityOption{}
-
+func (s EntityService) GetEntityOptionsByID(entityType types.EntityType, id uint) ([]dtos.EntityOption, error) {
+	var options []dtos.EntityOption
 	entity, err := s.EF.Get(entityType.Val())
 	if err != nil {
 		return options, err

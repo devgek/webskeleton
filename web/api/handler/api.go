@@ -5,7 +5,6 @@ import (
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/dtos"
 	"github.com/devgek/webskeleton/types"
-	"github.com/devgek/webskeleton/web/viewmodel"
 	"github.com/golang-jwt/jwt"
 	"log"
 	"net/http"
@@ -74,8 +73,8 @@ func HandleAPILogin(c echo.Context) error {
 	})
 }
 
-//HandleAPICreate ...
-func HandleAPICreate(c echo.Context) error {
+//HandleAPICreateEntity ...
+func HandleAPICreateEntity(c echo.Context) error {
 	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
 
@@ -97,7 +96,7 @@ func HandleAPICreate(c echo.Context) error {
 	}
 
 	apiError := &dtos.ApiError{Nr: 1000, Msg: "Entity not created"}
-	log.Println("HandleAPICreate::", http.StatusInternalServerError, apiError, origError)
+	log.Println("HandleAPICreateEntity::", http.StatusInternalServerError, apiError, origError)
 	return c.JSON(http.StatusInternalServerError, apiError)
 }
 
@@ -128,8 +127,8 @@ errorReturn:
 	return c.JSON(http.StatusInternalServerError, apiError)
 }
 
-//HandleAPIUpdate ...
-func HandleAPIUpdate(c echo.Context) error {
+//HandleAPIUpdateEntity ...
+func HandleAPIUpdateEntity(c echo.Context) error {
 	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
 	oEntityObject, origError := ec.Env.EF.Get(entity)
@@ -144,12 +143,12 @@ func HandleAPIUpdate(c echo.Context) error {
 	}
 
 	apiError := &dtos.ApiError{Nr: 3000, Msg: "Entity not updated"}
-	log.Println("HandleAPIUpdate::", http.StatusInternalServerError, apiError, origError)
+	log.Println("HandleAPIUpdateEntity::", http.StatusInternalServerError, apiError, origError)
 	return c.JSON(http.StatusInternalServerError, apiError)
 }
 
-//HandleAPIDelete ...
-func HandleAPIDelete(c echo.Context) error {
+//HandleAPIDeleteEntity ...
+func HandleAPIDeleteEntity(c echo.Context) error {
 	ec := c.(*webenv.EnvContext)
 	entity := ec.Param("entity")
 	id := ec.Param("id")
@@ -165,7 +164,7 @@ func HandleAPIDelete(c echo.Context) error {
 	}
 
 	apiError := &dtos.ApiError{Nr: 4000, Msg: "Entity not deleted"}
-	log.Println("HandleAPIDelete::", http.StatusInternalServerError, apiError, origError)
+	log.Println("HandleAPIDeleteEntity::", http.StatusInternalServerError, apiError, origError)
 	return c.JSON(http.StatusInternalServerError, apiError)
 }
 
@@ -177,21 +176,14 @@ func HandleAPIOptionList(c echo.Context) error {
 
 	ec := c.(*webenv.EnvContext)
 
-	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
-
-	entityResponse := viewmodel.NewEntityOptionsResponse(nil)
-	var err error
-	entityResponse.EntityOptions, err = ec.Env.Services.ES.GetEntityOptions(entityType)
-	if err == nil {
-		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.success.entity.optionlist", entityName)
-	} else {
-
-		entityResponse.IsError = true
-		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.error.entity.optionlist", entityName)
+	entityOptions, origError := ec.Env.Services.GetEntityOptions(entityType)
+	if origError == nil {
+		return c.JSON(http.StatusOK, entityOptions)
 	}
 
-	//on client entityResponse is received as javascript object, no JSON.parse is needed
-	return c.JSON(http.StatusOK, entityResponse)
+	apiError := &dtos.ApiError{Nr: 6000, Msg: "No entity options"}
+	log.Println("HandleAPIOptionList::", http.StatusInternalServerError, apiError, origError)
+	return c.JSON(http.StatusInternalServerError, apiError)
 }
 
 //HandleAPIEntityList ...
@@ -200,23 +192,16 @@ func HandleAPIEntityList(c echo.Context) error {
 	entity := c.Param("entity")
 
 	ec := c.(*webenv.EnvContext)
-	entities, err := ec.Env.EF.GetSlice(entity)
-	if err != nil {
-		return err
+	entities, origError := ec.Env.EF.GetSlice(entity)
+
+	if origError == nil {
+		origError = ec.Env.DS.GetAllEntities(entities)
+		if origError == nil {
+			return c.JSON(http.StatusOK, entities)
+		}
 	}
 
-	entityResponse := viewmodel.NewEntityResponse(entities)
-	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
-
-	err = ec.Env.DS.GetAllEntities(entities)
-
-	if err != nil {
-		entityResponse.IsError = true
-		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.error.entity.list", entityName)
-	} else {
-		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.success.entity.list", entityName)
-	}
-
-	//on client entityResponse is received as javascript object, no JSON.parse is needed
-	return c.JSON(http.StatusOK, entityResponse)
+	apiError := &dtos.ApiError{Nr: 5000, Msg: "No entity list"}
+	log.Println("HandleAPIEntityList::", http.StatusInternalServerError, apiError, origError)
+	return c.JSON(http.StatusInternalServerError, apiError)
 }

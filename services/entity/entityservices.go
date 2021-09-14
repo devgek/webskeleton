@@ -6,8 +6,8 @@ import (
 	"github.com/devgek/webskeleton/models"
 )
 
-//EntityServices the services to handle entity data
-type EntityServices struct {
+//EntityService the service to handle entity data
+type EntityService struct {
 	DS entitydata.EntityDatastore
 	EF models.EntityFactory
 }

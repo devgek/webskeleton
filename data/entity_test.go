@@ -23,13 +23,13 @@ func TestGetOneEntityBy(t *testing.T) {
 
 	err = inMemoryDS.GetOneEntityBy(&user, "name", "Lionex")
 	assert.NotNil(t, err, "Error expected")
-	assert.Equal(t, entity.ErrorEntityNotFountBy, err, "ErrorEntityNotFoundBy expected")
+	assert.Equal(t, entitydata.ErrorEntityNotFountBy, err, "ErrorEntityNotFoundBy expected")
 }
 
 func TestGetAllEntities(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 
-	var users = []models.User{}
+	var users []models.User
 	err := inMemoryDS.GetAllEntities(&users)
 
 	assert.Nil(t, err, "No error expected")
@@ -39,7 +39,7 @@ func TestGetAllEntities(t *testing.T) {
 func TestGetAllEntitiesFiltered(t *testing.T) {
 	inMemoryDS := data.NewInMemoryDatastore()
 
-	var users = []models.User{}
+	var users []models.User
 	err := inMemoryDS.GetAllEntities(&users)
 	inMemoryDS.GetDB().Where("name = ? AND admin = ?", "admin", false)
 	assert.Nil(t, err, "No error expected")
@@ -91,5 +91,5 @@ func TestDeleteEntityById(t *testing.T) {
 	notExistingUser := &models.User{}
 	err = inMemoryDS.DeleteEntityByID(notExistingUser, 99)
 	assert.NotNil(t, err, "Error expected")
-	assert.Equal(t, entity.ErrorEntityNotDeleted, err, "Expected dedicated error ErrorEntityNotDeleted")
+	assert.Equal(t, entitydata.ErrorEntityNotDeleted, err, "Expected dedicated error ErrorEntityNotDeleted")
 }

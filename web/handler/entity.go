@@ -2,12 +2,14 @@ package handler
 
 import (
 	"github.com/devgek/webskeleton/models"
+	"github.com/devgek/webskeleton/types"
 	webenv "github.com/devgek/webskeleton/web/env"
 	"github.com/devgek/webskeleton/web/viewmodel"
 	"github.com/labstack/echo"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 //HandleEntityList ...
@@ -142,6 +144,58 @@ func HandleEntityNew(c echo.Context) error {
 
 	if err != nil {
 		entityResponse.IsError = true
+	}
+
+	//on client entityResponse is received as javascript object, no JSON.parse is needed
+	return c.JSON(http.StatusOK, entityResponse)
+}
+
+//HandleOptionListAjax ...
+func HandleOptionListAjax(c echo.Context) error {
+	//show entity list
+	entity := c.Param("entity")
+	entityType := types.ParseEntityType(strings.ToLower(entity))
+
+	ec := c.(*webenv.EnvContext)
+
+	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
+
+	entityResponse := viewmodel.NewEntityOptionsResponse(nil)
+	var err error
+	entityResponse.EntityOptions, err = ec.Env.Services.GetEntityOptions(entityType)
+	if err == nil {
+		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.success.entity.optionlist", entityName)
+	} else {
+
+		entityResponse.IsError = true
+		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.error.entity.optionlist", entityName)
+	}
+
+	//on client entityResponse is received as javascript object, no JSON.parse is needed
+	return c.JSON(http.StatusOK, entityResponse)
+}
+
+//HandleEntityListAjax ...
+func HandleEntityListAjax(c echo.Context) error {
+	//show entity list
+	entity := c.Param("entity")
+
+	ec := c.(*webenv.EnvContext)
+	entities, err := ec.Env.EF.GetSlice(entity)
+	if err != nil {
+		return err
+	}
+
+	entityResponse := viewmodel.NewEntityResponse(entities)
+	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
+
+	err = ec.Env.DS.GetAllEntities(entities)
+
+	if err != nil {
+		entityResponse.IsError = true
+		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.error.entity.list", entityName)
+	} else {
+		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.success.entity.list", entityName)
 	}
 
 	//on client entityResponse is received as javascript object, no JSON.parse is needed

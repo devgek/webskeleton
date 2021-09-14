@@ -2,7 +2,7 @@ package echo
 
 import (
 	apihandler "github.com/devgek/webskeleton/web/api/handler"
-	handler2 "github.com/devgek/webskeleton/web/template/handler"
+	templatehandler "github.com/devgek/webskeleton/web/template/handler"
 	"net/http"
 
 	"github.com/devgek/webskeleton/config"
@@ -45,9 +45,9 @@ func InitEchoApi(env *webenv.Env) *echo.Echo {
 	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entitylist:entity", apihandler.HandleAPIEntityList)
 	apiGroup.Match([]string{"OPTIONS", "POST"}, "/optionlist:entity", apihandler.HandleAPIOptionList)
 
-	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entitynew:entity", apihandler.HandleAPICreate)
-	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entityedit:entity", apihandler.HandleAPIUpdate)
-	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entitydelete:entity/:id", apihandler.HandleAPIDelete)
+	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entitynew:entity", apihandler.HandleAPICreateEntity)
+	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entityedit:entity", apihandler.HandleAPIUpdateEntity)
+	apiGroup.Match([]string{"OPTIONS", "POST"}, "/entitydelete:entity/:id", apihandler.HandleAPIDeleteEntity)
 
 	apiGroup.PUT("/allnew:entity", apihandler.HandleAPICreateAll)
 	apiGroup.GET("/health", apihandler.HandleAPIHealth)
@@ -56,7 +56,7 @@ func InitEchoApi(env *webenv.Env) *echo.Echo {
 	assetHandler := http.FileServer(env.Assets)
 	e.GET(webenv.AssetHandlerPattern, handler.AssetHandlerFunc(http.StripPrefix(webenv.AssetPattern, assetHandler)))
 
-	e.GET("/favicon.ico", handler2.HandleFavicon)
+	e.GET("/favicon.ico", templatehandler.HandleFavicon)
 
 	e.Use(handler.EnvContextMiddleware)
 	e.Use(handler.RequestLoggingMiddleware)
@@ -80,22 +80,26 @@ func InitEchoWebApp(env *webenv.Env) *echo.Echo {
 	assetHandler := http.FileServer(env.Assets)
 	e.GET(webenv.AssetHandlerPattern, handler.AssetHandlerFunc(http.StripPrefix(webenv.AssetPattern, assetHandler)))
 	//
-	e.GET("/health", handler2.HandleHealth)
+	e.GET("/health", templatehandler.HandleHealth)
 
-	e.POST("/loginuser", handler2.HandleLogin)
+	e.POST("/loginuser", templatehandler.HandleLogin)
 
-	e.GET("/logout", handler2.HandleLogout)
+	e.GET("/logout", templatehandler.HandleLogout)
 
-	e.GET("/favicon.ico", handler2.HandleFavicon)
+	e.GET("/favicon.ico", templatehandler.HandleFavicon)
 
 	e.Match([]string{"GET", "POST"}, "/entitylist:entity", handler.HandleEntityList)
+
+	e.Match([]string{"OPTIONS", "POST"}, "/entitylist:entity", handler.HandleEntityListAjax)
+	e.Match([]string{"OPTIONS", "POST"}, "/optionlist:entity", handler.HandleOptionListAjax)
+
 	e.POST("/entityedit:entity", handler.HandleEntityEdit)
 	e.POST("/entitynew:entity", handler.HandleEntityNew)
 	e.POST("/entitydelete:entity", handler.HandleEntityDelete)
 
-	e.Match([]string{"GET", "POST"}, "/", handler2.HandleStartApp)
-	e.Match([]string{"GET", "POST"}, "/page1", handler2.HandlePage1)
-	e.Match([]string{"GET", "POST"}, "/:page", handler2.HandlePageDefault)
+	e.Match([]string{"GET", "POST"}, "/", templatehandler.HandleStartApp)
+	e.Match([]string{"GET", "POST"}, "/page1", templatehandler.HandlePage1)
+	e.Match([]string{"GET", "POST"}, "/:page", templatehandler.HandlePageDefault)
 
 	e.Use(handler.EnvContextMiddleware)
 	e.Use(handler.RequestLoggingMiddleware)
