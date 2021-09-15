@@ -10,11 +10,11 @@ import (
 )
 
 func TestCreateContact(t *testing.T) {
-	inMemoryDS := data.NewInMemoryDatastore()
+	inMemoryDS, err := data.NewInMemoryDatastore()
 
 	contactAddress := &models.ContactAddress{Street: "Short Street", StreetNr: "11", Zip: "3100", City: "St. Pauls"}
 	customer := &models.Contact{OrgType: types.OrgTypeOrg, Name: "Mustermann GesmbH", ContactType: types.ContactTypeK, ContactAddresses: []models.ContactAddress{*contactAddress}}
-	err := inMemoryDS.CreateEntity(customer)
+	err = inMemoryDS.CreateEntity(customer)
 
 	assert.Nil(t, err, "No error expected")
 	expectedID := uint(2)

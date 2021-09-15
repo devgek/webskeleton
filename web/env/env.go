@@ -39,7 +39,7 @@ func GetEnv() *Env {
 }
 
 //GetApiEnv return new initialized environment for serving api
-func GetApiEnv() *Env {
+func GetApiEnv(isTest bool) *Env {
 	once.Do(func() {
 		originalAssetBox := packr.New("assets", "../assets")
 		// assetBox := packrfix.New(origninalAssetBox)
@@ -54,10 +54,14 @@ func GetApiEnv() *Env {
 		//here we create the datastore
 		//?_foreign_keys=1, neccessary for golang to respect foreign key constraints on sqlite3 db
 		var ds data.Datastore
-		if config.DatastoreSystem() == "postgres" {
-			ds, err = data.NewPostgres()
+		if isTest {
+			ds, err = data.NewInMemoryDatastore()
 		} else {
-			ds, err = data.NewSqlite(config.DatabaseName)
+			if config.DatastoreSystem() == "postgres" {
+				ds, err = data.NewPostgres()
+			} else {
+				ds, err = data.NewSqlite(config.DatabaseName)
+			}
 		}
 		if err != nil {
 			log.Panic(err)
@@ -65,7 +69,7 @@ func GetApiEnv() *Env {
 
 		s := services.NewServices(models.EntityFactory{}, ds)
 
-		theEnv = &Env{Api: true, TStore: nil, Templates: nil, Assets: originalAssetBox, DS: ds, Services: s, MessageLocator: ml}
+		theEnv = &Env{Api: true, TStore: nil, Templates: nil, Assets: originalAssetBox, DS: ds, Services: s, MessageLocator: ml, EF: models.EntityFactory{}}
 	})
 
 	return GetEnv()
@@ -105,7 +109,7 @@ func GetWebEnv() *Env {
 
 		s := services.NewServices(models.EntityFactory{}, ds)
 
-		theEnv = &Env{Api: false, TStore: tStore, Templates: originalTemplateBox, Assets: originalAssetBox, DS: ds, Services: s, MessageLocator: ml}
+		theEnv = &Env{Api: false, TStore: tStore, Templates: originalTemplateBox, Assets: originalAssetBox, DS: ds, Services: s, MessageLocator: ml, EF: models.EntityFactory{}}
 	})
 
 	return GetEnv()

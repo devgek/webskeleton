@@ -22,7 +22,7 @@ func InitEchoApi(env *webenv.Env) *echo.Echo {
 		// e.Use(middleware.Recover())
 	}
 
-	e.Renderer = template.NewRenderer(env.TStore)
+	//e.Renderer = template.NewRenderer(env.TStore)
 	e.HTTPErrorHandler = handler.LoggingDefaultHTTPErrorHandler
 
 	// api
@@ -53,8 +53,8 @@ func InitEchoApi(env *webenv.Env) *echo.Echo {
 	apiGroup.GET("/health", apihandler.HandleAPIHealth)
 
 	// resoure files
-	assetHandler := http.FileServer(env.Assets)
-	e.GET(webenv.AssetHandlerPattern, handler.AssetHandlerFunc(http.StripPrefix(webenv.AssetPattern, assetHandler)))
+	//assetHandler := http.FileServer(env.Assets)
+	//e.GET(webenv.AssetHandlerPattern, handler.AssetHandlerFunc(http.StripPrefix(webenv.AssetPattern, assetHandler)))
 
 	e.GET("/favicon.ico", templatehandler.HandleFavicon)
 

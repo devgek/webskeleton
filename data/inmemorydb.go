@@ -15,10 +15,10 @@ var (
 )
 
 //NewInMemoryDatastore ...
-func NewInMemoryDatastore() Datastore {
+func NewInMemoryDatastore() (Datastore, error) {
 	ds, err := NewDatastore("sqlite3", ":memory:")
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	//init the db with test data
 	passEncrypted := password.EncryptPassword(PassSecret)
@@ -30,5 +30,5 @@ func NewInMemoryDatastore() Datastore {
 
 	MessiID = messi.ID
 
-	return ds
+	return ds, nil
 }

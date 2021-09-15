@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/devgek/webskeleton/models"
 	webenv "github.com/devgek/webskeleton/web/env"
@@ -28,6 +29,14 @@ func HandleAPIHealth(c echo.Context) error {
 	vd["health"] = "ok"
 
 	return c.JSON(http.StatusOK, vd)
+}
+
+// jwtCustomClaims are custom claims extending default ones.
+// See https://github.com/golang-jwt/jwt for more examples
+type jwtCustomClaims struct {
+	Name  string `json:"name"`
+	Admin bool   `json:"admin"`
+	jwt.StandardClaims
 }
 
 //HandleAPILogin handles login to api and returns a JWT token
@@ -51,23 +60,27 @@ func HandleAPILogin(c echo.Context) error {
 	//login ok
 	log.Println("User", user.Name, "logged in for api")
 
-	// Create token
-	token := jwt.New(jwt.SigningMethodHS256)
+	// Set claims; content can be checked on further requests with token
+	isAdmin := user.Role == types.RoleTypeAdmin
+	claims := &jwtCustomClaims{
+		loginData.User,
+		isAdmin,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		},
+	}
 
-	// Set claims into webtoken, content can be checked on further requests with token
-	claims := token.Claims.(jwt.MapClaims)
-	isAdmin := (user.Role == types.RoleTypeAdmin)
-	claims["name"] = loginData.User
-	claims["admin"] = isAdmin
+	// Create token with custom claims
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Generate encoded token and send it as response.
-	t, err := token.SignedString([]byte("secret"))
+	tSigned, err := token.SignedString([]byte("secret"))
 	if err != nil {
 		return err
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"token": t,
+		"token": tSigned,
 		"name":  loginData.User,
 		"admin": isAdmin,
 	})

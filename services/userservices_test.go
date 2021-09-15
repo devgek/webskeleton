@@ -46,7 +46,7 @@ func TestLoginUser(t *testing.T) {
 
 //TestLoginUserInMemory test login service with inmemory db
 func TestLoginUserInMemoryOK(t *testing.T) {
-	inMemoryDS := data.NewInMemoryDatastore()
+	inMemoryDS, err := data.NewInMemoryDatastore()
 	services := services.NewServices(models.EntityFactory{}, inMemoryDS)
 
 	// happy test, user with correct password
@@ -55,7 +55,7 @@ func TestLoginUserInMemoryOK(t *testing.T) {
 	assert.NotNil(t, user, "User is nil")
 }
 func TestLoginUserInMemoryNOK(t *testing.T) {
-	inMemoryDS := data.NewInMemoryDatastore()
+	inMemoryDS, err := data.NewInMemoryDatastore()
 	s := services.NewServices(models.EntityFactory{}, inMemoryDS)
 
 	// user with wrong password
@@ -85,7 +85,7 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestUpdateUser(t *testing.T) {
-	inMemoryDS := data.NewInMemoryDatastore()
+	inMemoryDS, err := data.NewInMemoryDatastore()
 	s := services.NewServices(models.EntityFactory{}, inMemoryDS)
 
 	messi, err := s.DS.GetUser("Lionel")
@@ -96,7 +96,7 @@ func TestUpdateUser(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
-	inMemoryDS := data.NewInMemoryDatastore()
+	inMemoryDS, err := data.NewInMemoryDatastore()
 	s := services.NewServices(models.EntityFactory{}, inMemoryDS)
 
 	user, err := s.CreateUser("Rafa", data.PassSecret, "rafael.nadal@atp.com", types.RoleTypeUser)
@@ -106,10 +106,10 @@ func TestDeleteUser(t *testing.T) {
 }
 
 func TestDeleteUserError(t *testing.T) {
-	inMemoryDS := data.NewInMemoryDatastore()
+	inMemoryDS, err := data.NewInMemoryDatastore()
 	s := services.NewServices(models.EntityFactory{}, inMemoryDS)
 
-	err := s.DS.DeleteEntityByID(&models.User{}, 99)
+	err = s.DS.DeleteEntityByID(&models.User{}, 99)
 	assert.Equal(t, entitydata.ErrorEntityNotDeleted, err, "Expected error not returned")
 }
 func TestDoTableBased(t *testing.T) {

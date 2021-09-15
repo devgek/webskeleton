@@ -8,7 +8,7 @@ import (
 )
 
 func TestGetUserLionel(t *testing.T) {
-	inMemoryDS := data.NewInMemoryDatastore()
+	inMemoryDS, err := data.NewInMemoryDatastore()
 
 	user, err := inMemoryDS.GetUser("Lionel")
 

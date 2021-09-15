@@ -1,12 +1,11 @@
 package cmd
 
 import (
+	webenv "github.com/devgek/webskeleton/web/env"
 	"log"
 
-	"github.com/devgek/webskeleton/web/echo"
-	webenv "github.com/devgek/webskeleton/web/env"
-
 	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/web/echo"
 	"github.com/spf13/cobra"
 )
 
@@ -54,7 +53,7 @@ func runApi(cmd *cobra.Command) {
 		log.Println("Datastore log mode is on")
 	}
 
-	env := webenv.GetApiEnv()
+	env := webenv.GetApiEnv(false)
 
 	e := echo.InitEchoApi(env)
 

@@ -73,5 +73,5 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 
 	err = db.FirstOrCreate(contact, "name = ?", "Mustermann GesmbH").Error
 
-	return &DatastoreImpl{GormEntityDatastoreImpl: &data.GormEntityDatastoreImpl{db}}, err
+	return &DatastoreImpl{GormEntityDatastoreImpl: &data.GormEntityDatastoreImpl{DB: db}}, err
 }
