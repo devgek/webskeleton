@@ -2,23 +2,24 @@ package data
 
 import (
 	"github.com/devgek/webskeleton/config"
-	data "github.com/devgek/webskeleton/data/entity"
+	entitydata "github.com/devgek/webskeleton/entity/data"
 	"github.com/devgek/webskeleton/helper/password"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/types"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 )
 
 //Datastore interface to datastore
 type Datastore interface {
-	data.EntityDatastore
+	entitydata.EntityDatastore
 	GetUser(name string) (*models.User, error)
 	GetDB() *gorm.DB
 }
 
 //DatastoreImpl the Datastore implementation
 type DatastoreImpl struct {
-	*data.GormEntityDatastoreImpl
+	*entitydata.GormEntityDatastoreImpl
 }
 
 //GetDB ...
@@ -73,5 +74,5 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 
 	err = db.FirstOrCreate(contact, "name = ?", "Mustermann GesmbH").Error
 
-	return &DatastoreImpl{GormEntityDatastoreImpl: &data.GormEntityDatastoreImpl{DB: db}}, err
+	return &DatastoreImpl{GormEntityDatastoreImpl: &entitydata.GormEntityDatastoreImpl{DB: db}}, err
 }

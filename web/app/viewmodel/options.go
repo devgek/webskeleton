@@ -1,16 +1,16 @@
 package viewmodel
 
 import (
-	"github.com/devgek/webskeleton/dtos"
+	"github.com/devgek/webskeleton/entity/dto"
 )
 
 //EntityOptionsResponse ...
 type EntityOptionsResponse struct {
 	*BaseResponse
-	EntityOptions []dtos.EntityOption
+	EntityOptions []dto.EntityOption
 }
 
 //NewEntityOptionsResponse ...
-func NewEntityOptionsResponse(entityOptions []dtos.EntityOption) *EntityOptionsResponse {
+func NewEntityOptionsResponse(entityOptions []dto.EntityOption) *EntityOptionsResponse {
 	return &EntityOptionsResponse{&BaseResponse{false, ""}, entityOptions}
 }

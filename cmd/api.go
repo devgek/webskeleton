@@ -43,9 +43,6 @@ func runApi(cmd *cobra.Command) {
 	if config.IsDev() {
 		log.Println("Development mode is on")
 	}
-	if config.IsAssetsCache() {
-		log.Println("Assets cache mode is on")
-	}
 	if config.IsServerDebug() {
 		log.Println("Server debug mode is on")
 	}

@@ -1,13 +1,14 @@
 package models
 
 import (
-	"github.com/devgek/webskeleton/dtos"
+	"github.com/devgek/webskeleton/entity/dto"
+	"github.com/devgek/webskeleton/entity/model"
 	"github.com/devgek/webskeleton/types"
 )
 
 //User ...
 type User struct {
-	Entity
+	entitymodel.Entity
 	Name  string         `gorm:"type:varchar(50);not null;unique" form:"gkvName"`
 	Pass  string         `gorm:"type:text;not null" form:"gkvPass"`
 	Email string         `gorm:"type:varchar(100);not null" form:"gkvEmail"`
@@ -15,9 +16,9 @@ type User struct {
 }
 
 //BuildEntityOption ...
-func (u *User) BuildEntityOption() dtos.EntityOption {
-	o := dtos.EntityOption{}
-	o.ID = u.ID
+func (u User) BuildEntityOption() dto.EntityOption {
+	o := dto.EntityOption{}
+	o.ID = u.Entity.ID
 	o.Value = u.Name + ":" + u.Email
 
 	return o

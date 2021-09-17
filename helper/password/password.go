@@ -1,14 +1,14 @@
 package password
 
 import (
-	"github.com/devgek/webskeleton/helper/helper"
+	"github.com/devgek/webskeleton/helper/common"
 	"golang.org/x/crypto/bcrypt"
 )
 
 //EncryptPassword create hashed password
 func EncryptPassword(password string) string {
 	encryptedPass, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
-	helper.PanicOnError(err)
+	common.PanicOnError(err)
 
 	return string(encryptedPass)
 }

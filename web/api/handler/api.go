@@ -182,7 +182,7 @@ func HandleAPIDeleteEntity(c echo.Context) error {
 func HandleAPIOptionList(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
-	entityType := types.ParseEntityType(strings.ToLower(entity))
+	entityType := models.ParseEntityType(strings.ToLower(entity))
 
 	ec := c.(*env.ApiEnvContext)
 

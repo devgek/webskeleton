@@ -1,7 +1,7 @@
-package data_test
+package entitydata_test
 
 import (
-	"github.com/devgek/webskeleton/data/entity"
+	entitydata "github.com/devgek/webskeleton/entity/data"
 	"testing"
 
 	"github.com/devgek/webskeleton/data"

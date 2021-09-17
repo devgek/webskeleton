@@ -1,14 +1,15 @@
 package models
 
 import (
-	"github.com/devgek/webskeleton/dtos"
+	"github.com/devgek/webskeleton/entity/dto"
+	entitymodel "github.com/devgek/webskeleton/entity/model"
 	"github.com/devgek/webskeleton/types"
 	"github.com/jinzhu/gorm"
 )
 
 //Contact ...
 type Contact struct {
-	Entity
+	entitymodel.Entity
 	OrgType          types.OrgType     `gorm:"type:integer;not null" form:"gkvOrgType"`
 	Name             string            `gorm:"type:varchar(100);not null" form:"gkvName"`
 	NameExt          string            `gorm:"type:varchar(100)" form:"gkvNameExt"`
@@ -17,9 +18,9 @@ type Contact struct {
 }
 
 //BuildEntityOption ...
-func (c *Contact) BuildEntityOption() dtos.EntityOption {
-	o := dtos.EntityOption{}
-	o.ID = c.ID
+func (c Contact) BuildEntityOption() dto.EntityOption {
+	o := dto.EntityOption{}
+	o.ID = c.Entity.ID
 	o.Value = c.Name
 
 	return o

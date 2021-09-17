@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/devgek/webskeleton/helper/helper"
+	"github.com/devgek/webskeleton/helper/common"
 	"github.com/spf13/viper"
 )
 
@@ -28,7 +28,7 @@ func NewMessageLocator(messages []byte) *MessageLocator {
 		ml := &MessageLocator{viper.New()}
 		ml.SetConfigType("yaml")
 		err := ml.ReadConfig(msgReader)
-		helper.PanicOnError(err)
+		common.PanicOnError(err)
 		theMessageLocator = ml
 	})
 

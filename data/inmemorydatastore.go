@@ -28,7 +28,7 @@ func NewInMemoryDatastore() (Datastore, error) {
 		panic(err)
 	}
 
-	MessiID = messi.ID
+	MessiID = messi.Entity.ID
 
 	return ds, nil
 }

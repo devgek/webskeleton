@@ -3,6 +3,7 @@ package env
 import (
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/data"
+	entitymodel "github.com/devgek/webskeleton/entity/model"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/services"
 	"github.com/devgek/webskeleton/web/app/msg"
@@ -16,7 +17,7 @@ import (
 //AppEnv the environment
 type AppEnv struct {
 	DS             data.Datastore
-	EF             *models.EntityFactory
+	EF             entitymodel.EntityFactory
 	Services       *services.Services
 	TStore         template.TStore
 	Templates      *packr.Box
@@ -66,7 +67,7 @@ func GetWebEnv() *AppEnv {
 			log.Panic(err)
 		}
 
-		ef := models.EntityFactory{}
+		ef := models.EntityFactoryImpl{}
 		s := services.NewServices(ef, ds)
 
 		theAppEnv = &AppEnv{

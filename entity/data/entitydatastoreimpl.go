@@ -2,6 +2,7 @@ package entitydata
 
 import (
 	"errors"
+	entitymodel "github.com/devgek/webskeleton/entity/model"
 
 	"github.com/devgek/webskeleton/models"
 	"github.com/jinzhu/gorm"
@@ -134,7 +135,7 @@ func (ds *GormEntityDatastoreImpl) DeleteEntityByID(entity interface{}, id uint)
 
 //LoadRelatedEntities load embedded entities
 func (ds *GormEntityDatastoreImpl) LoadRelatedEntities(i interface{}) error {
-	if val, ok := i.(models.EntityHolder); ok {
+	if val, ok := i.(entitymodel.EntityHolder); ok {
 		if val != nil {
 			return val.LoadRelated(ds.DB)
 		}

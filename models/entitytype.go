@@ -1,4 +1,4 @@
-package types
+package models
 
 //
 //EntityType type of entity

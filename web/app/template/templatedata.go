@@ -2,6 +2,7 @@ package template
 
 import (
 	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/types"
 	"github.com/devgek/webskeleton/web/app/msg"
 	"github.com/devgek/webskeleton/web/app/request"
@@ -29,7 +30,7 @@ func NewTemplateData() TData {
 	vd["VersionInfo"] = config.ProjectVersion
 	vd["StartPage"] = config.StartPage
 	//add types for handling in templates
-	vd["EntityTypes"] = types.EntityTypes()
+	vd["EntityTypes"] = models.EntityTypes()
 	vd["OrgTypes"] = types.OrgTypes()
 	vd["RoleTypes"] = types.RoleTypes()
 	vd["ContactTypes"] = types.ContactTypes()

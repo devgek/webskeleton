@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/devgek/webskeleton/helper/common"
 	"github.com/devgek/webskeleton/helper/fileutil"
-	"github.com/devgek/webskeleton/helper/helper"
 	"github.com/otiai10/copy"
 	"github.com/spf13/cobra"
 )
@@ -47,12 +47,12 @@ func runBootstrap(cmd *cobra.Command) {
 
 	packageName := repoName + "/" + repoUser + "/" + projectName
 	currPath, err := os.Getwd()
-	helper.ExitOnError(err, "Can't get current path!")
+	common.ExitOnError(err, "Can't get current path!")
 
 	log.Println("Start bootstraping new project for", "'"+packageName+"' with title", projectTitle, "in", currPath)
 
 	// There can be more than one path, separated by colon.
-	gopaths := helper.GoPaths()
+	gopaths := common.GoPaths()
 	if len(gopaths) == 0 {
 		log.Fatalln("GOPATH is not set.")
 	}
@@ -96,7 +96,7 @@ func runBootstrap(cmd *cobra.Command) {
 	replacers["webskeleton-types"] = projectName + "-types"
 	replacers["webskeleton.com"] = projectName + ".com"
 	err = recursiveSearchReplaceFiles(projectPath, replacers)
-	helper.ExitOnError(err, "")
+	common.ExitOnError(err, "")
 
 	// 4. Setup and bootstrap databases.
 	// nothing to do, yet
@@ -108,7 +108,7 @@ func runBootstrap(cmd *cobra.Command) {
 	// output, err = command.CombinedOutput()
 	// helper.ExitOnError(err, string(output))
 	err = os.Chdir(projectPath)
-	helper.ExitOnError(err, "")
+	common.ExitOnError(err, "")
 
 	// 5. Initialize a go module project
 	log.Print("Running go mod init ", packageName)
@@ -144,7 +144,7 @@ func copySources(sourceLines []string, sourceRoot, destinationRoot string) {
 
 		log.Print(cmd, sourcePath, "--->", destinationPath)
 		err := copy.Copy(sourcePath, destinationPath)
-		helper.ExitOnError(err, "Error while copying source [files]cd")
+		common.ExitOnError(err, "Error while copying source [files]cd")
 	}
 }
 
@@ -153,7 +153,7 @@ func getSources(rootPath string, projectType string) []string {
 	fileName = filepath.Clean(fileName)
 
 	sources, err := fileutil.ReadLines(fileName)
-	helper.ExitOnError(err, "getSources")
+	common.ExitOnError(err, "getSources")
 
 	return sources
 }

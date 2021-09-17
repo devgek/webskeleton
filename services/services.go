@@ -3,20 +3,18 @@ package services
 import (
 	"errors"
 	"github.com/devgek/webskeleton/data"
-	"github.com/devgek/webskeleton/dtos"
-	"github.com/devgek/webskeleton/models"
-	"github.com/devgek/webskeleton/types"
+	entitymodel "github.com/devgek/webskeleton/entity/model"
 )
 
 //Services the business services
 type Services struct {
-	EF models.EntityFactory
 	DS data.Datastore
+	EF entitymodel.EntityFactory
 }
 
 //NewServices ...
-func NewServices(ef models.EntityFactory, ds data.Datastore) *Services {
-	return &Services{ef, ds}
+func NewServices(ef entitymodel.EntityFactory, ds data.Datastore) *Services {
+	return &Services{DS: ds, EF: ef}
 }
 
 //Do ... just for test mocking
@@ -31,55 +29,6 @@ func (s Services) Do(par1 int, par2 int) (int, error) {
 		return sum, errors.New("invalid: sum > 5")
 	}
 	return sum, nil
-}
-
-//GetEntityOptions ...
-func (s Services) GetEntityOptions(entityType types.EntityType) ([]dtos.EntityOption, error) {
-	var options []dtos.EntityOption
-
-	entities, err := s.EF.GetSlice(entityType.Val())
-	if err != nil {
-		return options, err
-	}
-
-	err = s.DS.GetAllEntities(entities)
-	if err != nil {
-		return options, err
-	}
-
-	switch entityType := entities.(type) {
-	case *[]models.User:
-		for _, e := range *entityType {
-			option := e.BuildEntityOption()
-			options = append(options, option)
-		}
-	case *[]models.Contact:
-		for _, e := range *entityType {
-			option := e.BuildEntityOption()
-			options = append(options, option)
-		}
-	}
-	return options, nil
-}
-
-//GetEntityOptionsByID ...
-func (s Services) GetEntityOptionsByID(entityType types.EntityType, id uint) ([]dtos.EntityOption, error) {
-	var options []dtos.EntityOption
-	entity, err := s.EF.Get(entityType.Val())
-	if err != nil {
-		return options, err
-	}
-	err = s.DS.GetEntityByID(entity, id)
-	if err != nil {
-		return options, err
-	}
-	switch entity.(type) {
-	case *models.Contact:
-		contact := entity.(*models.Contact)
-		option := contact.BuildEntityOption()
-		options = append(options, option)
-	}
-	return options, nil
 }
 
 //ServiceError ...

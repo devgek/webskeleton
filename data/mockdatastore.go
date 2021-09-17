@@ -48,7 +48,16 @@ func (m *MockedDatastore) DeleteEntityByID(entity interface{}, id uint) error {
 func (m *MockedDatastore) GetAllEntities(entitySlice interface{}) error {
 	args := m.Called(entitySlice)
 
-	return args.Error(0)
+	switch entitySlice.(type) {
+	case *[]models.User:
+		userList := entitySlice.(*[]models.User)
+		userSlice := args.Get(0).([]models.User)
+		for _, val := range userSlice {
+			*userList = append(*userList, val)
+		}
+	}
+
+	return nil
 }
 
 //GetOneEntityBy ...

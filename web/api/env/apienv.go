@@ -3,6 +3,7 @@ package env
 import (
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/data"
+	entitymodel "github.com/devgek/webskeleton/entity/model"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/services"
 	_ "github.com/jinzhu/gorm/dialects/postgres" // gorm for postgres
@@ -14,7 +15,7 @@ import (
 //ApiEnv the environment
 type ApiEnv struct {
 	DS       data.Datastore
-	EF       *models.EntityFactory
+	EF       entitymodel.EntityFactory
 	Services *services.Services
 }
 
@@ -47,7 +48,7 @@ func GetApiEnv(isTest bool) *ApiEnv {
 			log.Panic(err)
 		}
 
-		ef := models.EntityFactory{}
+		ef := models.EntityFactoryImpl{}
 		s := services.NewServices(ef, ds)
 
 		theApiEnv = &ApiEnv{DS: ds, Services: s, EF: &ef}
