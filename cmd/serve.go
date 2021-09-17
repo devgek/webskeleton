@@ -1,10 +1,9 @@
 package cmd
 
 import (
+	"github.com/devgek/webskeleton/web/app"
+	"github.com/devgek/webskeleton/web/app/env"
 	"log"
-
-	"github.com/devgek/webskeleton/web/echo"
-	webenv "github.com/devgek/webskeleton/web/env"
 
 	"github.com/devgek/webskeleton/config"
 	"github.com/spf13/cobra"
@@ -54,9 +53,9 @@ func runServe(cmd *cobra.Command) {
 		log.Println("Datastore log mode is on")
 	}
 
-	env := webenv.GetWebEnv()
+	env := env.GetWebEnv()
 
-	e := echo.InitEchoWebApp(env)
+	e := app.InitEchoWebApp(env)
 
 	if config.IsServerSecure() {
 		log.Fatal(e.StartTLS(":"+config.ServerPort(), config.ServerCert(), config.ServerKey()))

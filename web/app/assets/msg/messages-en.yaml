@@ -1,0 +1,16 @@
+---
+msg: 
+  m0001: "Login not allowed"
+  m0002: "User cannot be created"
+form:
+  login:
+    label:
+      user: "User"
+      pass: "Password"
+  page1:
+    header: "Page 1"
+    content: "This is content of page 1"
+  page2:
+    header: "Page 2"
+    content: "This is content of page2"
+...

@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Icons -->
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <!-- Stylesheets -->
+    <!-- Fonts and OneUI framework -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
+
+    <!-- Page JS Plugins CSS -->
+    <link rel="stylesheet" href="assets/js/plugins/datatables/dataTables.bootstrap4.css" type="text/css">
+    <link rel="stylesheet" href="assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" type="text/css">
+
+    <!-- OneUI CSS -->
+    <link rel="stylesheet" id="css-main" href="assets/css/oneui.min.css" type="text/css">
+    <!-- bepo app CSS -->
+    <link rel="stylesheet" id="css-bepo" href="assets/css/gkwebapp.css" type="text/css">
+
+    <script src="assets/js/jquery-3.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script>
+    <!-- bootstrap comes with oneui -->
+    <!--script src="assets/js/bootstrap-4.3.1.min.js" crossorigin="anonymous" type="text/javascript"></script-->
+
+    <!-- app JavaScript -->
+    <script src="assets/js/gkentitytable-1.0.js" crossorigin="anonymous" type="text/javascript"></script>
+    <script src="assets/js/gkwebapp.js" crossorigin="anonymous" type="text/javascript"></script>
+
+    <title>{{.ProjectTitle}}</title>
+</head>
+
+<body>
+    <div id="page-container" class="page-header-dark main-content-xxx">
+
+        <!-- Header -->
+        <header id="page-header">
+            <!-- Header Content -->
+            <div class="content-header">
+                <!-- Left Section -->
+                <div class="d-flex align-items-center">
+                    <!-- Logo -->
+                    <a class="font-w600 text-dual mr-3" href="{{.StartPage}}">
+                        <span class="font-w700 font-size-h5">{{.Messages.GetString "layout.page.header"}}</span>
+                    </a>
+                    <!-- END Logo -->
+
+                </div>
+                <!-- END Left Section -->
+
+                <!-- Right Section -->
+                <div class="d-flex align-items-center">
+                    <!-- User Dropdown -->
+                    <div class="dropdown d-inline-block ml-2">
+                        <button type="button" class="btn btn-sm btn-dual" id="page-header-user-dropdown"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img class="rounded" src="assets/media/avatars/avatar10.jpg" alt="Header Avatar"
+                                style="width: 18px;">
+                            <span class="d-none d-sm-inline-block ml-1">{{.UserID}}</span>
+                            <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right p-0 border-0 font-size-sm"
+                            aria-labelledby="page-header-user-dropdown">
+                            <div class="p-3 text-center bg-primary">
+                                <img class="img-avatar img-avatar48 img-avatar-thumb"
+                                    src="assets/media/avatars/avatar10.jpg" alt="">
+                            </div>
+                            <div class="p-2">
+                                <h5 class="dropdown-header text-uppercase">Aktionen</h5>
+                                <a class="dropdown-item d-flex align-items-center justify-content-between"
+                                    href="/logout">
+                                    <span>{{.Messages.GetString "layout.page.logout"}}</span>
+                                    <i class="si si-logout ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END User Dropdown -->
+                </div>
+                <!-- END Right Section -->
+            </div>
+            <!-- END Header Content -->
+
+            <!-- Header Loader -->
+            <!-- Please check out the Loaders page under Components category to see examples of showing/hiding it -->
+            <div id="page-header-loader" class="overlay-header bg-primary-lighter">
+                <div class="content-header">
+                    <div class="w-100 text-center">
+                        <i class="fa fa-fw fa-circle-notch fa-spin text-primary"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- END Header Loader -->
+        </header>
+        <!-- END Header -->
+
+        <!-- Main Container -->
+        <main id="main-container">
+
+            <!-- Navigation -->
+            <div class="bg-white">
+                <div class="content py-3">
+                    <!-- Main Navigation -->
+                    <div id="main-navigation" class="d-none d-lg-block mt-2 mt-lg-0">
+                        <ul class="nav-main nav-main-horizontal nav-main-hover">
+                            <li class="nav-main-item">
+                                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
+                                    aria-haspopup="true" aria-expanded="false" href="#">
+                                    <i class="nav-main-link-icon si si-speedometer"></i>
+                                    <span
+                                        class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.pages.header"}}</span>
+                                </a>
+                                <ul class="nav-main-submenu">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link" href="/page1">
+                                            <span
+                                                class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.pages.page1"}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-main-heading">Heading</li>
+                            <li class="nav-main-item {{.AdminMenuClass}}">
+                                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
+                                    aria-haspopup="true" aria-expanded="false" href="#">
+                                    <i class="nav-main-link-icon si si-settings"></i>
+                                    <span
+                                        class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.header"}}</span>
+                                </a>
+                                <ul class="nav-main-submenu">
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link" href="/entitylistuser">
+                                            <span
+                                                class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.user"}}</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-main-item">
+                                        <a class="nav-main-link" href="/entitylistcontact">
+                                            <span
+                                                class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.contact"}}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END Main Navigation -->
+                </div>
+            </div>
+            <!-- END Navigation -->
+
+            <!-- Page Content -->
+            <div class="content content-full">
+                <!-- Your Block -->
+                {{template "t_content" .}}
+                <!-- END Your Block -->
+            </div>
+            <!-- END Page Content -->
+
+        </main>
+        <!-- END Main Container -->
+    </div>
+    <!-- END Page Container -->
+
+    <!-- OneUI JS -->
+    <script src="assets/js/oneui.core.min-4.6.js"></script>
+    <script src="assets/js/oneui.app.min-4.6.js"></script>
+
+    <!-- Page JS Plugins -->
+    <script src="assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script src="assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script src="assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script src="assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+    <script src="assets/js/plugins/datatables/buttons/buttons.colVis.min.js"></script>
+
+    <!-- Page JS Code -->
+    <script src="assets/js/pages/gkwebapp_tables_datatables.min.js"></script>
+    <script src="assets/js/plugins/easy-pie-chart/jquery.easypiechart.min.js"></script>
+    <script src="assets/js/plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <script src="assets/js/plugins/chart.js/Chart.bundle.min.js"></script>
+
+    <!-- Page JS Helpers (Table Tools helpers) -->
+    <script>jQuery(function () { One.helpers(['table-tools-sections']); });</script>
+    <!-- Page JS Helpers (Easy Pie Chart + jQuery Sparkline Plugins) -->
+    <script>jQuery(function () { One.helpers(['easy-pie-chart', 'sparkline']); });</script>
+</body>
+
+</html>

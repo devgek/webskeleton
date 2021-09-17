@@ -1,9 +1,10 @@
 package apihandler_test
 
 import (
-	"github.com/devgek/webskeleton/web/echo"
-	webenv "github.com/devgek/webskeleton/web/env"
-	echofw "github.com/labstack/echo"
+	"github.com/devgek/webskeleton/data"
+	"github.com/devgek/webskeleton/web/api"
+	"github.com/devgek/webskeleton/web/api/env"
+	"github.com/labstack/echo"
 	"github.com/smartystreets/goconvey/convey"
 	"net/http"
 	"net/http/httptest"
@@ -13,13 +14,13 @@ import (
 
 var authTokenAdminNoExpiresAt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwibmFtZSI6ImFkbWluIn0.BbGKax52n_5pqsutfKF62Gz6RdXHTJ9LPd9onWm8HuE"
 var authString = "Bearer " + authTokenAdminNoExpiresAt
-var echoForAPITests *echofw.Echo
+var echoForAPITests *echo.Echo
 
 /*
 	Init initialize API tests
 */
 func init() {
-	echoForAPITests = echo.InitEchoApi(webenv.GetApiEnv(true))
+	echoForAPITests = api.InitEchoApi(env.GetApiEnv(true))
 }
 
 func TestHandleAPIHealth(t *testing.T) {
@@ -50,13 +51,65 @@ func TestHandleAPIHealth(t *testing.T) {
 	})
 }
 
+func TestHandleAPILogin(t *testing.T) {
+	convey.Convey("Testing handler APILogin", t, func() {
+		// Create a request to pass to our handler. We don't have any query parameters for now, so we'll
+		// pass 'nil' as the third parameter.
+		bodyContent := `{"user":"admin", "pass": "xyz"}`
+		req, err := http.NewRequest("POST", "/api/login", strings.NewReader(bodyContent))
+		convey.So(err, convey.ShouldBeNil)
+
+		req.Header.Set("Authorization", authString)
+		req.Header.Set("Content-type", "application/json")
+
+		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+		rr := httptest.NewRecorder()
+
+		echoForAPITests.ServeHTTP(rr, req)
+
+		// Check the status code is what we expect.
+		if status := rr.Code; status != http.StatusOK {
+			t.Errorf("handler returned wrong status code: got %v want %v",
+				status, http.StatusOK)
+		}
+
+		println(rr.Body.String())
+	})
+}
+
+func TestHandleAPILoginUnauthorized(t *testing.T) {
+	convey.Convey("Testing handler APILogin failed", t, func() {
+		// Create a request to pass to our handler. We don't have any query parameters for now, so we'll
+		// pass 'nil' as the third parameter.
+		bodyContent := `{"user":"Lionel", "pass": "wasinet"}`
+		req, err := http.NewRequest("POST", "/api/login", strings.NewReader(bodyContent))
+		convey.So(err, convey.ShouldBeNil)
+
+		req.Header.Set("Authorization", authString)
+		req.Header.Set("Content-type", "application/json")
+
+		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+		rr := httptest.NewRecorder()
+
+		echoForAPITests.ServeHTTP(rr, req)
+
+		// Check the status code is what we expect.
+		if status := rr.Code; status != http.StatusUnauthorized {
+			t.Errorf("handler returned wrong status code: got %v want %v",
+				status, http.StatusUnauthorized)
+		}
+
+		println(rr.Body.String())
+	})
+}
 func TestHandleAPIEntityList(t *testing.T) {
 	convey.Convey("Testing handler APIEntityList", t, func() {
 		// Create a request to pass to our handler. We don't have any query parameters for now, so we'll
 		// pass 'nil' as the third parameter.
 		req, err := http.NewRequest("POST", "/api/entitylistuser", nil)
-		req.Header.Set("Authorization", authString)
 		convey.So(err, convey.ShouldBeNil)
+
+		req.Header.Set("Authorization", authString)
 
 		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
 		rr := httptest.NewRecorder()
@@ -78,8 +131,86 @@ func TestHandleAPIOptionList(t *testing.T) {
 		// Create a request to pass to our handler. We don't have any query parameters for now, so we'll
 		// pass 'nil' as the third parameter.
 		req, err := http.NewRequest("POST", "/api/optionlistuser", nil)
-		req.Header.Set("Authorization", authString)
 		convey.So(err, convey.ShouldBeNil)
+
+		req.Header.Set("Authorization", authString)
+
+		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+		rr := httptest.NewRecorder()
+
+		echoForAPITests.ServeHTTP(rr, req)
+
+		// Check the status code is what we expect.
+		if status := rr.Code; status != http.StatusOK {
+			t.Errorf("handler returned wrong status code: got %v want %v",
+				status, http.StatusOK)
+		}
+
+		println(rr.Body.String())
+	})
+}
+
+func TestHandleAPICreateEntity(t *testing.T) {
+	convey.Convey("Testing handler APICreateEntity", t, func() {
+		// Create a request to pass to our handler. We don't have any query parameters for now, so we'll
+		// pass 'nil' as the third parameter.
+		bodyContent := `{"name":"Micky", "pass": "xyz", "email":"micky.mouse@gmail.com", "role": 0}`
+		req, err := http.NewRequest("POST", "/api/entitynewuser", strings.NewReader(bodyContent))
+		convey.So(err, convey.ShouldBeNil)
+
+		req.Header.Set("Authorization", authString)
+		req.Header.Set("Content-type", "application/json")
+
+		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+		rr := httptest.NewRecorder()
+
+		echoForAPITests.ServeHTTP(rr, req)
+
+		// Check the status code is what we expect.
+		if status := rr.Code; status != http.StatusOK {
+			t.Errorf("handler returned wrong status code: got %v want %v",
+				status, http.StatusOK)
+		}
+
+		println(rr.Body.String())
+	})
+}
+
+func TestHandleAPIUpdateEntity(t *testing.T) {
+	convey.Convey("Testing handler APIUpdateEntity", t, func() {
+		// Create a request to pass to our handler. We don't have any query parameters for now, so we'll
+		// pass 'nil' as the third parameter.
+		bodyContent := `{"id": 2, "name":"Lionel", "pass":"` + data.PassSecretEcrypted + `", "email":"lm10@gmail.com", "role": 0}`
+		req, err := http.NewRequest("POST", "/api/entityedituser", strings.NewReader(bodyContent))
+		convey.So(err, convey.ShouldBeNil)
+
+		req.Header.Set("Authorization", authString)
+		req.Header.Set("Content-type", "application/json")
+
+		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+		rr := httptest.NewRecorder()
+
+		echoForAPITests.ServeHTTP(rr, req)
+
+		// Check the status code is what we expect.
+		if status := rr.Code; status != http.StatusOK {
+			t.Errorf("handler returned wrong status code: got %v want %v",
+				status, http.StatusOK)
+		}
+
+		println(rr.Body.String())
+	})
+}
+
+func TestHandleAPIDeleteEntity(t *testing.T) {
+	convey.Convey("Testing handler APIDeleteEntity", t, func() {
+		// Create a request to pass to our handler. We don't have any query parameters for now, so we'll
+		// pass 'nil' as the third parameter.
+		req, err := http.NewRequest("POST", "/api/entitydeleteuser/2", nil)
+		convey.So(err, convey.ShouldBeNil)
+
+		req.Header.Set("Authorization", authString)
+		req.Header.Set("Content-type", "application/json")
 
 		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
 		rr := httptest.NewRecorder()

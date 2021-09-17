@@ -1,0 +1,86 @@
+{{$labelUser := .Messages.GetString "form.login.label.user"}}
+{{$labelPass := .Messages.GetString "form.login.label.pass"}}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Icons -->
+    <link rel="shortcut icon" href="assets/favicon_kahrersoftware.png">
+
+    <!-- Stylesheets -->
+    <!-- Fonts and OneUI framework -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400italic,600,700%7COpen+Sans:300,400,400italic,600,700">
+    <link rel="stylesheet" id="css-main" href="assets/css/oneui.min.css">
+
+    <title>{{.ProjectTitle}}</title>
+</head>
+
+<body>
+    <div id="page-container">
+        <main id="main-container">
+            <div class="hero-static bg-white-95">
+                <div class="content">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 col-lg-6 col-xl-4">
+                            <div class="block block-themed block-fx-shadow mb-0">
+                                <div class="block-header">
+                                    <h3 class="block-title">Login</h3>
+                                </div>
+                                <div class="block-content">
+                                    <div class="p-sm-3 px-lg-4 py-lg-5">
+                                        <h1 class="mb-2">{{.ProjectTitle}}</h1>
+                                        <p><span
+                                                class="font-w700 font-size-h5">{{.Messages.GetString "layout.page.header"}}</span>
+                                        </p>
+                                        <form class="" action="loginuser" method="POST">
+                                            <div class="py-3">
+                                                <div class="form-group">
+                                                    <input type="text"
+                                                        class="form-control form-control-alt form-control-lg"
+                                                        id="login-username" name="userid" placeholder="{{$labelUser}}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password"
+                                                        class="form-control form-control-alt form-control-lg"
+                                                        id="login-password" name="password"
+                                                        placeholder="{{$labelPass}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6 col-xl-5">
+                                                    <button type="submit" class="btn btn-block btn-primary">
+                                                        <i class="fa fa-fw fa-sign-in-alt mr-1"></i>
+                                                        {{.Messages.GetString "form.login.btn.login"}}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer text-danger">
+                                                {{.ErrorMessage}}
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    <script src="assets/js/oneui.core.min-4.6.js"></script>
+    <script src="assets/js/oneui.app.min-4.6.js"></script>
+    <script>
+        jQuery(function () {
+            $("#login-username").focus();
+        });
+    </script>
+</body>
+
+</html>

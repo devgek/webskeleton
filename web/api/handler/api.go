@@ -5,6 +5,8 @@ import (
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/dtos"
 	"github.com/devgek/webskeleton/types"
+	"github.com/devgek/webskeleton/web/api/env"
+	"github.com/devgek/webskeleton/web/app/template"
 	"github.com/golang-jwt/jwt"
 	"log"
 	"net/http"
@@ -13,19 +15,16 @@ import (
 	"time"
 
 	"github.com/devgek/webskeleton/models"
-	webenv "github.com/devgek/webskeleton/web/env"
 	"github.com/labstack/echo"
 )
 
 //HandleAPIHealth ...
 func HandleAPIHealth(c echo.Context) error {
-	ec := c.(*webenv.EnvContext)
-
-	vd := webenv.TData{}
+	vd := template.TData{}
 	vd["Host"] = c.Request().Host
 	vd["ProjectName"] = config.ProjectName
 	vd["VersionInfo"] = config.ProjectVersion
-	vd["API"] = ec.Env.Api
+	vd["API"] = true
 	vd["health"] = "ok"
 
 	return c.JSON(http.StatusOK, vd)
@@ -48,13 +47,11 @@ func HandleAPILogin(c echo.Context) error {
 		return err
 	}
 
-	ec := c.(*webenv.EnvContext)
-	user, err := ec.Env.Services.LoginUser(loginData.User, loginData.Pass)
+	ec := c.(*env.ApiEnvContext)
+	user, err := ec.ApiEnv.Services.LoginUser(loginData.User, loginData.Pass)
 	if err != nil {
-		// return echo.NewHTTPError(http.StatusUnauthorized)
-		msg := ec.Env.MessageLocator.GetMessageF(err.Error())
-		log.Println("HandleApiLogin return:", http.StatusUnauthorized, msg)
-		return c.JSON(http.StatusUnauthorized, msg)
+		log.Println("HandleApiLogin return:", http.StatusUnauthorized, err.Error())
+		return c.JSON(http.StatusUnauthorized, "Login not allowed.")
 	}
 
 	//login ok
@@ -88,18 +85,18 @@ func HandleAPILogin(c echo.Context) error {
 
 //HandleAPICreateEntity ...
 func HandleAPICreateEntity(c echo.Context) error {
-	ec := c.(*webenv.EnvContext)
+	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
 
-	oEntityObject, origError := ec.Env.EF.Get(entity)
+	oEntityObject, origError := ec.ApiEnv.EF.Get(entity)
 	if origError == nil {
 		origError = c.Bind(oEntityObject)
 		if origError == nil {
 			if entity == "User" {
 				user := oEntityObject.(*models.User)
-				oEntityObject, origError = ec.Env.Services.CreateUser(user.Name, user.Pass, user.Email, user.Role)
+				oEntityObject, origError = ec.ApiEnv.Services.CreateUser(user.Name, user.Pass, user.Email, user.Role)
 			} else {
-				origError = ec.Env.DS.CreateEntity(oEntityObject)
+				origError = ec.ApiEnv.DS.CreateEntity(oEntityObject)
 			}
 
 			if origError == nil {
@@ -115,16 +112,16 @@ func HandleAPICreateEntity(c echo.Context) error {
 
 //HandleAPICreateAll ...
 func HandleAPICreateAll(c echo.Context) error {
-	ec := c.(*webenv.EnvContext)
+	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
-	oEntityObjects, origError := ec.Env.EF.GetSlice(entity)
+	oEntityObjects, origError := ec.ApiEnv.EF.GetSlice(entity)
 	if origError == nil {
 		origError = c.Bind(oEntityObjects)
 		if origError == nil {
 			switch entityType := oEntityObjects.(type) {
 			case *[]models.Contact:
 				for idx := range *entityType {
-					origError = ec.Env.DS.CreateEntity(&((*entityType)[idx]))
+					origError = ec.ApiEnv.DS.CreateEntity(&((*entityType)[idx]))
 					if origError != nil {
 						goto errorReturn
 					}
@@ -142,13 +139,13 @@ errorReturn:
 
 //HandleAPIUpdateEntity ...
 func HandleAPIUpdateEntity(c echo.Context) error {
-	ec := c.(*webenv.EnvContext)
+	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
-	oEntityObject, origError := ec.Env.EF.Get(entity)
+	oEntityObject, origError := ec.ApiEnv.EF.Get(entity)
 	if origError == nil {
 		origError = c.Bind(oEntityObject)
 		if origError == nil {
-			origError = ec.Env.DS.SaveEntity(oEntityObject)
+			origError = ec.ApiEnv.DS.SaveEntity(oEntityObject)
 			if origError == nil {
 				return c.JSON(http.StatusOK, oEntityObject)
 			}
@@ -162,14 +159,14 @@ func HandleAPIUpdateEntity(c echo.Context) error {
 
 //HandleAPIDeleteEntity ...
 func HandleAPIDeleteEntity(c echo.Context) error {
-	ec := c.(*webenv.EnvContext)
+	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
 	id := ec.Param("id")
 	ioID, origError := strconv.Atoi(id)
 	if origError == nil {
-		entityModel, origError := ec.Env.EF.Get(entity)
+		entityModel, origError := ec.ApiEnv.EF.Get(entity)
 		if origError == nil {
-			origError = ec.Env.DS.DeleteEntityByID(entityModel, uint(ioID))
+			origError = ec.ApiEnv.DS.DeleteEntityByID(entityModel, uint(ioID))
 			if origError == nil {
 				return c.JSON(http.StatusOK, "Entity deleted")
 			}
@@ -187,9 +184,9 @@ func HandleAPIOptionList(c echo.Context) error {
 	entity := c.Param("entity")
 	entityType := types.ParseEntityType(strings.ToLower(entity))
 
-	ec := c.(*webenv.EnvContext)
+	ec := c.(*env.ApiEnvContext)
 
-	entityOptions, origError := ec.Env.Services.GetEntityOptions(entityType)
+	entityOptions, origError := ec.ApiEnv.Services.GetEntityOptions(entityType)
 	if origError == nil {
 		return c.JSON(http.StatusOK, entityOptions)
 	}
@@ -204,11 +201,11 @@ func HandleAPIEntityList(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
 
-	ec := c.(*webenv.EnvContext)
-	entities, origError := ec.Env.EF.GetSlice(entity)
+	ec := c.(*env.ApiEnvContext)
+	entities, origError := ec.ApiEnv.EF.GetSlice(entity)
 
 	if origError == nil {
-		origError = ec.Env.DS.GetAllEntities(entities)
+		origError = ec.ApiEnv.DS.GetAllEntities(entities)
 		if origError == nil {
 			return c.JSON(http.StatusOK, entities)
 		}

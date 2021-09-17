@@ -1,0 +1,96 @@
+---
+msg:
+  success:
+    entity:
+      create: "%s wurde angelegt"
+      edit: "%s wurde geändert"
+      delete: "%s wurde gelöscht"
+      list: "Liste(%s) wurde gelesen"
+  error:
+    ajax: "Technischer Fehler:"
+    login: "Login nicht erlaubt"
+    entity:
+      create: "%s kann nicht angelegt werden"
+      edit: "%s kann nicht geändert werden"
+      delete: "%s kann nicht gelöscht werden"
+      list: "Liste(%s) kann nicht gelesen werden"
+      optionlist: "Optionenliste(%s) kann nicht gelesen werden"
+    user:
+      passwordrules: "Das Passwort entspricht nicht den Regeln"
+      create: "Der Benutzer kann nicht angelegt werden"
+      update: "Der Benutzer kann nicht geändert werden"
+      delete: "Der Benutzer kann nicht gelöscht werden"
+ckbox:
+  true: "ja"
+  false: "nein"
+entity:
+  user: "Benutzer"
+  contact: "Kontakt"
+  contactaddress: "Kontaktadresse"
+layout:
+  page:
+    header: "webskeleton Webapp mit Oneui-Golang-Templates und Golang backend"
+    logout: "Abmelden"
+    nav:
+      pages:
+        header: "Benutzerfunktionen"
+        page1: "Seite 1"
+      admin:
+        header: "Administration"
+        user: "Benutzer"
+        contact: "Kontakt"
+form:
+  all:
+    btn:
+      abort: "Abbrechen"
+      save: "Speichern"
+      delete: "Löschen"
+    label:
+      actions: "Aktionen"
+    option:
+      all: "Alle"
+  confirmdelete:
+    header: "%s löschen"
+    body: "%s wirklich löschen?"
+  login:
+    label:
+      user: "Benutzer"
+      pass: "Passwort"
+    btn:
+      login: "Anmelden"
+  page1:
+    header: "Seite 1"
+    content: "Das ist der Inhalt von Seite 1"
+    label:
+      contacttype: "Kontakttyp:"
+  user:
+    list:
+      header: "Benutzer"
+      buttonnew: "Neuer Benutzer"
+    edit:
+      header: "Benutzer bearbeiten"
+      headernew: "Benutzer neu anlegen"
+      label:
+        name: "Name:"
+        pass: "Passwort:"
+        email: "Email:"
+        role: "Benutzerrolle:"
+        customer: "Anzeige Energiedaten:"
+  contact:
+    list:
+      header: "Kontakt"
+      buttonnew: "Neuer Kontakt"
+      orgtype: "Typ"
+      name: "Name"
+      nameext: "Namenszusatz"
+      contacttype: "Kontakttyp"
+      id: "Id"
+    edit:
+      header: "Kontakt bearbeiten"
+      headernew: "Kontakt neu anlegen"
+      label:
+        orgtype: "Organisationstyp:"
+        name: "Name:"
+        nameext: "Namenszusatz:"
+        contacttype: "Kontakttyp:"
+        id: "Id:"
