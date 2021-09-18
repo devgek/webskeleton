@@ -5,5 +5,5 @@ type DoWithEntityFunc func(EntityOptionBuilder, ...interface{})
 type EntityFactory interface {
 	Get(entityName string) (interface{}, error)
 	GetSlice(entityName string) (interface{}, error)
-	DoWithAll(entities interface{}, entityFunc DoWithEntityFunc, params ...interface{})
+	DoWithAll(entityList interface{}, entityFunc DoWithEntityFunc, params ...interface{})
 }

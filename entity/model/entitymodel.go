@@ -35,3 +35,12 @@ func (e Entity) BuildEntityOption() dto.EntityOption {
 
 	return o
 }
+
+//AddNewEntityOption
+/*
+	Creates a new entity option and adds it to the given entityOptionList
+*/
+func AddNewEntityOption(builder EntityOptionBuilder, params ...interface{}) {
+	option := builder.BuildEntityOption()
+	*(params[0].(*[]dto.EntityOption)) = append(*(params[0].(*[]dto.EntityOption)), option)
+}

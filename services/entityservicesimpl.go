@@ -20,12 +20,7 @@ func (s Services) GetEntityOptions(entityType models.EntityType) ([]dto.EntityOp
 		return options, err
 	}
 
-	s.EF.DoWithAll(entities, MakeEntityOption, &options)
+	s.EF.DoWithAll(entities, entitymodel.AddNewEntityOption, &options)
 
 	return options, nil
-}
-
-func MakeEntityOption(builder entitymodel.EntityOptionBuilder, params ...interface{}) {
-	option := builder.BuildEntityOption()
-	*(params[0].(*[]dto.EntityOption)) = append(*(params[0].(*[]dto.EntityOption)), option)
 }

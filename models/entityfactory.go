@@ -49,19 +49,19 @@ func (ef EntityFactoryImpl) GetSlice(entityName string) (interface{}, error) {
 	Method ranges over entities and calls entityFunc with each entity. You can serve parameters with each call to entityFunc.
     Attention! Maybe params should be pointers to change things outside entityFunc.
 */
-func (ef EntityFactoryImpl) DoWithAll(entities interface{}, entityFunc entitymodel.DoWithEntityFunc, params ...interface{}) {
-	switch entityType := entities.(type) {
+func (ef EntityFactoryImpl) DoWithAll(entityList interface{}, entityFunc entitymodel.DoWithEntityFunc, params ...interface{}) {
+	switch entityListType := entityList.(type) {
 	case *[]User:
-		for _, e := range *entityType {
-			entityFunc(e, params...)
+		for _, entity := range *entityListType {
+			entityFunc(entity, params...)
 		}
 	case *[]Contact:
-		for _, e := range *entityType {
-			entityFunc(e, params...)
+		for _, entity := range *entityListType {
+			entityFunc(entity, params...)
 		}
 	case *[]ContactAddress:
-		for _, e := range *entityType {
-			entityFunc(e, params...)
+		for _, entity := range *entityListType {
+			entityFunc(entity, params...)
 		}
 	}
 }
