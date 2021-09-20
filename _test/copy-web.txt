@@ -4,13 +4,14 @@ copy;cmd/serve.go;cmd/serve.go
 copy;config;config
 copy;data;data
 copy;dtos;dtos
+copy;entity;entity
 xcopy;helper;helper
 copy;models;models
-copy;msg;msg
 copy;packrd;packrd
-copy;packrfix;packrfix
 copy;services;services
 copy;types;types
-xcopy;web;web
+xcopy;web/app;web/app
+xcopy;web/common;web/common
 copy;LICENSE;LICENSE
 copy;main.go;main.go
+copy;_test/template-go.mod;go.mod

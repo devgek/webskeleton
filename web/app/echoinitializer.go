@@ -48,7 +48,7 @@ func InitEchoWebApp(appEnv *env.AppEnv) *echo.Echo {
 
 	e.Use(apphandler.AppEnvContextMiddleware)
 	e.Use(common.RequestLoggingMiddleware)
-	e.Use(common.CookieAuthMiddleware)
+	e.Use(apphandler.CookieAuthMiddleware)
 
 	return e
 }

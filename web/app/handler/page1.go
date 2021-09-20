@@ -1,22 +1,22 @@
 package handler
 
 import (
+	helper "github.com/devgek/webskeleton/helper/common"
 	"github.com/devgek/webskeleton/web/app/env"
 	"github.com/devgek/webskeleton/web/app/template"
 	"log"
 	"net/http"
 	"strconv"
 
-	"github.com/devgek/webskeleton/helper/common"
 	"github.com/devgek/webskeleton/types"
 	"github.com/labstack/echo"
 )
 
 //HandlePage1 ...
 func HandlePage1(c echo.Context) error {
-	contactType := common.ValueOrDefault(c.FormValue("page1FilterContactType"), "0")
+	contactType := helper.ValueOrDefault(c.FormValue("page1FilterContactType"), "0")
 	iContactType, err := strconv.Atoi(contactType)
-	common.PanicOnError(err)
+	helper.PanicOnError(err)
 	log.Println("page1FilterContactType", iContactType)
 
 	ec := c.(*env.AppEnvContext)

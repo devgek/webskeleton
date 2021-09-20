@@ -28,6 +28,7 @@ var bootstrapCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(bootstrapCmd)
 
+	bootstrapCmd.Flags().String("templatedir", "", "The directory with the template files")
 	bootstrapCmd.Flags().String("type", "web", "The type of project you want to bootstrap [api|web|cli]")
 	bootstrapCmd.Flags().String("repository", "github.com", "The git repository for the new project")
 	bootstrapCmd.Flags().String("user", "theuser", "The git user for the new project")
@@ -36,6 +37,7 @@ func init() {
 }
 
 func runBootstrap(cmd *cobra.Command) {
+	templateDir, _ := cmd.Flags().GetString("templatedir")
 	projectType, _ := cmd.Flags().GetString("type")
 	repoName, _ := cmd.Flags().GetString("repository")
 	repoUser, _ := cmd.Flags().GetString("user")
@@ -47,27 +49,22 @@ func runBootstrap(cmd *cobra.Command) {
 
 	packageName := repoName + "/" + repoUser + "/" + projectName
 	currPath, err := os.Getwd()
-	common.ExitOnError(err, "Can't get current path!")
+	helper.ExitOnError(err, "Can't get current path!")
 
 	log.Println("Start bootstraping new project for", "'"+packageName+"' with title", projectTitle, "in", currPath)
 
-	// There can be more than one path, separated by colon.
-	gopaths := common.GoPaths()
-	if len(gopaths) == 0 {
-		log.Fatalln("GOPATH is not set.")
+	projectTemplateDir := templateDir
+	if templateDir == "" {
+		projectTemplateDir = templateDirFromGoPath()
 	}
-	// By default, we choose the last GOPATH.
-	gopath := gopaths[len(gopaths)-1]
 
-	// projectPath := filepath.Join(gopath, "src", packageName)
+	// projectPath
 	projectPath := filepath.Join(currPath, projectName)
-	dbName := projectName
-	projectTemplateDir := filepath.Join(gopath, "src", "github.com", "devgek", "webskeleton")
 
 	// 1. Create project directory
-	// log.Print("Creating " + fullpath + "...")
-	// err = os.MkdirAll(fullpath, 0755)
-	// helper.ExitOnError(err, "")
+	log.Print("Creating " + projectPath + "...")
+	err = os.MkdirAll(projectPath, 0755)
+	helper.ExitOnError(err, "")
 
 	// 2. Copy everything under project template directory to target directory.
 	log.Print("Copying project template files and directories to " + projectPath + "...")
@@ -87,7 +84,7 @@ func runBootstrap(cmd *cobra.Command) {
 
 	replacers := make(map[string]string)
 	replacers["github.com/devgek/webskeleton"] = packageName
-	replacers["webskeleton.db"] = dbName + ".db"
+	replacers["webskeleton.db"] = projectName + ".db"
 	replacers["webskeleton-auth"] = projectName + "-auth"
 	replacers[`= "webskeleton" //do not change`] = `= "` + projectName + `"`
 	replacers["go-webskeleton"] = projectTitle
@@ -95,8 +92,10 @@ func runBootstrap(cmd *cobra.Command) {
 	replacers["webskeleton_T_"] = projectName + "_T_"
 	replacers["webskeleton-types"] = projectName + "-types"
 	replacers["webskeleton.com"] = projectName + ".com"
+	replacers["../webskeleton"] = "../" + projectName
+	replacers[`"ProjectName":"webskeleton"`] = `"ProjectName":"` + projectName + `"`
 	err = recursiveSearchReplaceFiles(projectPath, replacers)
-	common.ExitOnError(err, "")
+	helper.ExitOnError(err, "")
 
 	// 4. Setup and bootstrap databases.
 	// nothing to do, yet
@@ -108,27 +107,39 @@ func runBootstrap(cmd *cobra.Command) {
 	// output, err = command.CombinedOutput()
 	// helper.ExitOnError(err, string(output))
 	err = os.Chdir(projectPath)
-	common.ExitOnError(err, "")
+	helper.ExitOnError(err, "")
 
 	// 5. Initialize a go module project
-	log.Print("Running go mod init ", packageName)
-	command := exec.Command("go", "mod", "init", packageName)
+	//log.Print("Running go mod init ", packageName)
+	//command := exec.Command("go", "mod", "init", packageName)
+	//command.Dir = projectPath
+	//output, _ := command.CombinedOutput()
+	//log.Print(string(output))
+
+	log.Print("Running go mod tidy")
+	command := exec.Command("go", "mod", "tidy")
 	command.Dir = projectPath
 	output, _ := command.CombinedOutput()
 	log.Print(string(output))
 
-	log.Print("Running go mod tidy")
-	command = exec.Command("go", "mod", "tidy")
-	command.Dir = projectPath
-	output, _ = command.CombinedOutput()
-	log.Print(string(output))
-
-	// 6. Run tests on newly generated app.
+	//6. Run tests on newly generated app.
 	log.Print("Running go test ./...")
 	command = exec.Command("go", "test", "./...")
 	command.Dir = projectPath
 	output, _ = command.CombinedOutput()
 	log.Print(string(output))
+}
+
+func templateDirFromGoPath() string {
+	// There can be more than one path, separated by colon.
+	gopaths := helper.GoPaths()
+	if len(gopaths) == 0 {
+		log.Fatalln("GOPATH is not set.")
+	}
+	// By default, we choose the last GOPATH.
+	gopath := gopaths[len(gopaths)-1]
+	projectTemplateDir := filepath.Join(gopath, "src", "github.com", "devgek", "webskeleton")
+	return projectTemplateDir
 }
 
 func copySources(sourceLines []string, sourceRoot, destinationRoot string) {
@@ -142,9 +153,9 @@ func copySources(sourceLines []string, sourceRoot, destinationRoot string) {
 			destinationPath = filepath.Join(destinationRoot, parts[2])
 		}
 
-		log.Print(cmd, sourcePath, "--->", destinationPath)
+		log.Print(cmd, " ", sourcePath, "--->", destinationPath)
 		err := copy.Copy(sourcePath, destinationPath)
-		common.ExitOnError(err, "Error while copying source [files]cd")
+		helper.ExitOnError(err, "Error while copying source [files]cd")
 	}
 }
 
@@ -153,7 +164,7 @@ func getSources(rootPath string, projectType string) []string {
 	fileName = filepath.Clean(fileName)
 
 	sources, err := fileutil.ReadLines(fileName)
-	common.ExitOnError(err, "getSources")
+	helper.ExitOnError(err, "getSources")
 
 	return sources
 }

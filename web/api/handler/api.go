@@ -6,7 +6,6 @@ import (
 	"github.com/devgek/webskeleton/dtos"
 	"github.com/devgek/webskeleton/types"
 	"github.com/devgek/webskeleton/web/api/env"
-	"github.com/devgek/webskeleton/web/app/template"
 	"github.com/golang-jwt/jwt"
 	"log"
 	"net/http"
@@ -20,7 +19,7 @@ import (
 
 //HandleAPIHealth ...
 func HandleAPIHealth(c echo.Context) error {
-	vd := template.TData{}
+	vd := make(map[string]interface{})
 	vd["Host"] = c.Request().Host
 	vd["ProjectName"] = config.ProjectName
 	vd["VersionInfo"] = config.ProjectVersion
