@@ -1,0 +1,2 @@
+	case EntityType{{EntityTypeName}}.Val():
+		return EntityType{{EntityTypeName}}

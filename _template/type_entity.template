@@ -1,0 +1,31 @@
+package models
+
+//
+//EntityType type of entity
+//
+type EntityType int
+
+//
+const (
+	EntityTypeUndefined EntityType = iota
+	{{TypeEntity1}}
+)
+
+//EntityTypes ...
+func EntityTypes() []EntityType {
+	return []EntityType{EntityTypeUndefined{{TypeEntity2}}}
+}
+
+//Val the value used in html template
+func (et EntityType) Val() string {
+	return [...]string{"undefined"{{TypeEntity4}}}[et]
+}
+
+//ParseEntityType ...
+func ParseEntityType(s string) EntityType {
+	switch s {
+	{{TypeEntity3}}
+	default:
+		return EntityTypeUndefined
+	}
+}

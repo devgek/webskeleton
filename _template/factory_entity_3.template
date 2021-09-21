@@ -1,0 +1,4 @@
+	case *[]{{EntityTypeName}}:
+		for _, entity := range *entityListType {
+			entityFunc(entity, params...)
+		}

@@ -9,12 +9,12 @@ import (
 
 //Contact ...
 type Contact struct {
-	entitymodel.Entity
-	OrgType          types.OrgType     `gorm:"type:integer;not null" form:"gkvOrgType"`
-	Name             string            `gorm:"type:varchar(100);not null" form:"gkvName"`
-	NameExt          string            `gorm:"type:varchar(100)" form:"gkvNameExt"`
-	ContactType      types.ContactType `gorm:"type:integer;not null" form:"gkvContactType"`
-	ContactAddresses []ContactAddress
+	entitymodel.Entity `entity:"type:Contact;name:contact"`
+	OrgType            types.OrgType     `gorm:"type:integer;not null" form:"gkvOrgType"`
+	Name               string            `gorm:"type:varchar(100);not null" form:"gkvName"`
+	NameExt            string            `gorm:"type:varchar(100)" form:"gkvNameExt"`
+	ContactType        types.ContactType `gorm:"type:integer;not null" form:"gkvContactType"`
+	ContactAddresses   []ContactAddress
 }
 
 //BuildEntityOption ...

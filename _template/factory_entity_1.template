@@ -1,0 +1,2 @@
+	case EntityType{{EntityTypeName}}:
+		return &{{EntityTypeName}}{}, nil

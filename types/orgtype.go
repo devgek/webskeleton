@@ -5,7 +5,7 @@ type OrgType int
 
 //
 const (
-	OrgTypeOrg = iota
+	OrgTypeOrg OrgType = iota
 	OrgTypePerson
 )
 

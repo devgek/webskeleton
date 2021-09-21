@@ -1,12 +1,12 @@
 /*
 Package models contains all entities and must also have a struct which implemnents entitymodel.EntityFactory.
-
 */
 package models
 
 import (
 	"errors"
 	entitymodel "github.com/devgek/webskeleton/entity/model"
+	"log"
 	"strings"
 )
 
@@ -18,12 +18,13 @@ type EntityFactoryImpl struct {
 func (ef EntityFactoryImpl) Get(entityName string) (interface{}, error) {
 	entityType := ParseEntityType(strings.ToLower(entityName))
 	switch entityType {
-	case EntityTypeUser:
-		return &User{}, nil
 	case EntityTypeContact:
 		return &Contact{}, nil
 	case EntityTypeContactAddress:
 		return &ContactAddress{}, nil
+	case EntityTypeUser:
+		return &User{}, nil
+
 	default:
 		return nil, errors.New("Unknown entity '" + entityName + "'")
 	}
@@ -33,12 +34,13 @@ func (ef EntityFactoryImpl) Get(entityName string) (interface{}, error) {
 func (ef EntityFactoryImpl) GetSlice(entityName string) (interface{}, error) {
 	entityType := ParseEntityType(strings.ToLower(entityName))
 	switch entityType {
-	case EntityTypeUser:
-		return &[]User{}, nil
 	case EntityTypeContact:
 		return &[]Contact{}, nil
 	case EntityTypeContactAddress:
 		return &[]ContactAddress{}, nil
+	case EntityTypeUser:
+		return &[]User{}, nil
+
 	default:
 		return nil, errors.New("Unknown entity '" + entityName + "'")
 	}
@@ -51,10 +53,6 @@ func (ef EntityFactoryImpl) GetSlice(entityName string) (interface{}, error) {
 */
 func (ef EntityFactoryImpl) DoWithAll(entityList interface{}, entityFunc entitymodel.DoWithEntityFunc, params ...interface{}) {
 	switch entityListType := entityList.(type) {
-	case *[]User:
-		for _, entity := range *entityListType {
-			entityFunc(entity, params...)
-		}
 	case *[]Contact:
 		for _, entity := range *entityListType {
 			entityFunc(entity, params...)
@@ -63,5 +61,12 @@ func (ef EntityFactoryImpl) DoWithAll(entityList interface{}, entityFunc entitym
 		for _, entity := range *entityListType {
 			entityFunc(entity, params...)
 		}
+	case *[]User:
+		for _, entity := range *entityListType {
+			entityFunc(entity, params...)
+		}
+
+	default:
+		log.Println("DoWithAll::unknown entityList", entityListType)
 	}
 }

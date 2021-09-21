@@ -8,29 +8,32 @@ type EntityType int
 //
 const (
 	EntityTypeUndefined EntityType = iota
-	EntityTypeUser
 	EntityTypeContact
 	EntityTypeContactAddress
+	EntityTypeUser
 )
 
 //EntityTypes ...
 func EntityTypes() []EntityType {
-	return []EntityType{EntityTypeUndefined, EntityTypeUser, EntityTypeContact, EntityTypeContactAddress}
+	return []EntityType{EntityTypeUndefined, EntityTypeContact, EntityTypeContactAddress, EntityTypeUser}
 }
 
 //Val the value used in html template
 func (et EntityType) Val() string {
-	return [...]string{"undefined", "user", "contact", "contactaddress"}[et]
+	return [...]string{"undefined", "contact", "contactaddress", "user"}[et]
 }
 
 //ParseEntityType ...
 func ParseEntityType(s string) EntityType {
-	if s == EntityTypeUser.Val() {
-		return EntityTypeUser
-	} else if s == EntityTypeContact.Val() {
+	switch s {
+	case EntityTypeContact.Val():
 		return EntityTypeContact
-	} else if s == EntityTypeContactAddress.Val() {
+	case EntityTypeContactAddress.Val():
 		return EntityTypeContactAddress
+	case EntityTypeUser.Val():
+		return EntityTypeUser
+
+	default:
+		return EntityTypeUndefined
 	}
-	return EntityTypeUndefined
 }
