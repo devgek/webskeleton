@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -48,7 +49,11 @@ func runGenerate(cmd *cobra.Command) {
 
 	generateEntityFactory(genModels, templatePath, modelsPath)
 
-	log.Println(genModels)
+	log.Print("Running go fmt ./models")
+	command := exec.Command("go", "fmt", "./models")
+	command.Dir = currPath
+	output, _ := command.CombinedOutput()
+	log.Print(string(output))
 }
 
 func generateEntityFactory(models []genModel, templatePath string, modelsPath string) {
