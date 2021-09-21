@@ -1,3 +1,4 @@
+copy;_template;_template
 copy;_test/config-serve.yaml;_test/config-serve.yaml
 copy;cmd/root.go;cmd/root.go
 copy;cmd/serve.go;cmd/serve.go
@@ -14,4 +15,4 @@ xcopy;web/app;web/app
 xcopy;web/common;web/common
 copy;LICENSE;LICENSE
 copy;main.go;main.go
-copy;_test/template-go.mod;go.mod
+copy;_template/go.mod.template;go.mod
