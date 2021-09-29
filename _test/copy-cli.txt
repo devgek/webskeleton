@@ -1,7 +1,7 @@
-copy;.vscode/launch.json;.vscode
-copy;cmd/root.go;cmd
-copy;cmd/cmd1.go;cmd
-copy;config/constants.go;config
-xcopy;helper/helper;helper/helper
-copy;LICENSE
-copy;main.go
+copy;cmd/root.go;cmd/root.go
+copy;cmd/cmd1.go;cmd/cmd1.go
+copy;config/constants.go;config/constants.go
+xcopy;helper/common;helper/common
+copy;LICENSE;LICENSE
+copy;main.go;main.go
+copy;_template/go.mod.template;go.mod
