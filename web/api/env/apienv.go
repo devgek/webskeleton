@@ -1,15 +1,16 @@
 package env
 
 import (
+	"log"
+	"sync"
+
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/data"
 	entitymodel "github.com/devgek/webskeleton/entity/model"
-	"github.com/devgek/webskeleton/models"
+	generated_models "github.com/devgek/webskeleton/models/generated"
 	"github.com/devgek/webskeleton/services"
 	_ "github.com/jinzhu/gorm/dialects/postgres" // gorm for postgres
 	_ "github.com/jinzhu/gorm/dialects/sqlite"   // gorm for sqlite3
-	"log"
-	"sync"
 )
 
 //ApiEnv the environment
@@ -48,7 +49,7 @@ func GetApiEnv(isTest bool) *ApiEnv {
 			log.Panic(err)
 		}
 
-		ef := models.EntityFactoryImpl{}
+		ef := generated_models.EntityFactoryImpl{}
 		s := services.NewServices(ef, ds)
 
 		theApiEnv = &ApiEnv{DS: ds, Services: s, EF: &ef}

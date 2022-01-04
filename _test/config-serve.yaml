@@ -9,7 +9,7 @@ server:
   tls: false
   cert: cert.pem
   key: key.pem
-  port: 8080
+  port: 8082
   debug: true
 datastore:
   system: sqlite3

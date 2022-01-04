@@ -1,12 +1,15 @@
 /*
 Package models contains all entities and must also have a struct which implemnents entitymodel.EntityFactory.
 */
-package models
+package generated_models
 
 import (
 	"errors"
-	entitymodel "github.com/devgek/webskeleton/entity/model"
 	"log"
+
+	entitymodel "github.com/devgek/webskeleton/entity/model"
+	"github.com/devgek/webskeleton/models"
+
 	"strings"
 )
 
@@ -19,11 +22,11 @@ func (ef EntityFactoryImpl) Get(entityName string) (interface{}, error) {
 	entityType := ParseEntityType(strings.ToLower(entityName))
 	switch entityType {
 	case EntityTypeContact:
-		return &Contact{}, nil
+		return &models.Contact{}, nil
 	case EntityTypeContactAddress:
-		return &ContactAddress{}, nil
+		return &models.ContactAddress{}, nil
 	case EntityTypeUser:
-		return &User{}, nil
+		return &models.User{}, nil
 
 	default:
 		return nil, errors.New("Unknown entity '" + entityName + "'")
@@ -35,11 +38,11 @@ func (ef EntityFactoryImpl) GetSlice(entityName string) (interface{}, error) {
 	entityType := ParseEntityType(strings.ToLower(entityName))
 	switch entityType {
 	case EntityTypeContact:
-		return &[]Contact{}, nil
+		return &[]models.Contact{}, nil
 	case EntityTypeContactAddress:
-		return &[]ContactAddress{}, nil
+		return &[]models.ContactAddress{}, nil
 	case EntityTypeUser:
-		return &[]User{}, nil
+		return &[]models.User{}, nil
 
 	default:
 		return nil, errors.New("Unknown entity '" + entityName + "'")
@@ -53,15 +56,15 @@ func (ef EntityFactoryImpl) GetSlice(entityName string) (interface{}, error) {
 */
 func (ef EntityFactoryImpl) DoWithAll(entityList interface{}, entityFunc entitymodel.DoWithEntityFunc, params ...interface{}) {
 	switch entityListType := entityList.(type) {
-	case *[]Contact:
+	case *[]models.Contact:
 		for _, entity := range *entityListType {
 			entityFunc(entity, params...)
 		}
-	case *[]ContactAddress:
+	case *[]models.ContactAddress:
 		for _, entity := range *entityListType {
 			entityFunc(entity, params...)
 		}
-	case *[]User:
+	case *[]models.User:
 		for _, entity := range *entityListType {
 			entityFunc(entity, params...)
 		}

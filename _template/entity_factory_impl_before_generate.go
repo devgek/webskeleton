@@ -1,12 +1,13 @@
 /*
-Package models contains all entities and must also have a struct which implemnents entitymodel.EntityFactory.
+	Type EntityFactoryImpl must exist even before first generating models, because they are used
+	in appenv.go and apienv.go
 */
 package generated_models
 
 import (
 	"errors"
+
 	entitymodel "github.com/devgek/webskeleton/entity/model"
-	"strings"
 )
 
 //EntityFactoryImpl create Entities by name
@@ -15,22 +16,12 @@ type EntityFactoryImpl struct {
 
 //Get return entity struct by name
 func (ef EntityFactoryImpl) Get(entityName string) (interface{}, error) {
-	entityType := ParseEntityType(strings.ToLower(entityName))
-	switch entityType {
-	{{FactoryEntity1}}
-	default:
-		return nil, errors.New("Unknown entity '" + entityName + "'")
-	}
+	return nil, errors.New("Unknown entity '" + entityName + "'")
 }
 
 //GetSlice return slice of entity struct by name
 func (ef EntityFactoryImpl) GetSlice(entityName string) (interface{}, error) {
-	entityType := ParseEntityType(strings.ToLower(entityName))
-	switch entityType {
-	{{FactoryEntity2}}
-	default:
-		return nil, errors.New("Unknown entity '" + entityName + "'")
-	}
+	return nil, errors.New("Unknown entity '" + entityName + "'")
 }
 
 //DoWithAll
@@ -39,9 +30,4 @@ func (ef EntityFactoryImpl) GetSlice(entityName string) (interface{}, error) {
     Attention! Maybe params should be pointers to change things outside entityFunc.
 */
 func (ef EntityFactoryImpl) DoWithAll(entityList interface{}, entityFunc entitymodel.DoWithEntityFunc, params ...interface{}) {
-	switch entityListType := entityList.(type) {
-	{{FactoryEntity3}}
-	default:
-		log.Println("DoWithAll::unknown entityList", entityListType)
-	}
 }

@@ -1,15 +1,17 @@
 package handler
 
 import (
-	"github.com/devgek/webskeleton/models"
-	"github.com/devgek/webskeleton/web/app/env"
-	"github.com/devgek/webskeleton/web/app/template"
-	viewmodel2 "github.com/devgek/webskeleton/web/app/viewmodel"
-	"github.com/labstack/echo"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/devgek/webskeleton/models"
+	generated_models "github.com/devgek/webskeleton/models/generated"
+	"github.com/devgek/webskeleton/web/app/env"
+	"github.com/devgek/webskeleton/web/app/template"
+	viewmodel2 "github.com/devgek/webskeleton/web/app/viewmodel"
+	"github.com/labstack/echo"
 )
 
 //HandleEntityList ...
@@ -154,7 +156,7 @@ func HandleEntityNew(c echo.Context) error {
 func HandleOptionListAjax(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
-	entityType := models.ParseEntityType(strings.ToLower(entity))
+	entityType := generated_models.ParseEntityType(strings.ToLower(entity))
 
 	ec := c.(*env.AppEnvContext)
 

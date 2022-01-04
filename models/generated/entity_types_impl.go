@@ -1,4 +1,4 @@
-package models
+package generated_models
 
 //
 //EntityType type of entity

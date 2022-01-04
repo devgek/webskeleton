@@ -2,16 +2,19 @@ package apihandler
 
 import (
 	"errors"
-	"github.com/devgek/webskeleton/config"
-	"github.com/devgek/webskeleton/dtos"
-	"github.com/devgek/webskeleton/types"
-	"github.com/devgek/webskeleton/web/api/env"
-	"github.com/golang-jwt/jwt"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/devgek/webskeleton/config"
+	"github.com/devgek/webskeleton/dtos"
+	generated_models "github.com/devgek/webskeleton/models/generated"
+	"github.com/devgek/webskeleton/types"
+	"github.com/devgek/webskeleton/web/api/env"
+	apipayload "github.com/devgek/webskeleton/web/api/payload"
+	"github.com/golang-jwt/jwt"
 
 	"github.com/devgek/webskeleton/models"
 	"github.com/labstack/echo"
@@ -181,13 +184,13 @@ func HandleAPIDeleteEntity(c echo.Context) error {
 func HandleAPIOptionList(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
-	entityType := models.ParseEntityType(strings.ToLower(entity))
+	entityType := generated_models.ParseEntityType(strings.ToLower(entity))
 
 	ec := c.(*env.ApiEnvContext)
 
 	entityOptions, origError := ec.ApiEnv.Services.GetEntityOptions(entityType)
 	if origError == nil {
-		return c.JSON(http.StatusOK, entityOptions)
+		return c.JSON(http.StatusOK, apipayload.APISuccessPayload{Data: entityOptions})
 	}
 
 	apiError := &dtos.ApiError{Nr: 6000, Msg: "No entity options"}
@@ -206,7 +209,7 @@ func HandleAPIEntityList(c echo.Context) error {
 	if origError == nil {
 		origError = ec.ApiEnv.DS.GetAllEntities(entities)
 		if origError == nil {
-			return c.JSON(http.StatusOK, entities)
+			return c.JSON(http.StatusOK, apipayload.APISuccessPayload{Data: entities})
 		}
 	}
 
