@@ -1,17 +1,18 @@
 package env
 
 import (
+	"log"
+	"net/http"
+	"sync"
+
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/data"
 	entitymodel "github.com/devgek/webskeleton/entity/model"
-	"github.com/devgek/webskeleton/models"
+	generated_models "github.com/devgek/webskeleton/models/generated"
 	"github.com/devgek/webskeleton/services"
 	"github.com/devgek/webskeleton/web/app/msg"
 	"github.com/devgek/webskeleton/web/app/template"
 	"github.com/gobuffalo/packr/v2"
-	"log"
-	"net/http"
-	"sync"
 )
 
 //AppEnv the environment
@@ -67,7 +68,7 @@ func GetWebEnv() *AppEnv {
 			log.Panic(err)
 		}
 
-		ef := models.EntityFactoryImpl{}
+		ef := generated_models.EntityFactoryImpl{}
 		s := services.NewServices(ef, ds)
 
 		theAppEnv = &AppEnv{

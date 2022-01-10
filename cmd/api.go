@@ -1,9 +1,10 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/devgek/webskeleton/web/api"
 	"github.com/devgek/webskeleton/web/api/env"
-	"log"
 
 	"github.com/devgek/webskeleton/config"
 	"github.com/spf13/cobra"
@@ -15,7 +16,7 @@ var apiCmd = &cobra.Command{
 	Short: "start web server and serve json API with echo http server",
 	Long:  `bla bla`,
 	Run: func(cmd *cobra.Command, args []string) {
-		runApi(cmd)
+		runAPI()
 	},
 }
 
@@ -34,7 +35,7 @@ func init() {
 	// serveCmd.Flags().Bool("debug", false, "debug mode on/off")
 }
 
-func runApi(cmd *cobra.Command) {
+func runAPI() {
 	// start the web server
 	log.Println("Starting ", config.ProjectName, " API on port ", config.ServerPort())
 	if config.IsServerSecure() {

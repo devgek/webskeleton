@@ -39,18 +39,20 @@ func runGenerate(cmd *cobra.Command) {
 	helper.ExitOnError(err, "Can't get current path!")
 
 	modelsPath := filepath.Join(currPath, modelsDir)
-	log.Println("Start generating entity types and factory in ", modelsPath)
+	genPath := filepath.Join(modelsPath, "generated")
+	log.Println("Start generating entity types and factory in ", genPath)
+	os.Mkdir(genPath, os.ModePerm)
 
 	genModels := getGenModels(modelsPath)
 
 	templatePath := filepath.Join(currPath, "_template")
 
-	generateEntityTypes(genModels, templatePath, modelsPath)
+	generateEntityTypes(genModels, templatePath, genPath)
 
-	generateEntityFactory(genModels, templatePath, modelsPath)
+	generateEntityFactory(genModels, templatePath, genPath)
 
-	log.Print("Running go fmt ./models")
-	command := exec.Command("go", "fmt", "./models")
+	log.Print("Running go fmt ", genPath)
+	command := exec.Command("go", "fmt", genPath)
 	command.Dir = currPath
 	output, _ := command.CombinedOutput()
 	log.Print(string(output))
@@ -79,7 +81,7 @@ func generateEntityFactory(models []genModel, templatePath string, modelsPath st
 	t = strings.ReplaceAll(t, "{{FactoryEntity2}}", f2.String())
 	t = strings.ReplaceAll(t, "{{FactoryEntity3}}", f3.String())
 
-	entityFactoryPath := filepath.Join(modelsPath, "factory_entity.go")
+	entityFactoryPath := filepath.Join(modelsPath, "entity_factory_impl.go")
 	err := ioutil.WriteFile(entityFactoryPath, []byte(t), os.ModePerm)
 	if err != nil {
 		log.Fatalln(err)
@@ -109,7 +111,7 @@ func generateEntityTypes(models []genModel, templatePath string, modelsPath stri
 	t = strings.ReplaceAll(t, "{{TypeEntity3}}", f3.String())
 	t = strings.ReplaceAll(t, "{{TypeEntity4}}", f4.String())
 
-	typePath := filepath.Join(modelsPath, "type_entity.go")
+	typePath := filepath.Join(modelsPath, "entity_types_impl.go")
 	err := ioutil.WriteFile(typePath, []byte(t), os.ModePerm)
 	if err != nil {
 		log.Fatalln(err)
