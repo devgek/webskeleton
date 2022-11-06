@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// serveCmd represents the serve command
+// apiCmd represents the api command
 var apiCmd = &cobra.Command{
 	Use:   "api --config=configfile.yaml",
 	Short: "start web server and serve json API with echo http server",

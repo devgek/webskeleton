@@ -52,12 +52,15 @@ func GetWebEnv() *AppEnv {
 		//load locale specific message file, if not default
 		// messages, err := assetBox.Find("msg/messages-en.yaml")
 		messages, err := originalAssetBox.Find("msg/messages.yaml")
+		if err != nil {
+			log.Panic(err)
+		}
 
 		//load messages
 		ml := msg.NewMessageLocator(messages)
 
 		//here we create the datastore
-		//?_foreign_keys=1, neccessary for golang to respect foreign key constraints on sqlite3 db
+		//?_foreign_keys=1, necessary for golang to respect foreign key constraints on sqlite3 db
 		var ds data.Datastore
 		if config.DatastoreSystem() == "postgres" {
 			ds, err = data.NewPostgres()

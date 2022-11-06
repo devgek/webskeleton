@@ -17,7 +17,6 @@ type genModel struct {
 	Name     string
 }
 
-// serveCmd represents the serve command
 var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "generate entity source code",

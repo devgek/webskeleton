@@ -33,7 +33,7 @@ func GetEnv() *ApiEnv {
 func GetApiEnv(isTest bool) *ApiEnv {
 	once.Do(func() {
 		//here we create the datastore
-		//?_foreign_keys=1, neccessary for golang to respect foreign key constraints on sqlite3 db
+		//?_foreign_keys=1, necessary for golang to respect foreign key constraints on sqlite3 db
 		var ds data.Datastore
 		var err error
 		if isTest {

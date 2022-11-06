@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// serveCmd represents the serve command
 var dataCmd = &cobra.Command{
 	Use:   "data",
 	Short: "initialize the datastore with data",
