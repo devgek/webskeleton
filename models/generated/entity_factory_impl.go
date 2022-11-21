@@ -1,5 +1,5 @@
 /*
-Package generated_models contains all entities and must also have a struct which implements entitymodel.EntityFactory.
+Package genmodels contains all entities and must also have a struct which implements entitymodel.EntityFactory.
 */
 package genmodels
 

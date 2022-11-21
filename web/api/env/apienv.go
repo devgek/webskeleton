@@ -7,7 +7,7 @@ import (
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/data"
 	entitymodel "github.com/devgek/webskeleton/entity/model"
-	generated_models "github.com/devgek/webskeleton/models/generated"
+	genmodels "github.com/devgek/webskeleton/models/generated"
 	"github.com/devgek/webskeleton/services"
 	_ "github.com/jinzhu/gorm/dialects/postgres" // gorm for postgres
 	_ "github.com/jinzhu/gorm/dialects/sqlite"   // gorm for sqlite3
@@ -49,7 +49,7 @@ func GetApiEnv(isTest bool) *ApiEnv {
 			log.Panic(err)
 		}
 
-		ef := generated_models.EntityFactoryImpl{}
+		ef := genmodels.EntityFactoryImpl{}
 		s := services.NewServices(ef, ds)
 
 		theApiEnv = &ApiEnv{DS: ds, Services: s, EF: &ef}

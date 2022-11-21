@@ -10,7 +10,7 @@ import (
 
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/dtos"
-	generated_models "github.com/devgek/webskeleton/models/generated"
+	genmodels "github.com/devgek/webskeleton/models/generated"
 	"github.com/devgek/webskeleton/types"
 	"github.com/devgek/webskeleton/web/api/env"
 	apipayload "github.com/devgek/webskeleton/web/api/payload"
@@ -184,7 +184,7 @@ func HandleAPIDeleteEntity(c echo.Context) error {
 func HandleAPIOptionList(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
-	entityType := generated_models.ParseEntityType(strings.ToLower(entity))
+	entityType := genmodels.ParseEntityType(strings.ToLower(entity))
 
 	ec := c.(*env.ApiEnvContext)
 

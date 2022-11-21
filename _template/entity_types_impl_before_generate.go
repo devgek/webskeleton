@@ -2,7 +2,7 @@
 	Type EntityType and function Val must exist even before first generating models, because they are used
 	in entityservicesimpl.go
 */
-package generated_models
+package genmodels
 
 //EntityType type of entity
 type EntityType int

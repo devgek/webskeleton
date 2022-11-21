@@ -8,7 +8,7 @@ import (
 	"github.com/devgek/webskeleton/config"
 	"github.com/devgek/webskeleton/data"
 	entitymodel "github.com/devgek/webskeleton/entity/model"
-	generated_models "github.com/devgek/webskeleton/models/generated"
+	genmodels "github.com/devgek/webskeleton/models/generated"
 	"github.com/devgek/webskeleton/services"
 	"github.com/devgek/webskeleton/web/app/msg"
 	"github.com/devgek/webskeleton/web/app/template"
@@ -71,7 +71,7 @@ func GetWebEnv() *AppEnv {
 			log.Panic(err)
 		}
 
-		ef := generated_models.EntityFactoryImpl{}
+		ef := genmodels.EntityFactoryImpl{}
 		s := services.NewServices(ef, ds)
 
 		theAppEnv = &AppEnv{

@@ -2,7 +2,7 @@
 	Type EntityFactoryImpl must exist even before first generating models, because they are used
 	in appenv.go and apienv.go
 */
-package generated_models
+package genmodels
 
 import (
 	"errors"

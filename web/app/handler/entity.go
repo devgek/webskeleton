@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/devgek/webskeleton/models"
-	generated_models "github.com/devgek/webskeleton/models/generated"
+	genmodels "github.com/devgek/webskeleton/models/generated"
 	"github.com/devgek/webskeleton/web/app/env"
 	"github.com/devgek/webskeleton/web/app/template"
 	viewmodel2 "github.com/devgek/webskeleton/web/app/viewmodel"
@@ -156,7 +156,7 @@ func HandleEntityNew(c echo.Context) error {
 func HandleOptionListAjax(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
-	entityType := generated_models.ParseEntityType(strings.ToLower(entity))
+	entityType := genmodels.ParseEntityType(strings.ToLower(entity))
 
 	ec := c.(*env.AppEnvContext)
 
