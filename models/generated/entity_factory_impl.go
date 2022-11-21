@@ -1,7 +1,7 @@
 /*
 Package generated_models contains all entities and must also have a struct which implements entitymodel.EntityFactory.
 */
-package generated_models
+package genmodels
 
 import (
 	"errors"

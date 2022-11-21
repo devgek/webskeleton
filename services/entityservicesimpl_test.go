@@ -1,10 +1,12 @@
 package services
 
 import (
+	"testing"
+
 	"github.com/devgek/webskeleton/data"
 	"github.com/devgek/webskeleton/models"
+	genmodels "github.com/devgek/webskeleton/models/generated"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 /*
@@ -12,7 +14,7 @@ import (
  */
 func TestServices_GetEntityOptions(t *testing.T) {
 	mockedDB := data.MockedDatastore{}
-	ef := models.EntityFactoryImpl{}
+	ef := genmodels.EntityFactoryImpl{}
 	services := NewServices(ef, &mockedDB)
 
 	u := []models.User{}
@@ -23,7 +25,7 @@ func TestServices_GetEntityOptions(t *testing.T) {
 	mockedDB.On("GetAllEntities", &u).Return(users)
 
 	// call the code we are testing
-	userOptions, err := services.GetEntityOptions(models.EntityTypeUser)
+	userOptions, err := services.GetEntityOptions(genmodels.EntityTypeUser)
 	assert.Nil(t, err, "No error expected")
 	assert.NotNil(t, userOptions, "Returned options expected")
 	assert.Equal(t, 2, len(userOptions), "Expected 2 user options")
