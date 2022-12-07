@@ -21,7 +21,7 @@ func (et EntityType) Val() string {
 	return [...]string{"undefined"{{TypeEntity4}}}[et]
 }
 
-//ObjectName the value used in html template
+//EntityName the value used in html template
 func (et EntityType) EntityName() string {
 	return [...]string{"Undefined"{{TypeEntity5}}}[et]
 }

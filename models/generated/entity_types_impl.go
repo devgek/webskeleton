@@ -1,11 +1,8 @@
 package genmodels
 
-//
-//EntityType type of entity
-//
+// EntityType type of entity
 type EntityType int
 
-//
 const (
 	EntityTypeUndefined EntityType = iota
 	EntityTypeContact
@@ -13,17 +10,22 @@ const (
 	EntityTypeUser
 )
 
-//EntityTypes ...
+// EntityTypes ...
 func EntityTypes() []EntityType {
 	return []EntityType{EntityTypeUndefined, EntityTypeContact, EntityTypeContactAddress, EntityTypeUser}
 }
 
-//Val the value used in html template
+// Val the value used in html template
 func (et EntityType) Val() string {
 	return [...]string{"undefined", "contact", "contactaddress", "user"}[et]
 }
 
-//ParseEntityType ...
+// EntityName the value used in html template
+func (et EntityType) EntityName() string {
+	return [...]string{"Undefined", "Contact", "ContactAddress", "User"}[et]
+}
+
+// ParseEntityType ...
 func ParseEntityType(s string) EntityType {
 	switch s {
 	case EntityTypeContact.Val():

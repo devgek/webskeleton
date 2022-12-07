@@ -130,7 +130,7 @@ func getGenModels(path string) []genModel {
 				return err
 			}
 			content := string(contentBytes)
-			if strings.Contains(content, "entitymodel.Entity") && strings.Contains(content, "entity:") {
+			if strings.Contains(content, "entitymodel.GormEntity") && strings.Contains(content, "entity:") {
 				from := strings.Index(content, "entity:")
 				sEnd := content[from+8:]
 				to := strings.Index(sEnd, "\"")
