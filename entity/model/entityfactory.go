@@ -1,6 +1,6 @@
 package entitymodel
 
-type DoWithEntityFunc func(EntityOptionBuilder, ...interface{})
+type DoWithEntityFunc func(Entity, ...interface{})
 
 type EntityFactory interface {
 	Get(entityName string) (interface{}, error)

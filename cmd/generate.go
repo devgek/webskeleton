@@ -95,6 +95,7 @@ func generateEntityTypes(models []genModel, templatePath string, modelsPath stri
 	f2 := strings.Builder{}
 	f3 := strings.Builder{}
 	f4 := strings.Builder{}
+	f5 := strings.Builder{}
 	for _, genModel := range models {
 		f1.WriteString("EntityType" + genModel.TypeName + "\n")
 		f2.WriteString(", EntityType" + genModel.TypeName)
@@ -103,12 +104,14 @@ func generateEntityTypes(models []genModel, templatePath string, modelsPath stri
 		f3.WriteString(rt3)
 
 		f4.WriteString(", \"" + genModel.Name + "\"")
+		f5.WriteString(", \"" + genModel.TypeName + "\"")
 	}
 
 	t = strings.ReplaceAll(t, "{{TypeEntity1}}", f1.String())
 	t = strings.ReplaceAll(t, "{{TypeEntity2}}", f2.String())
 	t = strings.ReplaceAll(t, "{{TypeEntity3}}", f3.String())
 	t = strings.ReplaceAll(t, "{{TypeEntity4}}", f4.String())
+	t = strings.ReplaceAll(t, "{{TypeEntity5}}", f5.String())
 
 	typePath := filepath.Join(modelsPath, "entity_types_impl.go")
 	err := ioutil.WriteFile(typePath, []byte(t), os.ModePerm)

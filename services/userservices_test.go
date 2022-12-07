@@ -27,7 +27,7 @@ func init() {
 }
 */
 
-//TestLoginUser test login service with mocking Datastore
+// TestLoginUser test login service with mocking Datastore
 func TestLoginUser(t *testing.T) {
 	// create an instance of the mocked Datastore
 	mockedDB := &data.MockedDatastore{}
@@ -47,7 +47,7 @@ func TestLoginUser(t *testing.T) {
 	mockedDB.AssertExpectations(t)
 }
 
-//TestLoginUserInMemory test login service with inmemory db
+// TestLoginUserInMemory test login service with inmemory db
 func TestLoginUserInMemoryOK(t *testing.T) {
 	inMemoryDS, err := data.NewInMemoryDatastore()
 	services := services.NewServices(genmodels.EntityFactoryImpl{}, inMemoryDS)
@@ -104,7 +104,7 @@ func TestDeleteUser(t *testing.T) {
 
 	user, err := s.CreateUser("Rafa", data.PassSecret, "rafael.nadal@atp.com", types.RoleTypeUser)
 	assert.Nil(t, err, "No error expected")
-	err = s.DS.DeleteEntityByID(user, user.Entity.ID)
+	err = s.DS.DeleteEntityByID(user, user.GormEntity.ID)
 	assert.Nil(t, err, "No error expected")
 }
 

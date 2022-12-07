@@ -15,7 +15,7 @@ var (
 	MessiID            = uint(0)
 )
 
-//NewInMemoryDatastore ...
+// NewInMemoryDatastore ...
 func NewInMemoryDatastore() (Datastore, error) {
 	ds, err := NewDatastore("sqlite3", ":memory:")
 	if err != nil {
@@ -25,10 +25,10 @@ func NewInMemoryDatastore() (Datastore, error) {
 	messi := &models.User{Name: MessiName, Pass: PassSecretEcrypted, Email: MessiEmail}
 	err = ds.CreateEntity(messi)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	MessiID = messi.Entity.ID
+	MessiID = messi.EntityId()
 
 	return ds, nil
 }

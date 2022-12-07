@@ -10,24 +10,24 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 )
 
-//Datastore interface to datastore
+// Datastore interface to datastore
 type Datastore interface {
 	entitydata.EntityDatastore
 	GetUser(name string) (*models.User, error)
 	GetDB() *gorm.DB
 }
 
-//DatastoreImpl the Datastore implementation
+// DatastoreImpl the Datastore implementation
 type DatastoreImpl struct {
-	*entitydata.GormEntityDatastoreImpl
+	*entitydata.GormEntityDatastore
 }
 
-//GetDB ...
+// GetDB ...
 func (ds DatastoreImpl) GetDB() *gorm.DB {
 	return ds.DB
 }
 
-//NewPostgres ...
+// NewPostgres ...
 func NewPostgres() (Datastore, error) {
 	dialectArgs := "host=" + config.DatastoreHost()
 	dialectArgs = dialectArgs + " port=" + config.DatastorePort()
@@ -39,13 +39,13 @@ func NewPostgres() (Datastore, error) {
 	return NewDatastore("postgres", dialectArgs)
 }
 
-//NewSqlite ...
+// NewSqlite ...
 func NewSqlite(dbName string) (Datastore, error) {
 	//?_foreign_keys=1 ... to handle foreign keys with golang
 	return NewDatastore("sqlite3", dbName+"?_foreign_keys=1")
 }
 
-//NewDatastore create datastore DS
+// NewDatastore create datastore DS
 func NewDatastore(driver string, databaseName string) (Datastore, error) {
 	db, err := gorm.Open(driver, databaseName)
 	if err != nil {
@@ -74,5 +74,5 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 
 	err = db.FirstOrCreate(contact, "name = ?", "Mustermann GesmbH").Error
 
-	return &DatastoreImpl{GormEntityDatastoreImpl: &entitydata.GormEntityDatastoreImpl{DB: db}}, err
+	return &DatastoreImpl{GormEntityDatastore: &entitydata.GormEntityDatastore{DB: db}}, err
 }

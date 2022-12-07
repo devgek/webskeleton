@@ -70,7 +70,7 @@ func TestCreateEntity(t *testing.T) {
 
 	assert.Nil(t, err, "No error expected")
 	expectedID := data.MessiID + 1
-	assert.Equal(t, expectedID, roger.ID, "User id not %v", expectedID)
+	assert.Equal(t, expectedID, roger.EntityId(), "User id not %v", expectedID)
 }
 
 func TestSaveEntity(t *testing.T) {

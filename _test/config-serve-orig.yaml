@@ -10,11 +10,11 @@ server:
   cert: cert.pem
   key: key.pem
   port: 8082
-  debug: false
+  debug: true
 datastore:
   system: sqlite3
   db: webskeleton.db
-  log: false
+  log: true
 # datastore:
 #   system: postgres #sqlite3 | postgres
 #   host: localhost

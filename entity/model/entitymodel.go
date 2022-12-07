@@ -7,31 +7,47 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-//Entity ...
-type Entity struct {
-	gorm.Model
+// Entity ...
+type Entity interface {
+	EntityId() uint
+	EntityName() string
+	EntityOption() dto.EntityOption
 }
 
-//EntityHolder struct that holds entities
+// EntityHolder struct that holds entities
 type EntityHolder interface {
 	LoadRelated(db *gorm.DB) error
 }
 
-//EntityOptionBuilder struct that can build entity options
+// EntityOptionBuilder struct that can build entity options
 type EntityOptionBuilder interface {
 	BuildEntityOption() dto.EntityOption
 }
 
-//LoadRelatedEntities implement this method in concrete entity
-func (e *Entity) LoadRelatedEntities(db *gorm.DB) error {
+type GormEntity struct {
+	gorm.Model
+}
+
+// LoadRelatedEntities implement this method in concrete entity
+func (e *GormEntity) LoadRelatedEntities(db *gorm.DB) error {
 	return nil
 }
 
-//BuildEntityOption ...
-func (e Entity) BuildEntityOption() dto.EntityOption {
+// EntityId
+func (e GormEntity) EntityId() uint {
+	return e.ID
+}
+
+// EntityName
+func (e GormEntity) EntityName() string {
+	return "GormEntity" + strconv.Itoa(int(e.ID))
+}
+
+// EntityOption ...
+func (e GormEntity) EntityOption() dto.EntityOption {
 	o := dto.EntityOption{}
 	o.ID = e.ID
-	o.Value = "Entity with ID " + strconv.Itoa(int(e.ID))
+	o.Value = e.EntityName()
 
 	return o
 }
@@ -40,7 +56,7 @@ func (e Entity) BuildEntityOption() dto.EntityOption {
 /*
 	Creates a new entity option and adds it to the given entityOptionList
 */
-func AddNewEntityOption(builder EntityOptionBuilder, params ...interface{}) {
-	option := builder.BuildEntityOption()
+func AddNewEntityOption(entity Entity, params ...interface{}) {
+	option := entity.EntityOption()
 	*(params[0].(*[]dto.EntityOption)) = append(*(params[0].(*[]dto.EntityOption)), option)
 }
