@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-//InitEchoWebApp initialize the echo web framework for serving a web application
+// InitEchoWebApp initialize the echo web framework for serving a web application
 func InitEchoWebApp(appEnv *env.AppEnv) *echo.Echo {
 	e := echo.New()
 	e.HideBanner = true
@@ -23,7 +23,7 @@ func InitEchoWebApp(appEnv *env.AppEnv) *echo.Echo {
 
 	// resoure files
 	assetHandler := http.FileServer(appEnv.Assets)
-	e.GET(env.AssetHandlerPattern, apphandler.AssetHandlerFunc(http.StripPrefix(env.AssetPattern, assetHandler)))
+	e.GET(env.AssetHandlerPattern, apphandler.AssetHandlerFunc(assetHandler))
 	//
 	e.GET("/health", apphandler.HandleHealth)
 
