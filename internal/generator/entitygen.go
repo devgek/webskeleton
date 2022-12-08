@@ -1,12 +1,31 @@
 package generator
 
 import (
+	_ "embed"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 )
+
+//go:embed entity_templates/factory_entity.template
+var feTemplate string
+
+//go:embed entity_templates/factory_entity_1.template
+var feTemplate1 string
+
+//go:embed entity_templates/factory_entity_2.template
+var feTemplate2 string
+
+//go:embed entity_templates/factory_entity_3.template
+var feTemplate3 string
+
+//go:embed entity_templates/type_entity.template
+var teTemplate string
+
+//go:embed entity_templates/type_entity_3.template
+var teTemplate3 string
 
 type genModel struct {
 	TypeName string
@@ -27,10 +46,10 @@ func (eg EntityGenerator) Do(modelsPath string, genPath string, templatePath str
 }
 
 func generateEntityFactory(models []genModel, templatePath string, modelsPath string) {
-	t := readStringTemplate(templatePath, "factory_entity.template")
-	t1 := readStringTemplate(templatePath, "factory_entity_1.template")
-	t2 := readStringTemplate(templatePath, "factory_entity_2.template")
-	t3 := readStringTemplate(templatePath, "factory_entity_3.template")
+	t := feTemplate
+	t1 := feTemplate1
+	t2 := feTemplate2
+	t3 := feTemplate3
 
 	f1 := strings.Builder{}
 	f2 := strings.Builder{}
@@ -57,8 +76,8 @@ func generateEntityFactory(models []genModel, templatePath string, modelsPath st
 }
 
 func generateEntityTypes(models []genModel, templatePath string, modelsPath string) {
-	t := readStringTemplate(templatePath, "type_entity.template")
-	t3 := readStringTemplate(templatePath, "type_entity_3.template")
+	t := teTemplate
+	t3 := teTemplate3
 
 	f1 := strings.Builder{}
 	f2 := strings.Builder{}
@@ -125,14 +144,4 @@ func getGenModels(path string) []genModel {
 	}
 
 	return genModels
-}
-
-func readStringTemplate(templatePath string, templateName string) string {
-	filename := filepath.Join(templatePath, templateName)
-	contentBytes, err := ioutil.ReadFile(filename)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return string(contentBytes)
 }

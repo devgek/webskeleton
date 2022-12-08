@@ -1,6 +1,6 @@
 module github.com/devgek/webskeleton
 
-go 1.15
+go 1.16
 
 require (
 	github.com/gobuffalo/logger v1.0.4 // indirect
