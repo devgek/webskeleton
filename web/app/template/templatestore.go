@@ -1,36 +1,38 @@
 package template
 
 import (
+	"embed"
+	"io/fs"
 	"strings"
 	"sync"
 	"text/template"
 
 	"github.com/devgek/webskeleton/config"
-	"github.com/gobuffalo/packr/v2"
 )
 
-//TemplateRoot rootdir for template files
-// var TemplateRoot = "./web/templates/"
+//go:embed templates/*.html
+var templateDir embed.FS
+var baseDir = "templates/"
 
-//TStore ...
+// TStore ...
 type TStore interface {
 	GetTemplate(name string) (*template.Template, error)
 }
 
-// BoxBasedTemplateStore ...
-type BoxBasedTemplateStore struct {
+// FSBasedTemplateStore ...
+type FSBasedTemplateStore struct {
 	sync.Mutex
-	Box       *packr.Box
-	templates map[string]*template.Template
+	templateDir embed.FS
+	templates   map[string]*template.Template
 }
 
-//NewBoxBasedTemplateStore ...
-func NewBoxBasedTemplateStore(box *packr.Box) TStore {
-	return &BoxBasedTemplateStore{Box: box, templates: map[string]*template.Template{}}
+// NewFSBasedTemplateStore ...
+func NewFSBasedTemplateStore() TStore {
+	return &FSBasedTemplateStore{templateDir: templateDir, templates: map[string]*template.Template{}}
 }
 
-//GetTemplate ...
-func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) (*template.Template, error) {
+// GetTemplate ...
+func (ts *FSBasedTemplateStore) GetTemplate(fileName string) (*template.Template, error) {
 	ts.Lock()
 	defer ts.Unlock()
 
@@ -44,11 +46,11 @@ func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) (*template.Templat
 
 	switch {
 	case fileName == "login":
-		templ, err = parsePacked(ts.Box, fileName+".html")
+		templ, err = parseEmbedded(ts.templateDir, templateName(fileName))
 	case strings.Contains(fileName, "page"):
-		templ, err = parsePacked(ts.Box, "layout.html", fileName+".html")
+		templ, err = parseEmbedded(ts.templateDir, templateName("layout"), templateName(fileName))
 	default:
-		templ, err = parsePacked(ts.Box, "layout.html", fileName+".html", fileName+"-edit.html", "confirm-delete.html")
+		templ, err = parseEmbedded(ts.templateDir, templateName("layout"), templateName(fileName), templateName(fileName+"-edit"), templateName("confirm-delete"))
 	}
 
 	if err == nil {
@@ -58,16 +60,21 @@ func (ts *BoxBasedTemplateStore) GetTemplate(fileName string) (*template.Templat
 	return templ, err
 }
 
-// ParsePacked parses html templates from packr box
+func templateName(template string) string {
+	return baseDir + template + ".html"
+}
+
+// ParseEmbedded parses html templates from embedded Filesystem
 // template is nil, it is created from the first file.
-func parsePacked(box *packr.Box, filenames ...string) (*template.Template, error) {
+func parseEmbedded(templateDir embed.FS, filenames ...string) (*template.Template, error) {
 	var t *template.Template
 
 	for _, filename := range filenames {
-		s, err := box.FindString(filename)
+		b, err := fs.ReadFile(templateDir, filename)
 		if err != nil {
 			return nil, err
 		}
+		s := string(b)
 		name := filename
 		// First template becomes return value if not already defined,
 		// and we use that one for subsequent New calls to associate

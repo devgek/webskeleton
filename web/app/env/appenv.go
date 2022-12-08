@@ -14,7 +14,6 @@ import (
 	"github.com/devgek/webskeleton/services"
 	"github.com/devgek/webskeleton/web/app/msg"
 	"github.com/devgek/webskeleton/web/app/template"
-	"github.com/gobuffalo/packr/v2"
 )
 
 // AppEnv the environment
@@ -23,7 +22,6 @@ type AppEnv struct {
 	EF             entitymodel.EntityFactory
 	Services       *services.Services
 	TStore         template.TStore
-	Templates      *packr.Box
 	Assets         http.FileSystem
 	MessageLocator *msg.MessageLocator
 }
@@ -48,12 +46,8 @@ func GetAppEnv() *AppEnv {
 // GetWebEnv return new initialized environment
 func GetWebEnv() *AppEnv {
 	once.Do(func() {
-		// ../templates important for packr2 to find files
-		originalTemplateBox := packr.New("templates", "../templates")
-		// templateBox := packrfix.New(origninalTemplateBox)
-
 		//init TStore
-		tStore := template.NewBoxBasedTemplateStore(originalTemplateBox)
+		tStore := template.NewFSBasedTemplateStore()
 
 		//load messages
 		ml := msg.NewMessageLocator(messages)
@@ -79,7 +73,6 @@ func GetWebEnv() *AppEnv {
 			EF:             &ef,
 			Services:       s,
 			TStore:         tStore,
-			Templates:      originalTemplateBox,
 			Assets:         http.FS(assets),
 			MessageLocator: ml,
 		}
