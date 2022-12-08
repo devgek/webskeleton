@@ -20,7 +20,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-//HandleAPIHealth ...
+// HandleAPIHealth ...
 func HandleAPIHealth(c echo.Context) error {
 	vd := make(map[string]interface{})
 	vd["Host"] = c.Request().Host
@@ -40,7 +40,7 @@ type jwtCustomClaims struct {
 	jwt.StandardClaims
 }
 
-//HandleAPILogin handles login to api and returns a JWT token
+// HandleAPILogin handles login to api and returns a JWT token
 func HandleAPILogin(c echo.Context) error {
 	log.Println("HandleApiLogin")
 	//do the login
@@ -85,7 +85,7 @@ func HandleAPILogin(c echo.Context) error {
 	})
 }
 
-//HandleAPICreateEntity ...
+// HandleAPICreateEntity ...
 func HandleAPICreateEntity(c echo.Context) error {
 	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
@@ -112,7 +112,7 @@ func HandleAPICreateEntity(c echo.Context) error {
 	return c.JSON(http.StatusInternalServerError, apiError)
 }
 
-//HandleAPICreateAll ...
+// HandleAPICreateAll ...
 func HandleAPICreateAll(c echo.Context) error {
 	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
@@ -139,7 +139,7 @@ errorReturn:
 	return c.JSON(http.StatusInternalServerError, apiError)
 }
 
-//HandleAPIUpdateEntity ...
+// HandleAPIUpdateEntity ...
 func HandleAPIUpdateEntity(c echo.Context) error {
 	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
@@ -159,7 +159,7 @@ func HandleAPIUpdateEntity(c echo.Context) error {
 	return c.JSON(http.StatusInternalServerError, apiError)
 }
 
-//HandleAPIDeleteEntity ...
+// HandleAPIDeleteEntity ...
 func HandleAPIDeleteEntity(c echo.Context) error {
 	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
@@ -180,9 +180,9 @@ func HandleAPIDeleteEntity(c echo.Context) error {
 	return c.JSON(http.StatusInternalServerError, apiError)
 }
 
-//HandleAPIOptionList ...
+// HandleAPIOptionList ...
 func HandleAPIOptionList(c echo.Context) error {
-	//show entity list
+	//show option list
 	entity := c.Param("entity")
 	entityType := genmodels.ParseEntityType(strings.ToLower(entity))
 
@@ -198,7 +198,7 @@ func HandleAPIOptionList(c echo.Context) error {
 	return c.JSON(http.StatusInternalServerError, apiError)
 }
 
-//HandleAPIEntityList ...
+// HandleAPIEntityList ...
 func HandleAPIEntityList(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
