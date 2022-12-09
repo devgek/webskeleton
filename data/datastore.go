@@ -6,8 +6,10 @@ import (
 	"github.com/devgek/webskeleton/helper/password"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/types"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
+	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
+	_ "gorm.io/driver/sqlite" // gorm for sqlite3
+	"gorm.io/gorm"
 )
 
 // Datastore interface to datastore
@@ -36,25 +38,29 @@ func NewPostgres() (Datastore, error) {
 	dialectArgs = dialectArgs + " dbname=" + config.DatastoreDb()
 	dialectArgs = dialectArgs + " sslmode=disable"
 
-	return NewDatastore("postgres", dialectArgs)
+	db, err := gorm.Open(postgres.Open(dialectArgs), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+
+	return initNewDatastore(db)
 }
 
 // NewSqlite ...
 func NewSqlite(dbName string) (Datastore, error) {
 	//?_foreign_keys=1 ... to handle foreign keys with golang
-	return NewDatastore("sqlite3", dbName+"?_foreign_keys=1")
-}
-
-// NewDatastore create datastore DS
-func NewDatastore(driver string, databaseName string) (Datastore, error) {
-	db, err := gorm.Open(driver, databaseName)
+	db, err := gorm.Open(sqlite.Open(dbName+"?_foreign_keys=1"), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
+	return initNewDatastore(db)
+}
 
+// Initialize new datastore with some initial data records
+func initNewDatastore(db *gorm.DB) (Datastore, error) {
 	if config.IsDatastoreLog() {
 		//log gorm db statements
-		db.LogMode(true)
+		db.Debug()
 	}
 
 	db.AutoMigrate(&models.User{})
@@ -64,7 +70,7 @@ func NewDatastore(driver string, databaseName string) (Datastore, error) {
 	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com", Role: types.RoleTypeAdmin}
 
 	// err = db.FirstOrCreate(admin, &models.User{Name: "admin"}).Error
-	err = db.FirstOrCreate(admin, "name = ?", "admin").Error
+	err := db.FirstOrCreate(admin, "name = ?", "admin").Error
 	if err != nil {
 		return nil, err
 	}

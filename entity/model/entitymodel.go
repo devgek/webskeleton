@@ -4,7 +4,7 @@ import (
 	"github.com/devgek/webskeleton/entity/dto"
 	"strconv"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // Entity ...

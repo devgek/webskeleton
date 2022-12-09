@@ -5,7 +5,7 @@ import (
 	entitymodel "github.com/devgek/webskeleton/entity/model"
 
 	"github.com/devgek/webskeleton/models"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 var (
@@ -21,7 +21,8 @@ type GormEntityDatastore struct {
 // GetOneEntityBy select * from table where key = value
 func (ds *GormEntityDatastore) GetOneEntityBy(entity interface{}, key string, val interface{}) error {
 	if err := ds.Where(key+" = ?", val).First(entity).Error; err != nil {
-		if gorm.IsRecordNotFoundError(err) {
+
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrorEntityNotFountBy
 		}
 

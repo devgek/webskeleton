@@ -13,9 +13,9 @@ import (
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/services"
 	"github.com/devgek/webskeleton/types"
-	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	_ "gorm.io/driver/sqlite" // gorm for sqlite3
 )
 
 /*

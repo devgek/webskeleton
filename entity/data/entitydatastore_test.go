@@ -7,9 +7,9 @@ import (
 	"github.com/devgek/webskeleton/data"
 	"github.com/devgek/webskeleton/models"
 	"github.com/devgek/webskeleton/types"
-	_ "github.com/jinzhu/gorm/dialects/sqlite" // gorm for sqlite3
 	. "github.com/smartystreets/goconvey/convey"
 	"github.com/stretchr/testify/assert"
+	_ "gorm.io/driver/sqlite" // gorm for sqlite3
 )
 
 func TestGormEntityDatastoreImpl_GetOneEntityBy(t *testing.T) {

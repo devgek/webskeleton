@@ -59,7 +59,7 @@ form:
     btn:
       login: "Anmelden"
   page1:
-    header: "Seite 1"
+    header: "Seite 1(Allgemeine Testseite)"
     content: "Das ist der Inhalt von Seite 1"
     label:
       contacttype: "Kontakttyp:"

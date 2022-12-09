@@ -2,49 +2,49 @@ package data
 
 import (
 	"github.com/devgek/webskeleton/models"
-	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/mock"
+	"gorm.io/gorm"
 )
 
-//MockedDatastore ...
+// MockedDatastore ...
 type MockedDatastore struct {
 	mock.Mock
 }
 
-//GetDB ...
+// GetDB ...
 func (m *MockedDatastore) GetDB() *gorm.DB {
 	return nil
 }
 
-//GetUser ...
+// GetUser ...
 func (m *MockedDatastore) GetUser(username string) (*models.User, error) {
 
 	args := m.Called(username)
 	return args.Get(0).(*models.User), args.Error(1)
 }
 
-//CreateEntity ...
+// CreateEntity ...
 func (m *MockedDatastore) CreateEntity(entity interface{}) error {
 	args := m.Called(entity)
 
 	return args.Error(0)
 }
 
-//SaveEntity ...
+// SaveEntity ...
 func (m *MockedDatastore) SaveEntity(entity interface{}) error {
 	args := m.Called(entity)
 
 	return args.Error(0)
 }
 
-//DeleteEntityByID ...
+// DeleteEntityByID ...
 func (m *MockedDatastore) DeleteEntityByID(entity interface{}, id uint) error {
 
 	args := m.Called(entity, id)
 	return args.Error(0)
 }
 
-//GetAllEntities ...
+// GetAllEntities ...
 func (m *MockedDatastore) GetAllEntities(entitySlice interface{}) error {
 	args := m.Called(entitySlice)
 
@@ -60,14 +60,14 @@ func (m *MockedDatastore) GetAllEntities(entitySlice interface{}) error {
 	return nil
 }
 
-//GetOneEntityBy ...
+// GetOneEntityBy ...
 func (m *MockedDatastore) GetOneEntityBy(entity interface{}, key string, val interface{}) error {
 	args := m.Called(entity, key, val)
 
 	return args.Error(0)
 }
 
-//GetEntityByID ...
+// GetEntityByID ...
 func (m *MockedDatastore) GetEntityByID(entity interface{}, id uint) error {
 	args := m.Called(entity, id)
 

@@ -17,7 +17,7 @@ var (
 
 // NewInMemoryDatastore ...
 func NewInMemoryDatastore() (Datastore, error) {
-	ds, err := NewDatastore("sqlite3", ":memory:")
+	ds, err := NewSqlite(":memory:")
 	if err != nil {
 		return nil, err
 	}

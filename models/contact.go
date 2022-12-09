@@ -4,7 +4,7 @@ import (
 	"github.com/devgek/webskeleton/entity/dto"
 	entitymodel "github.com/devgek/webskeleton/entity/model"
 	"github.com/devgek/webskeleton/types"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // Contact ...
@@ -29,7 +29,7 @@ func (c Contact) EntityOption() dto.EntityOption {
 // LoadRelated load related entities (implements EntityHolder)
 func (c *Contact) LoadRelated(db *gorm.DB) error {
 	c.ContactAddresses = []ContactAddress{}
-	db.Model(c).Related(&c.ContactAddresses)
-
+	//db.Model(c).Related(&c.ContactAddresses)
+	db.Model(c).Preload("ContactAddresses")
 	return nil
 }

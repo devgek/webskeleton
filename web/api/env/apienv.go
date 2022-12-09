@@ -9,11 +9,11 @@ import (
 	entitymodel "github.com/devgek/webskeleton/entity/model"
 	genmodels "github.com/devgek/webskeleton/models/generated"
 	"github.com/devgek/webskeleton/services"
-	_ "github.com/jinzhu/gorm/dialects/postgres" // gorm for postgres
-	_ "github.com/jinzhu/gorm/dialects/sqlite"   // gorm for sqlite3
+	_ "gorm.io/driver/postgres" // gorm for postgres
+	_ "gorm.io/driver/sqlite"   // gorm for sqlite3
 )
 
-//ApiEnv the environment
+// ApiEnv the environment
 type ApiEnv struct {
 	DS       data.Datastore
 	EF       entitymodel.EntityFactory
@@ -22,14 +22,14 @@ type ApiEnv struct {
 
 var once sync.Once
 
-//theEnv singleton instance for the app env
+// theEnv singleton instance for the app env
 var theApiEnv *ApiEnv
 
 func GetEnv() *ApiEnv {
 	return theApiEnv
 }
 
-//GetApiEnv return new initialized environment for serving api
+// GetApiEnv return new initialized environment for serving api
 func GetApiEnv(isTest bool) *ApiEnv {
 	once.Do(func() {
 		//here we create the datastore
