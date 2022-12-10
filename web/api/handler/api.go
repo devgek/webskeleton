@@ -90,7 +90,7 @@ func HandleAPICreateEntity(c echo.Context) error {
 	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
 
-	oEntityObject, origError := ec.ApiEnv.EF.Get(entity)
+	oEntityObject, origError := ec.ApiEnv.EF.GetEntity(entity)
 	if origError == nil {
 		origError = c.Bind(oEntityObject)
 		if origError == nil {
@@ -116,7 +116,7 @@ func HandleAPICreateEntity(c echo.Context) error {
 func HandleAPICreateAll(c echo.Context) error {
 	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
-	oEntityObjects, origError := ec.ApiEnv.EF.GetSlice(entity)
+	oEntityObjects, origError := ec.ApiEnv.EF.GetEntitySlice(entity)
 	if origError == nil {
 		origError = c.Bind(oEntityObjects)
 		if origError == nil {
@@ -143,7 +143,7 @@ errorReturn:
 func HandleAPIUpdateEntity(c echo.Context) error {
 	ec := c.(*env.ApiEnvContext)
 	entity := ec.Param("entity")
-	oEntityObject, origError := ec.ApiEnv.EF.Get(entity)
+	oEntityObject, origError := ec.ApiEnv.EF.GetEntity(entity)
 	if origError == nil {
 		origError = c.Bind(oEntityObject)
 		if origError == nil {
@@ -166,7 +166,7 @@ func HandleAPIDeleteEntity(c echo.Context) error {
 	id := ec.Param("id")
 	ioID, origError := strconv.Atoi(id)
 	if origError == nil {
-		entityModel, origError := ec.ApiEnv.EF.Get(entity)
+		entityModel, origError := ec.ApiEnv.EF.GetEntity(entity)
 		if origError == nil {
 			origError = ec.ApiEnv.DS.DeleteEntityByID(entityModel, uint(ioID))
 			if origError == nil {
@@ -201,13 +201,17 @@ func HandleAPIOptionList(c echo.Context) error {
 // HandleAPIEntityList ...
 func HandleAPIEntityList(c echo.Context) error {
 	//show entity list
-	entity := c.Param("entity")
+	entityName := c.Param("entity")
 
 	ec := c.(*env.ApiEnvContext)
-	entities, origError := ec.ApiEnv.EF.GetSlice(entity)
+	entities, origError := ec.ApiEnv.EF.GetEntitySlice(entityName)
 
+	if origError != nil {
+		return origError
+	}
+	entity, origError := ec.ApiEnv.EF.GetEntity(entityName)
 	if origError == nil {
-		origError = ec.ApiEnv.DS.GetAllEntities(entities)
+		origError = ec.ApiEnv.DS.GetAllEntities(entity, entities)
 		if origError == nil {
 			return c.JSON(http.StatusOK, apipayload.APISuccessPayload{Data: entities})
 		}

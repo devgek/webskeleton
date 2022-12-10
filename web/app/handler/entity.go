@@ -17,26 +17,30 @@ import (
 //HandleEntityList ...
 func HandleEntityList(c echo.Context) error {
 	//show entity list
-	entity := c.Param("entity")
+	entityName := c.Param("entity")
 
 	ec := c.(*env.AppEnvContext)
-	entities, err := ec.Env.EF.GetSlice(entity)
+	entities, err := ec.Env.EF.GetEntitySlice(entityName)
+	if err != nil {
+		return err
+	}
+	entity, err := ec.Env.EF.GetEntity(entityName)
 	if err != nil {
 		return err
 	}
 
-	err = ec.Env.DS.GetAllEntities(entities)
+	err = ec.Env.DS.GetAllEntities(entity, entities)
 
 	viewData := template.NewTemplateDataWithRequestData(ec.RequestData())
 	viewData["Entities"] = entities
-	viewData["EditEntityType"] = ec.Env.MessageLocator.GetString("entity." + entity)
+	viewData["EditEntityType"] = ec.Env.MessageLocator.GetString("entity." + entityName)
 	if entity == "consumptiongroup" {
 		viewData["EmbeddedEntityType"] = ec.Env.MessageLocator.GetString("entity." + "energymetermapping")
 	}
 	if err != nil {
 		viewData["ErrorMessage"] = err.Error()
 	}
-	return c.Render(http.StatusOK, entity, viewData)
+	return c.Render(http.StatusOK, entityName, viewData)
 }
 
 //HandleEntityDelete ...
@@ -49,7 +53,7 @@ func HandleEntityDelete(c echo.Context) error {
 	oID := c.FormValue("gkvObjId")
 	ioID, _ := strconv.Atoi(oID)
 
-	entityModel, err := ec.Env.EF.Get(entity)
+	entityModel, err := ec.Env.EF.GetEntity(entity)
 	if err != nil {
 		return err
 	}
@@ -74,7 +78,7 @@ func HandleEntityEdit(c echo.Context) error {
 
 	ec := c.(*env.AppEnvContext)
 	entity := ec.Param("entity")
-	oEntityObject, err := ec.Env.EF.Get(entity)
+	oEntityObject, err := ec.Env.EF.GetEntity(entity)
 	if err != nil {
 		return err
 	}
@@ -109,7 +113,7 @@ func HandleEntityNew(c echo.Context) error {
 	ec := c.(*env.AppEnvContext)
 	entity := ec.Param("entity")
 
-	oEntityObject, err := ec.Env.EF.Get(entity)
+	oEntityObject, err := ec.Env.EF.GetEntity(entity)
 	if err != nil {
 		return err
 	}
@@ -180,24 +184,28 @@ func HandleOptionListAjax(c echo.Context) error {
 //HandleEntityListAjax ...
 func HandleEntityListAjax(c echo.Context) error {
 	//show entity list
-	entity := c.Param("entity")
+	entityName := c.Param("entity")
 
 	ec := c.(*env.AppEnvContext)
-	entities, err := ec.Env.EF.GetSlice(entity)
+	entities, err := ec.Env.EF.GetEntitySlice(entityName)
+	if err != nil {
+		return err
+	}
+	entity, err := ec.Env.EF.GetEntity(entityName)
 	if err != nil {
 		return err
 	}
 
 	entityResponse := viewmodel2.NewEntityResponse(entities)
-	entityName := ec.Env.MessageLocator.GetString("entity." + entity)
+	entityDesc := ec.Env.MessageLocator.GetString("entity." + entityName)
 
-	err = ec.Env.DS.GetAllEntities(entities)
+	err = ec.Env.DS.GetAllEntities(entity, entities)
 
 	if err != nil {
 		entityResponse.IsError = true
-		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.error.entity.list", entityName)
+		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.error.entity.list", entityDesc)
 	} else {
-		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.success.entity.list", entityName)
+		entityResponse.Message = ec.Env.MessageLocator.GetMessageF("msg.success.entity.list", entityDesc)
 	}
 
 	//on client entityResponse is received as javascript object, no JSON.parse is needed

@@ -13,6 +13,9 @@ var (
 	MessiEmail         = "lionel.messi@fcb.com"
 	MessiEmail2        = "lm@barcelona.es"
 	MessiID            = uint(0)
+	MustermannName     = "Mustermann GesmbH"
+	MustermannID       = uint(1)
+	MustermannStreet   = "Short Street"
 )
 
 // NewInMemoryDatastore ...
@@ -28,7 +31,7 @@ func NewInMemoryDatastore() (Datastore, error) {
 		return nil, err
 	}
 
-	MessiID = messi.EntityId()
+	MessiID = messi.EntityID()
 
 	return ds, nil
 }

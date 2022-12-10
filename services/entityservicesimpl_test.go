@@ -17,12 +17,13 @@ func TestServices_GetEntityOptions(t *testing.T) {
 	ef := genmodels.EntityFactoryImpl{}
 	services := NewServices(ef, &mockedDB)
 
-	u := []models.User{}
+	u := models.User{}
+	us := []models.User{}
 	users := []models.User{}
 	users = append(users, models.User{Name: "Maxi", Pass: "xyz", Email: "maxi@test.at", Role: 0})
 	users = append(users, models.User{Name: "Franzi", Pass: "xyz", Email: "franzi@test.at", Role: 0})
 	// setup expectations
-	mockedDB.On("GetAllEntities", &u).Return(users)
+	mockedDB.On("GetAllEntities", &u, &us).Return(users)
 
 	// call the code we are testing
 	userOptions, err := services.GetEntityOptions(genmodels.EntityTypeUser)

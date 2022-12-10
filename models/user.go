@@ -18,7 +18,7 @@ type User struct {
 // EntityOption ...
 func (u User) EntityOption() dto.EntityOption {
 	o := dto.EntityOption{}
-	o.ID = u.GormEntity.EntityId()
+	o.ID = u.GormEntity.EntityID()
 	o.Value = u.Name + ":" + u.Email
 
 	return o

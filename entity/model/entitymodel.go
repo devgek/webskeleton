@@ -1,17 +1,19 @@
 package entitymodel
 
 import (
-	"github.com/devgek/webskeleton/entity/dto"
 	"strconv"
+
+	"github.com/devgek/webskeleton/entity/dto"
 
 	"gorm.io/gorm"
 )
 
 // Entity ...
 type Entity interface {
-	EntityId() uint
+	EntityID() uint
 	EntityName() string
 	EntityOption() dto.EntityOption
+	MustEmbed() []string
 }
 
 // EntityHolder struct that holds entities
@@ -33,12 +35,12 @@ func (e *GormEntity) LoadRelatedEntities(db *gorm.DB) error {
 	return nil
 }
 
-// EntityId
-func (e GormEntity) EntityId() uint {
+// EntityID the ID of the entity
+func (e GormEntity) EntityID() uint {
 	return e.ID
 }
 
-// EntityName
+// EntityName the name of the entity
 func (e GormEntity) EntityName() string {
 	return "GormEntity" + strconv.Itoa(int(e.ID))
 }
@@ -50,6 +52,10 @@ func (e GormEntity) EntityOption() dto.EntityOption {
 	o.Value = e.EntityName()
 
 	return o
+}
+
+func (e GormEntity) MustEmbed() []string {
+	return []string{}
 }
 
 //AddNewEntityOption

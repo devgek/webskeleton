@@ -45,8 +45,8 @@ func (m *MockedDatastore) DeleteEntityByID(entity interface{}, id uint) error {
 }
 
 // GetAllEntities ...
-func (m *MockedDatastore) GetAllEntities(entitySlice interface{}) error {
-	args := m.Called(entitySlice)
+func (m *MockedDatastore) GetAllEntities(entity interface{}, entitySlice interface{}) error {
+	args := m.Called(entity, entitySlice)
 
 	switch entitySlice.(type) {
 	case *[]models.User:

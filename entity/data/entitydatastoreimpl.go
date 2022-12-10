@@ -2,9 +2,8 @@ package entitydata
 
 import (
 	"errors"
-	entitymodel "github.com/devgek/webskeleton/entity/model"
 
-	"github.com/devgek/webskeleton/models"
+	entitymodel "github.com/devgek/webskeleton/entity/model"
 	"gorm.io/gorm"
 )
 
@@ -18,9 +17,14 @@ type GormEntityDatastore struct {
 	*gorm.DB
 }
 
+func NewGormEntityDatastore(db *gorm.DB) *GormEntityDatastore {
+	return &GormEntityDatastore{db}
+}
+
 // GetOneEntityBy select * from table where key = value
 func (ds *GormEntityDatastore) GetOneEntityBy(entity interface{}, key string, val interface{}) error {
-	if err := ds.Where(key+" = ?", val).First(entity).Error; err != nil {
+	db := ds.LoadRelatedEntities(entity)
+	if err := db.Where(key+" = ?", val).First(entity).Error; err != nil {
 
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrorEntityNotFountBy
@@ -29,71 +33,25 @@ func (ds *GormEntityDatastore) GetOneEntityBy(entity interface{}, key string, va
 		return err
 	}
 
-	return ds.LoadRelatedEntities(entity)
+	return nil
 }
 
 // GetEntityByID ...
 func (ds *GormEntityDatastore) GetEntityByID(entity interface{}, id uint) error {
-	if err := ds.First(entity, id).Error; err != nil {
+	db := ds.LoadRelatedEntities(entity)
+	if err := db.First(entity, id).Error; err != nil {
 		return err
 	}
 
-	return ds.LoadRelatedEntities(entity)
+	return nil
 }
 
 // GetAllEntities select * from table
-func (ds *GormEntityDatastore) GetAllEntities(entitySlice interface{}) error {
-	if err := ds.Order("id").Find(entitySlice).Error; err != nil {
+func (ds *GormEntityDatastore) GetAllEntities(entity interface{}, entitySlice interface{}) error {
+	db := ds.LoadRelatedEntities(entity)
+	if err := db.Order("id").Find(entitySlice).Error; err != nil {
 		return err
 	}
-
-	switch entityType := entitySlice.(type) {
-	case *[]models.User:
-		for idx := range *entityType {
-			ds.LoadRelatedEntities(&((*entityType)[idx]))
-		}
-	case *[]models.Contact:
-		for idx := range *entityType {
-			ds.LoadRelatedEntities(&((*entityType)[idx]))
-		}
-	}
-
-	/*
-		es := entitySlice.(*[]models.ConsumptionGroup)
-		//Attention!! use index instead of value because range makes a copy of the value
-		for idx := range *es {
-			ds.LoadRelated(&((*es)[idx]))
-		}
-
-					if reflect.TypeOf(entitySlice).Kind() == reflect.Ptr {
-					s := reflect.Indirect(reflect.ValueOf(entitySlice))
-
-					if s.Kind() == reflect.Slice {
-						for i := 0; i < s.Len(); i++ {
-							valPtr := s.Index(i)
-							val := reflect.Indirect(valPtr)
-							if err := ds.LoadRelated(&val); err != nil {
-								return err
-							}
-						}
-					}
-
-				}
-
-			if reflect.TypeOf(entitySlice).Kind() == reflect.Ptr {
-				s := reflect.Indirect(reflect.ValueOf(entitySlice))
-
-				if s.Kind() == reflect.Slice {
-					for i := 0; i < s.Len(); i++ {
-						valPtr := s.Index(i)
-						val := reflect.Indirect(valPtr)
-						t := val.Interface().(models.EntityHolder)
-						ds.LoadRelated(t)
-					}
-				}
-
-			}
-	*/
 
 	return nil
 }
@@ -104,7 +62,7 @@ func (ds *GormEntityDatastore) CreateEntity(entity interface{}) error {
 	if err := ds.Create(entity).Error; err != nil {
 		return err
 	}
-	return ds.LoadRelatedEntities(entity)
+	return nil
 }
 
 // SaveEntity update entity table
@@ -113,7 +71,7 @@ func (ds *GormEntityDatastore) SaveEntity(entity interface{}) error {
 	if err := ds.Save(entity).Error; err != nil {
 		return err
 	}
-	return ds.LoadRelatedEntities(entity)
+	return nil
 }
 
 // DeleteEntityByID delete entity by id (primary key)
@@ -134,12 +92,16 @@ func (ds *GormEntityDatastore) DeleteEntityByID(entity interface{}, id uint) err
 }
 
 // LoadRelatedEntities load embedded entities
-func (ds *GormEntityDatastore) LoadRelatedEntities(i interface{}) error {
-	if val, ok := i.(entitymodel.EntityHolder); ok {
+func (ds *GormEntityDatastore) LoadRelatedEntities(i interface{}) *gorm.DB {
+	db := ds.DB
+	if val, ok := i.(entitymodel.Entity); ok {
 		if val != nil {
-			return val.LoadRelated(ds.DB)
+			embeds := val.MustEmbed()
+			for _, embed := range embeds {
+				db = ds.Preload(embed)
+			}
 		}
 	}
 
-	return nil
+	return db
 }

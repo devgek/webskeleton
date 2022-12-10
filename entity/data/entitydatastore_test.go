@@ -1,8 +1,9 @@
 package entitydata_test
 
 import (
-	entitydata "github.com/devgek/webskeleton/entity/data"
 	"testing"
+
+	entitydata "github.com/devgek/webskeleton/entity/data"
 
 	"github.com/devgek/webskeleton/data"
 	"github.com/devgek/webskeleton/models"
@@ -43,11 +44,26 @@ func TestGetOneEntityBy(t *testing.T) {
 	assert.Equal(t, entitydata.ErrorEntityNotFountBy, err, "ErrorEntityNotFoundBy expected")
 }
 
+func TestGetOneEntityByWithEmbedded(t *testing.T) {
+	inMemoryDS, err := data.NewInMemoryDatastore()
+
+	var contact = models.Contact{}
+	err = inMemoryDS.GetOneEntityBy(&contact, "name", "Mustermann GesmbH")
+
+	assert.Nil(t, err, "No error expected")
+	assert.Equal(t, data.MustermannName, contact.Name, "Expected", data.MustermannName)
+
+	if assert.NotEmptyf(t, contact.ContactAddresses, "Customer must have ContactAddress") {
+		assert.Equal(t, data.MustermannID, contact.ContactAddresses[0].ContactID, "ContactAddresses.ContactID id not %v", data.MustermannID)
+		assert.Equal(t, data.MustermannStreet, contact.ContactAddresses[0].Street, "ContactAddresses.Street id not %v", data.MustermannStreet)
+	}
+}
+
 func TestGetAllEntities(t *testing.T) {
 	inMemoryDS, err := data.NewInMemoryDatastore()
 
 	var users []models.User
-	err = inMemoryDS.GetAllEntities(&users)
+	err = inMemoryDS.GetAllEntities(&models.User{}, &users)
 
 	assert.Nil(t, err, "No error expected")
 	assert.Equal(t, 2, len(users), "Expected %v, but got %v", 2, len(users))
@@ -57,7 +73,7 @@ func TestGetAllEntitiesFiltered(t *testing.T) {
 	inMemoryDS, err := data.NewInMemoryDatastore()
 
 	var users []models.User
-	err = inMemoryDS.GetAllEntities(&users)
+	err = inMemoryDS.GetAllEntities(&models.User{}, &users)
 	inMemoryDS.GetDB().Where("name = ? AND admin = ?", "admin", false)
 	assert.Nil(t, err, "No error expected")
 	assert.Equal(t, 2, len(users), "Expected %v, but got %v", 2, len(users))
@@ -70,7 +86,7 @@ func TestCreateEntity(t *testing.T) {
 
 	assert.Nil(t, err, "No error expected")
 	expectedID := data.MessiID + 1
-	assert.Equal(t, expectedID, roger.EntityId(), "User id not %v", expectedID)
+	assert.Equal(t, expectedID, roger.EntityID(), "User id not %v", expectedID)
 }
 
 func TestSaveEntity(t *testing.T) {

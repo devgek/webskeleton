@@ -3,7 +3,7 @@ package entitymodel
 type DoWithEntityFunc func(Entity, ...interface{})
 
 type EntityFactory interface {
-	Get(entityName string) (interface{}, error)
-	GetSlice(entityName string) (interface{}, error)
-	DoWithAll(entityList interface{}, entityFunc DoWithEntityFunc, params ...interface{})
+	GetEntity(entityName string) (interface{}, error)
+	GetEntitySlice(entityName string) (interface{}, error)
+	DoWithAllEntities(entityList interface{}, entityFunc DoWithEntityFunc, params ...interface{})
 }
