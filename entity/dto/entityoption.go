@@ -1,4 +1,4 @@
-package dto
+package entitydto
 
 //EntityOption ...
 type EntityOption struct {

@@ -65,12 +65,13 @@ func GetWebEnv() *AppEnv {
 			log.Panic(err)
 		}
 
-		ef := genmodels.EntityFactoryImpl{}
+		ef := (&genmodels.EntityFactoryCreator{}).Create()
+		//ef := genmodels.EntityFactoryImpl{}
 		s := services.NewServices(ef, ds)
 
 		theAppEnv = &AppEnv{
 			DS:             ds,
-			EF:             &ef,
+			EF:             ef,
 			Services:       s,
 			TStore:         tStore,
 			Assets:         http.FS(assets),

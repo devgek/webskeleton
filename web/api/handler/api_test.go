@@ -1,18 +1,19 @@
 package apihandler_test
 
 import (
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
+
 	"github.com/devgek/webskeleton/data"
 	"github.com/devgek/webskeleton/web/api"
 	"github.com/devgek/webskeleton/web/api/env"
 	"github.com/labstack/echo"
 	"github.com/smartystreets/goconvey/convey"
-	"net/http"
-	"net/http/httptest"
-	"strings"
-	"testing"
 )
 
-var authTokenAdminNoExpiresAt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwibmFtZSI6ImFkbWluIn0.BbGKax52n_5pqsutfKF62Gz6RdXHTJ9LPd9onWm8HuE"
+var authTokenAdminNoExpiresAt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwibmFtZSI6ImFkbWluIn0.BbGKax52n_5pqsutfKF62Gz6RdXHTJ9LPd9onWm8HuE" //nolint:gosec
 var authString = "Bearer " + authTokenAdminNoExpiresAt
 var echoForAPITests *echo.Echo
 

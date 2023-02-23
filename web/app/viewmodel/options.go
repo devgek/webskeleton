@@ -7,10 +7,10 @@ import (
 //EntityOptionsResponse ...
 type EntityOptionsResponse struct {
 	*BaseResponse
-	EntityOptions []dto.EntityOption
+	EntityOptions []entitydto.EntityOption
 }
 
 //NewEntityOptionsResponse ...
-func NewEntityOptionsResponse(entityOptions []dto.EntityOption) *EntityOptionsResponse {
+func NewEntityOptionsResponse(entityOptions []entitydto.EntityOption) *EntityOptionsResponse {
 	return &EntityOptionsResponse{&BaseResponse{false, ""}, entityOptions}
 }

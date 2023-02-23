@@ -9,6 +9,15 @@ import (
 	"strings"
 )
 
+//go:embed entity_templates/creator_entity.template
+var ceTemplate string
+
+//go:embed entity_templates/creator_entity_1.template
+var ceTemplate1 string
+
+//go:embed entity_templates/creator_entity_2.template
+var ceTemplate2 string
+
 //go:embed entity_templates/factory_entity.template
 var feTemplate string
 
@@ -42,33 +51,30 @@ func (eg EntityGenerator) Do(modelsPath string, genPath string, templatePath str
 
 	generateEntityTypes(genModels, templatePath, genPath)
 
-	generateEntityFactory(genModels, templatePath, genPath)
+	generateEntityCreator(genModels, templatePath, genPath)
 }
 
-func generateEntityFactory(models []genModel, templatePath string, modelsPath string) {
-	t := feTemplate
-	t1 := feTemplate1
-	t2 := feTemplate2
-	t3 := feTemplate3
+func generateEntityCreator(models []genModel, templatePath string, modelsPath string) {
+	t := ceTemplate
+	t1 := ceTemplate1
+	t2 := ceTemplate2
 
 	f1 := strings.Builder{}
 	f2 := strings.Builder{}
-	f3 := strings.Builder{}
 	for _, genModel := range models {
-		rt1 := strings.ReplaceAll(t1, "{{EntityTypeName}}", genModel.TypeName)
-		rt2 := strings.ReplaceAll(t2, "{{EntityTypeName}}", genModel.TypeName)
-		rt3 := strings.ReplaceAll(t3, "{{EntityTypeName}}", genModel.TypeName)
+		rt1 := strings.ReplaceAll(t1, "{{EntityName}}", genModel.Name)
+		rt1 = strings.ReplaceAll(rt1, "{{EntityTypeName}}", genModel.TypeName)
+		rt2 := strings.ReplaceAll(t2, "{{EntityName}}", genModel.Name)
+		rt2 = strings.ReplaceAll(rt2, "{{EntityTypeName}}", genModel.TypeName)
 
 		f1.WriteString(rt1)
 		f2.WriteString(rt2)
-		f3.WriteString(rt3)
 	}
 
-	t = strings.ReplaceAll(t, "{{FactoryEntity1}}", f1.String())
-	t = strings.ReplaceAll(t, "{{FactoryEntity2}}", f2.String())
-	t = strings.ReplaceAll(t, "{{FactoryEntity3}}", f3.String())
+	t = strings.ReplaceAll(t, "{{CreatorEntity1}}", f1.String())
+	t = strings.ReplaceAll(t, "{{CreatorEntity2}}", f2.String())
 
-	entityFactoryPath := filepath.Join(modelsPath, "entity_factory_impl.go")
+	entityFactoryPath := filepath.Join(modelsPath, "entity_factory_creator.go")
 	err := ioutil.WriteFile(entityFactoryPath, []byte(t), os.ModePerm)
 	if err != nil {
 		log.Fatalln(err)

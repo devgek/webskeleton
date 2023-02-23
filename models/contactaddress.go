@@ -1,6 +1,6 @@
 package models
 
-import "github.com/devgek/webskeleton/entity/model"
+import entitymodel "github.com/devgek/webskeleton/entity/model"
 
 // ContactAddress ...
 type ContactAddress struct {

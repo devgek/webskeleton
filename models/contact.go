@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/devgek/webskeleton/entity/dto"
+	entitydto "github.com/devgek/webskeleton/entity/dto"
 	entitymodel "github.com/devgek/webskeleton/entity/model"
 	"github.com/devgek/webskeleton/types"
 )
@@ -17,8 +17,8 @@ type Contact struct {
 }
 
 // EntityOption ...
-func (c Contact) EntityOption() dto.EntityOption {
-	o := dto.EntityOption{}
+func (c Contact) EntityOption() entitydto.EntityOption {
+	o := entitydto.EntityOption{}
 	o.ID = c.GormEntity.EntityID()
 	o.Value = c.Name
 

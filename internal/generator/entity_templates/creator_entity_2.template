@@ -1,0 +1,1 @@
+	ef.RegisterSliceType("{{EntityName}}", &[]models.{{EntityTypeName}}{})

@@ -1,14 +1,14 @@
 package services
 
 import (
-	"github.com/devgek/webskeleton/entity/dto"
+	entitydto "github.com/devgek/webskeleton/entity/dto"
 	entitymodel "github.com/devgek/webskeleton/entity/model"
 	genmodels "github.com/devgek/webskeleton/models/generated"
 )
 
 //GetEntityOptions ...
-func (s Services) GetEntityOptions(entityType genmodels.EntityType) ([]dto.EntityOption, error) {
-	options := []dto.EntityOption{}
+func (s Services) GetEntityOptions(entityType genmodels.EntityType) ([]entitydto.EntityOption, error) {
+	options := []entitydto.EntityOption{}
 
 	entities, err := s.EF.GetEntitySlice(entityType.Val())
 	if err != nil {
