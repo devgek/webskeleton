@@ -1,17 +1,17 @@
-{{define "t_{{entity}}-edit"}}
+{{define "t_account-edit"}}
 {{$userIsAdmin := .Admin}}
-{{$headerEdit := .Messages.GetString "form.{{entity}}.edit.header"}}
-{{$headerNew := .Messages.GetString "form.{{entity}}.edit.headernew"}}
+{{$headerEdit := .Messages.GetString "form.account.edit.header"}}
+{{$headerNew := .Messages.GetString "form.account.edit.headernew"}}
 <!-- Modal Dialog-->
-<div class="modal fade" id="{{entity}}EditModal" data-backdrop="static" tabindex="-1" role="dialog"
-    aria-labelledby="{{entity}}EditModalLabel" aria-hidden="true">
+<div class="modal fade" id="accountEditModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="accountEditModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="block block-themed block-transparent mb-0">
                 <div class="block-header bg-primary">
-                    <h3 class="block-title" id="{{entity}}EditModalLabel">Modal Title</h3>
+                    <h3 class="block-title" id="accountEditModalLabel">Modal Title</h3>
                     <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true"
-                        data-delay="3000" data-tableId="{{entity}}Table">
+                        data-delay="3000" data-tableId="accountTable">
                         <div class="toast-header">
                             <span class="gk-toast-text">Toast Text</span>
                             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -27,15 +27,15 @@
                 </div>
                 <div class="block-content font-size-sm">
                     <div class="form-group">
-                        <label for="{{entity}}EditName"
-                            class="col-form-label">{{.Messages.GetString "form.{{entity}}.edit.label.name"}}</label>
-                        <input name="{{entity}}EditName" class="form-control" id="{{entity}}EditName" value=""
+                        <label for="accountEditName"
+                            class="col-form-label">{{.Messages.GetString "form.account.edit.label.name"}}</label>
+                        <input name="accountEditName" class="form-control" id="accountEditName" value=""
                             autocomplete="new-password" />
                     </div>
                     <div class="form-group">
-                        <label for="{{entity}}EditShort"
-                            class="col-form-label">{{.Messages.GetString "form.{{entity}}.edit.label.short"}}</label>
-                        <input name="{{entity}}EditShort" class="form-control" id="{{entity}}EditShort" value=""
+                        <label for="accountEditNr"
+                            class="col-form-label">{{.Messages.GetString "form.account.edit.label.nr"}}</label>
+                        <input name="accountEditNr" class="form-control" id="accountEditNr" value=""
                             autocomplete="new-password" />
                     </div>
                 </div>
@@ -53,32 +53,32 @@
 <script>
     activeGKEntityTable.prepareEditDialog = function () {
         if (activeGKEntityTable.isEditNew()) {
-            $("#{{entity}}EditModalLabel").html("{{$headerNew}}");
-            $("#{{entity}}EditShort").prop("disabled", false);
+            $("#accountEditModalLabel").html("{{$headerNew}}");
+            $("#accountEditNr").prop("disabled", false);
         }
         else {
-            $("#{{entity}}EditModalLabel").html("{{$headerEdit}}")
-            $("#{{entity}}EditShort").prop("disabled", true);
+            $("#accountEditModalLabel").html("{{$headerEdit}}")
+            $("#accountEditNr").prop("disabled", true);
         }
-        $("#{{entity}}EditName").val(activeGKEntityTable.editRowData[0]);
-        $("{{entity}}EditShort").val(activeGKEntityTable.editRowData[1]);
+        $("#accountEditName").val(activeGKEntityTable.editRowData[0]);
+        $("accountEditNr").val(activeGKEntityTable.editRowData[1]);
     };
     activeGKEntityTable.prepareSendRowData = function () {
         var sendParams = [];
         sendParams["gkvObjId"] = activeGKEntityTable.getEditRowKey();
-        sendParams["gkvName"] = $("#{{entity}}EditType").val();
-        sendParams["gkvShort"] = $("#{{entity}}EditZnr").val();
+        sendParams["gkvName"] = $("#accountEditName").val();
+        sendParams["gkvNr"] = $("#accountEditNr").val();
 
         return sendParams;
     };
     activeGKEntityTable.getRowDataFromEntity = function (data) {
         var rowData = [];
-        rowData.push(data.EntityObject.Name, data.EntityObject.Short)
+        rowData.push(data.EntityObject.Name, data.EntityObject.Nr)
         return rowData;
     };
     activeGKEntityTable.getRowDataHiddenFromEntity = function (data) {
         var rowDataHidden = [];
-        rowDataHidden.push(data.EntityObject.Name, data.EntityObject.Short);
+        rowDataHidden.push(data.EntityObject.Name, data.EntityObject.Nr);
         return rowDataHidden;
     };
 

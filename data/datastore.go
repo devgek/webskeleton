@@ -63,8 +63,7 @@ func initNewDatastore(db *gorm.DB) (Datastore, error) {
 		db.Debug()
 	}
 
-	db.AutoMigrate(&models.User{})
-	db.AutoMigrate(&models.Contact{}, &models.ContactAddress{})
+	db.AutoMigrate(&models.User{}, &models.Contact{}, &models.ContactAddress{}, &models.Account{})
 
 	pass := password.EncryptPassword("xyz")
 	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com", Role: types.RoleTypeAdmin}

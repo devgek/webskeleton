@@ -27,6 +27,7 @@ entity:
   user: "Benutzer"
   contact: "Kontakt"
   contactaddress: "Kontaktadresse"
+  account: "Konto"
 layout:
   page:
     header: "webskeleton: Webapp mit Oneui-Golang-Templates Frontend und Golang-Entity-Datastore Backend"
@@ -39,6 +40,7 @@ layout:
         header: "Administration"
         user: "Benutzer"
         contact: "Kontakt"
+        account: "Konto"
 form:
   all:
     btn:
@@ -67,6 +69,10 @@ form:
     list:
       header: "Benutzer"
       buttonnew: "Neuer Benutzer"
+      name: "Name"
+      pass: "Passwort"
+      email: "Email"
+      role: "Benutzerrolle"
     edit:
       header: "Benutzer bearbeiten"
       headernew: "Benutzer neu anlegen"
@@ -94,3 +100,15 @@ form:
         nameext: "Namenszusatz:"
         contacttype: "Kontakttyp:"
         id: "Id:"
+  account:
+    list:
+      header: "Konto"
+      buttonnew: "Neues Konto"
+      name: "Name"
+      nr: "Nummer"
+    edit:
+      header: "Konto bearbeiten"
+      headernew: "Konto neu anlegen"
+      label:
+        name: "Name:"
+        nr: "Nummer:"

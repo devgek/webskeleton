@@ -8,7 +8,6 @@ copy;dtos;dtos
 copy;entity;entity
 xcopy;helper;helper
 copy;models;models
-copy;packrd;packrd
 copy;services;services
 copy;types;types
 xcopy;web/app;web/app

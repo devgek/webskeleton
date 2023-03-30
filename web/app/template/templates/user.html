@@ -22,11 +22,11 @@
             id="userTable">
             <thead>
                 <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Passwort</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Benutzerrolle</th>
-                    <th scope="col" class="w-5">Aktionen</th>
+                    <th scope="col">{{.Messages.GetString "form.user.list.name"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.user.list.pass"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.user.list.email"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.user.list.role"}}</th>
+                    <th scope="col" class="w-5">{{.Messages.GetString "form.all.label.actions"}}</th>
                 </tr>
             </thead>
             <tbody>

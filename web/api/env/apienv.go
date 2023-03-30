@@ -49,7 +49,7 @@ func GetApiEnv(isTest bool) *ApiEnv {
 			log.Panic(err)
 		}
 
-		ef := (&genmodels.EntityFactoryCreator{}).Create()
+		ef := genmodels.NewEntityFactoryImpl()
 		s := services.NewServices(ef, ds)
 
 		theApiEnv = &ApiEnv{DS: ds, Services: s, EF: ef}

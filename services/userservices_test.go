@@ -31,8 +31,8 @@ func init() {
 func TestLoginUser(t *testing.T) {
 	// create an instance of the mocked Datastore
 	mockedDB := &data.MockedDatastore{}
-	entityFactoryCreator := &genmodels.EntityFactoryCreator{}
-	services := services.NewServices(entityFactoryCreator.Create(), mockedDB)
+	ef := genmodels.NewEntityFactoryImpl()
+	services := services.NewServices(ef, mockedDB)
 
 	passEncrypted := password.EncryptPassword("secret")
 	userGerald := &models.User{Name: "Gerald", Pass: passEncrypted, Email: "gerald.kahrer@gmail.com"}
@@ -51,8 +51,8 @@ func TestLoginUser(t *testing.T) {
 // TestLoginUserInMemory test login service with inmemory db
 func TestLoginUserInMemoryOK(t *testing.T) {
 	inMemoryDS, err := data.NewInMemoryDatastore()
-	entityFactoryCreator := &genmodels.EntityFactoryCreator{}
-	services := services.NewServices(entityFactoryCreator.Create(), inMemoryDS)
+	ef := genmodels.NewEntityFactoryImpl()
+	services := services.NewServices(ef, inMemoryDS)
 
 	// happy test, user with correct password
 	user, err := services.LoginUser("Lionel", data.PassSecret)
@@ -61,8 +61,8 @@ func TestLoginUserInMemoryOK(t *testing.T) {
 }
 func TestLoginUserInMemoryNOK(t *testing.T) {
 	inMemoryDS, err := data.NewInMemoryDatastore()
-	entityFactoryCreator := &genmodels.EntityFactoryCreator{}
-	s := services.NewServices(entityFactoryCreator.Create(), inMemoryDS)
+	ef := genmodels.NewEntityFactoryImpl()
+	s := services.NewServices(ef, inMemoryDS)
 
 	// user with wrong password
 	user, err := s.LoginUser("Lionel", "wrongsecret")
@@ -74,8 +74,8 @@ func TestLoginUserInMemoryNOK(t *testing.T) {
 func TestCreateUser(t *testing.T) {
 	// create an instance of the mocked Datastore
 	mockedDB := &data.MockedDatastore{}
-	entityFactoryCreator := &genmodels.EntityFactoryCreator{}
-	s := services.NewServices(entityFactoryCreator.Create(), mockedDB)
+	ef := genmodels.NewEntityFactoryImpl()
+	s := services.NewServices(ef, mockedDB)
 
 	passEncrypted := password.EncryptPassword(data.PassSecret)
 	userRoger := &models.User{Name: "Roger", Pass: passEncrypted, Email: "roger.federer@atp.com", Role: types.RoleTypeUser}
@@ -93,8 +93,8 @@ func TestCreateUser(t *testing.T) {
 
 func TestUpdateUser(t *testing.T) {
 	inMemoryDS, err := data.NewInMemoryDatastore()
-	entityFactoryCreator := &genmodels.EntityFactoryCreator{}
-	s := services.NewServices(entityFactoryCreator.Create(), inMemoryDS)
+	ef := genmodels.NewEntityFactoryImpl()
+	s := services.NewServices(ef, inMemoryDS)
 
 	messi, err := s.DS.GetUser("Lionel")
 	assert.Nil(t, err, "No error expected")
@@ -105,8 +105,8 @@ func TestUpdateUser(t *testing.T) {
 
 func TestDeleteUser(t *testing.T) {
 	inMemoryDS, err := data.NewInMemoryDatastore()
-	entityFactoryCreator := &genmodels.EntityFactoryCreator{}
-	s := services.NewServices(entityFactoryCreator.Create(), inMemoryDS)
+	ef := genmodels.NewEntityFactoryImpl()
+	s := services.NewServices(ef, inMemoryDS)
 
 	user, err := s.CreateUser("Rafa", data.PassSecret, "rafael.nadal@atp.com", types.RoleTypeUser)
 	assert.Nil(t, err, "No error expected")
@@ -116,8 +116,8 @@ func TestDeleteUser(t *testing.T) {
 
 func TestDeleteUserError(t *testing.T) {
 	inMemoryDS, err := data.NewInMemoryDatastore()
-	entityFactoryCreator := &genmodels.EntityFactoryCreator{}
-	s := services.NewServices(entityFactoryCreator.Create(), inMemoryDS)
+	ef := genmodels.NewEntityFactoryImpl()
+	s := services.NewServices(ef, inMemoryDS)
 
 	err = s.DS.DeleteEntityByID(&models.User{}, 99)
 	assert.Equal(t, entitydata.ErrorEntityNotDeleted, err, "Expected error not returned")
@@ -148,8 +148,8 @@ func TestDoTableBased(t *testing.T) {
 			err:    errors.New("invalid: sum > 5"),
 		},
 	}
-	entityFactoryCreator := &genmodels.EntityFactoryCreator{}
-	s := services.NewServices(entityFactoryCreator.Create(), nil)
+	ef := genmodels.NewEntityFactoryImpl()
+	s := services.NewServices(ef, nil)
 
 	for testName, test := range tests {
 		t.Logf("Running test case %s", testName)

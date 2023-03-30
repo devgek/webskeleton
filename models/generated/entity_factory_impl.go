@@ -1,6 +1,3 @@
-/*
-Package genmodels contains all entities and must also have a struct which implements entitymodel.EntityFactory.
-*/
 package genmodels
 
 import (
@@ -16,25 +13,40 @@ func NewEntityFactoryImpl() EntityFactoryImpl {
 	return EntityFactoryImpl{}
 }
 
-//GetEntity return entity struct by name
+// GetEntity return entity struct by name
 func (ef EntityFactoryImpl) GetEntity(entityName string) (interface{}, error) {
+	//entity := ef.entityRegistry[entityName]
+	//return entity, nil
+
 	switch strings.ToLower(entityName) {
-
-	{{FactoryEntity1}}
-
-
+	case "contact":
+		return &models.Contact{}, nil
+	case "contactaddress":
+		return &models.ContactAddress{}, nil
+	case "user":
+		return &models.User{}, nil
+	case "account":
+		return &models.Account{}, nil
 	default:
 		return nil, errors.New("Unknown entity '" + entityName + "'")
 	}
 
 }
 
-//GetEntitySlice return slice of entity struct by name
+// GetEntitySlice return slice of entity struct by name
 func (ef EntityFactoryImpl) GetEntitySlice(entityName string) (interface{}, error) {
+	//entitySlice := ef.entitySliceRegistry[entityName]
+	//return entitySlice, nil
+
 	switch strings.ToLower(entityName) {
-
-	{{FactoryEntity2}}
-
+	case "contact":
+		return &[]models.Contact{}, nil
+	case "contactaddress":
+		return &[]models.ContactAddress{}, nil
+	case "user":
+		return &[]models.User{}, nil
+	case "account":
+		return &[]models.Account{}, nil
 	default:
 		return nil, errors.New("Unknown entity '" + entityName + "'")
 	}

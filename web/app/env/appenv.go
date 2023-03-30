@@ -65,7 +65,7 @@ func GetWebEnv() *AppEnv {
 			log.Panic(err)
 		}
 
-		ef := (&genmodels.EntityFactoryCreator{}).Create()
+		ef := genmodels.NewEntityFactoryImpl()
 		//ef := genmodels.EntityFactoryImpl{}
 		s := services.NewServices(ef, ds)
 
