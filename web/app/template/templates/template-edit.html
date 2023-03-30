@@ -61,7 +61,7 @@
             $("#{{entity}}EditShort").prop("disabled", true);
         }
         $("#{{entity}}EditName").val(activeGKEntityTable.editRowData[0]);
-        $("{{entity}}EditShort").val(activeGKEntityTable.editRowData[1]);
+        $("#{{entity}}EditShort").val(activeGKEntityTable.editRowData[1]);
     };
     activeGKEntityTable.prepareSendRowData = function () {
         var sendParams = [];

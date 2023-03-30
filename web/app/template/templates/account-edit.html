@@ -54,14 +54,14 @@
     activeGKEntityTable.prepareEditDialog = function () {
         if (activeGKEntityTable.isEditNew()) {
             $("#accountEditModalLabel").html("{{$headerNew}}");
-            $("#accountEditNr").prop("disabled", false);
+            $("#accountEditName").prop("disabled", false);
         }
         else {
             $("#accountEditModalLabel").html("{{$headerEdit}}")
-            $("#accountEditNr").prop("disabled", true);
+            $("#accountEditName").prop("disabled", true);
         }
         $("#accountEditName").val(activeGKEntityTable.editRowData[0]);
-        $("accountEditNr").val(activeGKEntityTable.editRowData[1]);
+        $("#accountEditNr").val(activeGKEntityTable.editRowData[1]);
     };
     activeGKEntityTable.prepareSendRowData = function () {
         var sendParams = [];

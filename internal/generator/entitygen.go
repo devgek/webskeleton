@@ -52,10 +52,10 @@ func generateEntityFactory(models []genModel, templatePath string, modelsPath st
 	for _, genModel := range models {
 		rt1 := strings.ReplaceAll(t1, "{{EntityName}}", genModel.Name)
 		rt1 = strings.ReplaceAll(rt1, "{{EntityTypeName}}", genModel.TypeName)
+		f1.WriteString(rt1)
+
 		rt2 := strings.ReplaceAll(t2, "{{EntityName}}", genModel.Name)
 		rt2 = strings.ReplaceAll(rt2, "{{EntityTypeName}}", genModel.TypeName)
-
-		f1.WriteString(rt1)
 		f2.WriteString(rt2)
 	}
 

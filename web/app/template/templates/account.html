@@ -19,7 +19,7 @@
                 <tr>
                     <th scope="col">{{.Messages.GetString "form.account.list.name"}}</th>
                     <th scope="col">{{.Messages.GetString "form.account.list.nr"}}</th>
-                    <th scope="col">{{.Messages.GetString "form.all.label.actions"}}</th>
+                    <th scope="col" class="w-5">{{.Messages.GetString "form.all.label.actions"}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,13 +30,12 @@
                     <td class="">
                         {{if $userIsAdmin}}
                         <div class="btn-group-sm">
-                            <button type="button" class="btn btn-sm btn-alt-primary" data-toggle="modal"
-                                data-target="#accountEditModal" data-gkvobjid="{{.ID}}">
+                            <button type="button" class="btn btn-sm btn-alt-primary gk-btn-edit" data-toggle="modal"
+                                data-target="#accountEditModal">
                                 <i class="fa fa-fw fa-pencil-alt"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-alt-primary" data-toggle="modal"
-                                data-target="#confirmDeleteModal" data-cfdurl="/entitydeleteaccount"
-                                data-gkvobjid="{{.ID}}">
+                            <button type="button" class="btn btn-sm btn-alt-primary gk-btn-delete" data-toggle="modal"
+                                data-target="#confirmDeleteModal" >
                                 <i class="fa fa-fw fa-times"></i>
                             </button>
                         </div>

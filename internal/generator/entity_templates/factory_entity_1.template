@@ -1,2 +1,2 @@
-	case EntityType{{EntityTypeName}}:
+	case "{{EntityName}}":
 		return &models.{{EntityTypeName}}{}, nil

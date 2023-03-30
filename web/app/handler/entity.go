@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -14,7 +15,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-//HandleEntityList ...
+// HandleEntityList ...
 func HandleEntityList(c echo.Context) error {
 	//show entity list
 	entityName := c.Param("entity")
@@ -43,7 +44,7 @@ func HandleEntityList(c echo.Context) error {
 	return c.Render(http.StatusOK, entityName, viewData)
 }
 
-//HandleEntityDelete ...
+// HandleEntityDelete ...
 func HandleEntityDelete(c echo.Context) error {
 	ec := c.(*env.AppEnvContext)
 
@@ -52,6 +53,9 @@ func HandleEntityDelete(c echo.Context) error {
 
 	oID := c.FormValue("gkvObjId")
 	ioID, _ := strconv.Atoi(oID)
+	if ioID <= 0 {
+		return errors.New(ec.Env.MessageLocator.GetMessageF("msg.error.entity.general", entity, "ID <= 0!"))
+	}
 
 	entityModel, err := ec.Env.EF.GetEntity(entity)
 	if err != nil {
@@ -71,7 +75,7 @@ func HandleEntityDelete(c echo.Context) error {
 	return c.JSON(http.StatusOK, baseResponse)
 }
 
-//HandleEntityEdit ...
+// HandleEntityEdit ...
 func HandleEntityEdit(c echo.Context) error {
 	oID := c.FormValue("gkvObjId")
 	ioID, _ := strconv.Atoi(oID)
@@ -108,7 +112,7 @@ func HandleEntityEdit(c echo.Context) error {
 	return c.JSON(http.StatusOK, entityResponse)
 }
 
-//HandleEntityNew ...
+// HandleEntityNew ...
 func HandleEntityNew(c echo.Context) error {
 	ec := c.(*env.AppEnvContext)
 	entity := ec.Param("entity")
@@ -156,7 +160,7 @@ func HandleEntityNew(c echo.Context) error {
 	return c.JSON(http.StatusOK, entityResponse)
 }
 
-//HandleOptionListAjax ...
+// HandleOptionListAjax ...
 func HandleOptionListAjax(c echo.Context) error {
 	//show entity list
 	entity := c.Param("entity")
@@ -181,7 +185,7 @@ func HandleOptionListAjax(c echo.Context) error {
 	return c.JSON(http.StatusOK, entityResponse)
 }
 
-//HandleEntityListAjax ...
+// HandleEntityListAjax ...
 func HandleEntityListAjax(c echo.Context) error {
 	//show entity list
 	entityName := c.Param("entity")

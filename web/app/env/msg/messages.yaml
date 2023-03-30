@@ -10,6 +10,7 @@ msg:
     ajax: "Technischer Fehler:"
     login: "Login nicht erlaubt"
     entity:
+      general: "Technischer Fehler Entität %s:%s"
       create: "%s kann nicht angelegt werden"
       edit: "%s kann nicht geändert werden"
       delete: "%s kann nicht gelöscht werden"
