@@ -26,6 +26,8 @@ func (ef EntityFactoryImpl) GetEntity(entityName string) (interface{}, error) {
 		return &models.Contact{}, nil
 	case "contactaddress":
 		return &models.ContactAddress{}, nil
+	case "maxi":
+		return &models.Maxi{}, nil
 	case "user":
 		return &models.User{}, nil
 
@@ -45,6 +47,8 @@ func (ef EntityFactoryImpl) GetEntitySlice(entityName string) (interface{}, erro
 		return &[]models.Contact{}, nil
 	case "contactaddress":
 		return &[]models.ContactAddress{}, nil
+	case "maxi":
+		return &[]models.Maxi{}, nil
 	case "user":
 		return &[]models.User{}, nil
 

@@ -1,17 +1,17 @@
-{{define "t_{{entity}}-edit"}}
+{{define "t_{{EntityName}}-edit"}}
 {{$userIsAdmin := .Admin}}
-{{$headerEdit := .Messages.GetString "form.{{entity}}.edit.header"}}
-{{$headerNew := .Messages.GetString "form.{{entity}}.edit.headernew"}}
+{{$headerEdit := .Messages.GetString "form.{{EntityName}}.edit.header"}}
+{{$headerNew := .Messages.GetString "form.{{EntityName}}.edit.headernew"}}
 <!-- Modal Dialog-->
-<div class="modal fade" id="{{entity}}EditModal" data-backdrop="static" tabindex="-1" role="dialog"
-    aria-labelledby="{{entity}}EditModalLabel" aria-hidden="true">
+<div class="modal fade" id="{{EntityName}}EditModal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="{{EntityName}}EditModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="block block-themed block-transparent mb-0">
                 <div class="block-header bg-primary">
-                    <h3 class="block-title" id="{{entity}}EditModalLabel">Modal Title</h3>
+                    <h3 class="block-title" id="{{EntityName}}EditModalLabel">Modal Title</h3>
                     <div class="toast bg-warning" role="alert" aria-live="assertive" aria-atomic="true"
-                        data-delay="3000" data-tableId="{{entity}}Table">
+                        data-delay="3000" data-tableId="{{EntityName}}Table">
                         <div class="toast-header">
                             <span class="gk-toast-text">Toast Text</span>
                             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -27,15 +27,15 @@
                 </div>
                 <div class="block-content font-size-sm">
                     <div class="form-group">
-                        <label for="{{entity}}EditName"
-                            class="col-form-label">{{.Messages.GetString "form.{{entity}}.edit.label.name"}}</label>
-                        <input name="{{entity}}EditName" class="form-control" id="{{entity}}EditName" value=""
+                        <label for="{{EntityName}}EditName"
+                            class="col-form-label">{{.Messages.GetString "form.{{EntityName}}.edit.label.name"}}</label>
+                        <input name="{{EntityName}}EditName" class="form-control" id="{{EntityName}}EditName" value=""
                             autocomplete="new-password" />
                     </div>
                     <div class="form-group">
-                        <label for="{{entity}}EditShort"
-                            class="col-form-label">{{.Messages.GetString "form.{{entity}}.edit.label.short"}}</label>
-                        <input name="{{entity}}EditShort" class="form-control" id="{{entity}}EditShort" value=""
+                        <label for="{{EntityName}}EditShort"
+                            class="col-form-label">{{.Messages.GetString "form.{{EntityName}}.edit.label.short"}}</label>
+                        <input name="{{EntityName}}EditShort" class="form-control" id="{{EntityName}}EditShort" value=""
                             autocomplete="new-password" />
                     </div>
                 </div>
@@ -53,21 +53,21 @@
 <script>
     activeGKEntityTable.prepareEditDialog = function () {
         if (activeGKEntityTable.isEditNew()) {
-            $("#{{entity}}EditModalLabel").html("{{$headerNew}}");
-            $("#{{entity}}EditShort").prop("disabled", false);
+            $("#{{EntityName}}EditModalLabel").html("{{$headerNew}}");
+            $("#{{EntityName}}EditShort").prop("disabled", false);
         }
         else {
-            $("#{{entity}}EditModalLabel").html("{{$headerEdit}}")
-            $("#{{entity}}EditShort").prop("disabled", true);
+            $("#{{EntityName}}EditModalLabel").html("{{$headerEdit}}")
+            $("#{{EntityName}}EditShort").prop("disabled", true);
         }
-        $("#{{entity}}EditName").val(activeGKEntityTable.editRowData[0]);
-        $("#{{entity}}EditShort").val(activeGKEntityTable.editRowData[1]);
+        $("#{{EntityName}}EditName").val(activeGKEntityTable.editRowData[0]);
+        $("#{{EntityName}}EditShort").val(activeGKEntityTable.editRowData[1]);
     };
     activeGKEntityTable.prepareSendRowData = function () {
         var sendParams = [];
         sendParams["gkvObjId"] = activeGKEntityTable.getEditRowKey();
-        sendParams["gkvName"] = $("#{{entity}}EditType").val();
-        sendParams["gkvShort"] = $("#{{entity}}EditZnr").val();
+        sendParams["gkvName"] = $("#{{EntityName}}EditName").val();
+        sendParams["gkvShort"] = $("#{{EntityName}}EditShort").val();
 
         return sendParams;
     };

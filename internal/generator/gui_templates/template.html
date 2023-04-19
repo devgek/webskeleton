@@ -1,4 +1,4 @@
-{{define "t_content"}}
+{{define "t_{{EntityName}}"}}
 {{$userIsAdmin := .Admin}}
 {{$yes := .Messages.GetString "ckbox.true"}}
 {{$no := .Messages.GetString "ckbox.false"}}
@@ -6,19 +6,19 @@
 <!-- Your Block -->
 <div class="block block-rounded">
     <div class="block-header">
-        <h3 class="block-title text-primary">{{.Messages.GetString "form.{{entity}}.list.header"}}</h3>
+        <h3 class="block-title text-primary">{{.Messages.GetString "form.{{EntityName}}.list.header"}}</h3>
         <span class="float-right">
             <button type="button" class="btn btn-outline-primary gk-btn-new" data-toggle="modal"
-                data-target="#{{entity}}EditModal">{{.Messages.GetString "form.{{entity}}.list.buttonnew"}}</button>
+                data-target="#{{EntityName}}EditModal">{{.Messages.GetString "form.{{EntityName}}.list.buttonnew"}}</button>
         </span>
     </div>
     <div class="block-content font-size-sm">
         <table class="table table-hover table-sm table-bordered table-striped gk-table js-dataTable-simple dataTable"
-            id="{{entity}}Table">
+            id="{{EntityName}}Table">
             <thead>
                 <tr>
-                    <th scope="col">{{.Messages.GetString "form.{{entity}}.list.name"}}</th>
-                    <th scope="col">{{.Messages.GetString "form.{{entity}}.list.short"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.{{EntityName}}.list.name"}}</th>
+                    <th scope="col">{{.Messages.GetString "form.{{EntityName}}.list.short"}}</th>
                     <th scope="col" class="w-5">{{.Messages.GetString "form.all.label.actions"}}</th>
                 </tr>
             </thead>
@@ -31,7 +31,7 @@
                         {{if $userIsAdmin}}
                         <div class="btn-group-sm">
                             <button type="button" class="btn btn-sm btn-alt-primary gk-btn-edit" data-toggle="modal"
-                                data-target="#{{entity}}EditModal">
+                                data-target="#{{EntityName}}EditModal">
                                 <i class="fa fa-fw fa-pencil-alt"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-alt-primary gk-btn-delete" data-toggle="modal"
@@ -55,11 +55,11 @@
 <!-- Page Content -->
 <script>
     //create GKTable without inline editing
-    var userTable = new GKEntityTable("{{entity}}");
+    var userTable = new GKEntityTable("{{EntityName}}");
 </script>
 
 <!-- user-edit -->
-{{template "t_{{entity}}-edit" .}}
+{{template "t_{{EntityName}}-edit" .}}
 {{template "t_confirm-delete" .}}
 
 {{end}}

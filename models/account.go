@@ -7,7 +7,7 @@ import (
 
 // Account ...
 type Account struct {
-	entitymodel.GormEntity `entity:"type:Account;name:account"`
+	entitymodel.GormEntity `entity:"type:Account;name:account;gui:no"`
 	Name                   string `gorm:"type:varchar(50);not null;unique" form:"gkvName"`
 	Nr                     string `gorm:"type:text;not null" form:"gkvNr"`
 }
