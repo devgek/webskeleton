@@ -22,7 +22,7 @@ It also contains a login form and a simple menu. You can login with "admin/xyz".
 ---
 ## Generate new Entities
 1. Write models-file (e.g. account.go) in directory models
-2. `webskeleton generate` 
+2. `webskeleton generate --type=db` or `webskeleton generate`
 
    --> generates files *models/generated/entity_factory_creator.go* and *models/generated/entity_types_impl.go*
    
@@ -30,11 +30,16 @@ It also contains a login form and a simple menu. You can login with "admin/xyz".
 3. Modify *data/datastore* --> complete `db.automigrate(...)` with *account*
 ---
 ## Make golang html templates for new Entities (e.g. "account")
-1. Copy *template/templates/template.html to template/templates/account.html*
-2. Find/Replace *{{entity}}* with *account*
-3. Copy *template/templates/template-edit.html to template/templates/account-edit.html*
-4. Find/Replace *{{entity}}* with *account*
+1. Modify models-file (e.g. account.go) in directory models, set *gui:yes* and *nav:yes*
+2. `webskeleton generate --type=gui`
 
-4. Change and complete field names ("name", "short") to field names of *account.go*
-5. Modify *web/app/env/msg/messages.yaml* --> create messages for "account" like for "user"
-6. Modify *template/templates/layout.html* --> create entry for menu "account"
+   --> generates files *web/app/template/templates/account.html*
+
+   --> generates files *web/app/template/templates/account-edit.html*
+
+   --> generates files *web/app/template/templates/entity-nav.html*
+
+   --> all *.go - files in directory *models* are taken for generation process
+
+3. Change and complete field names ("name", "short") to field names of *account.go*
+4. Modify *web/app/env/msg/messages.yaml* --> create messages for "account" like for "user"

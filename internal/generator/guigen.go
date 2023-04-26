@@ -73,7 +73,7 @@ func (gg GuiGenerator) generateNavTemplate(models []genModel, genPath string) {
 
 	t = strings.ReplaceAll(t, "{{EntityNav1}}", b1.String())
 
-	entityNavPath := filepath.Join(genPath, "entity_nav.html")
+	entityNavPath := filepath.Join(genPath, "entity-nav.html")
 	err := ioutil.WriteFile(entityNavPath, []byte(t), os.ModePerm)
 	if err != nil {
 		log.Fatalln(err)
