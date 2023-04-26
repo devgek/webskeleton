@@ -43,7 +43,7 @@ func NewPostgres() (Datastore, error) {
 		return nil, err
 	}
 
-	return initNewDatastore(db)
+	return initNewEntityDatastore(db)
 }
 
 // NewSqlite ...
@@ -53,17 +53,19 @@ func NewSqlite(dbName string) (Datastore, error) {
 	if err != nil {
 		return nil, err
 	}
-	return initNewDatastore(db)
+	return initNewEntityDatastore(db)
 }
 
-// Initialize new datastore with some initial data records
-func initNewDatastore(db *gorm.DB) (Datastore, error) {
+// Initialize new entity datastore with some initial data records
+func initNewEntityDatastore(db *gorm.DB) (Datastore, error) {
 	if config.IsDatastoreLog() {
 		//log gorm db statements
 		db.Debug()
 	}
 
+	//GEN-BEGIN:create entity tables
 	db.AutoMigrate(&models.User{}, &models.Contact{}, &models.ContactAddress{}, &models.Account{})
+	//GEN-END:create entity tables
 
 	pass := password.EncryptPassword("xyz")
 	admin := &models.User{Name: "admin", Pass: pass, Email: "admin@webskeleton.com", Role: types.RoleTypeAdmin}

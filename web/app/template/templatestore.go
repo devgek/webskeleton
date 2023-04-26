@@ -48,9 +48,9 @@ func (ts *FSBasedTemplateStore) GetTemplate(fileName string) (*template.Template
 	case fileName == "login":
 		templ, err = parseEmbedded(ts.templateDir, templateName(fileName))
 	case strings.Contains(fileName, "page"):
-		templ, err = parseEmbedded(ts.templateDir, templateName("layout"), templateName(fileName))
+		templ, err = parseEmbedded(ts.templateDir, templateName("layout"), templateName("entity-nav"), templateName(fileName))
 	default:
-		templ, err = parseEmbedded(ts.templateDir, templateName("layout"), templateName(fileName), templateName(fileName+"-edit"), templateName("confirm-delete"))
+		templ, err = parseEmbedded(ts.templateDir, templateName("layout"), templateName("entity-nav"), templateName(fileName), templateName(fileName+"-edit"), templateName("confirm-delete"))
 	}
 
 	if err == nil {

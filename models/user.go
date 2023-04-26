@@ -8,7 +8,7 @@ import (
 
 // User ...
 type User struct {
-	entitymodel.GormEntity `entity:"type:User;name:user;gui:no"`
+	entitymodel.GormEntity `entity:"type:User;name:user;gui:no;nav:yes"`
 	Name                   string         `gorm:"type:varchar(50);not null;unique" form:"gkvName"`
 	Pass                   string         `gorm:"type:text;not null" form:"gkvPass"`
 	Email                  string         `gorm:"type:varchar(100);not null" form:"gkvEmail"`

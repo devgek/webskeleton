@@ -12,6 +12,7 @@ type genModel struct {
 	TypeName string
 	Name     string
 	Gui      bool
+	Nav      bool
 }
 
 func getGenModels(path string) []genModel {
@@ -45,10 +46,16 @@ func getGenModels(path string) []genModel {
 		typeParts := strings.Split(parts[0], ":")
 		nameParts := strings.Split(parts[1], ":")
 		genModel := genModel{TypeName: typeParts[1], Name: nameParts[1], Gui: false}
-		if len(parts) == 3 {
+		if len(parts) > 2 {
 			guiParts := strings.Split(parts[2], ":")
 			if guiParts[1] == "yes" {
 				genModel.Gui = true
+			}
+		}
+		if len(parts) > 3 {
+			navParts := strings.Split(parts[3], ":")
+			if navParts[1] == "yes" {
+				genModel.Nav = true
 			}
 		}
 

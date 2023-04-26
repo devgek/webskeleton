@@ -48,9 +48,11 @@ func runGenerate(cmd *cobra.Command) {
 		log.Print("missing type=[db|gui]")
 	}
 
-	log.Print("Running go fmt ", genPath)
-	command := exec.Command("go", "fmt", genPath)
-	command.Dir = currPath
-	output, _ := command.CombinedOutput()
-	log.Print(string(output))
+	if "db" == generationType {
+		log.Print("Running go fmt ", genPath)
+		command := exec.Command("go", "fmt", genPath)
+		command.Dir = currPath
+		output, _ := command.CombinedOutput()
+		log.Print(string(output))
+	}
 }

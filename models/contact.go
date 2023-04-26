@@ -8,7 +8,7 @@ import (
 
 // Contact ...
 type Contact struct {
-	entitymodel.GormEntity `entity:"type:Contact;name:contact;gui:no"`
+	entitymodel.GormEntity `entity:"type:Contact;name:contact;gui:no;nav:yes"`
 	OrgType                types.OrgType     `gorm:"type:integer;not null" form:"gkvOrgType"`
 	Name                   string            `gorm:"type:varchar(100);not null" form:"gkvName"`
 	NameExt                string            `gorm:"type:varchar(100)" form:"gkvNameExt"`

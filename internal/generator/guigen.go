@@ -15,6 +15,12 @@ var entityListTemplate string
 //go:embed gui_templates/template-edit.html
 var entityEditTemplate string
 
+//go:embed gui_templates/template-entity-nav.html
+var navTemplate string
+
+//go:embed gui_templates/template-entity-nav_1.html
+var navTemplate1 string
+
 type GuiGenerator struct{}
 
 func (gg GuiGenerator) Do(modelsPath string, genPath string) {
@@ -24,6 +30,7 @@ func (gg GuiGenerator) Do(modelsPath string, genPath string) {
 	genModels := getGenModels(modelsPath)
 
 	gg.generateGuiTemplates(genModels, genPath)
+	gg.generateNavTemplate(genModels, genPath)
 }
 
 func (gg GuiGenerator) generateGuiTemplates(models []genModel, genPath string) {
@@ -50,4 +57,25 @@ func (gg GuiGenerator) generateGuiTemplates(models []genModel, genPath string) {
 		}
 	}
 
+}
+
+func (gg GuiGenerator) generateNavTemplate(models []genModel, genPath string) {
+	t := navTemplate
+	t1 := navTemplate1
+
+	b1 := strings.Builder{}
+	for _, genModel := range models {
+		if genModel.Nav {
+			rt1 := strings.ReplaceAll(t1, "{{EntityName}}", genModel.Name)
+			b1.WriteString(rt1)
+		}
+	}
+
+	t = strings.ReplaceAll(t, "{{EntityNav1}}", b1.String())
+
+	entityNavPath := filepath.Join(genPath, "entity_nav.html")
+	err := ioutil.WriteFile(entityNavPath, []byte(t), os.ModePerm)
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
