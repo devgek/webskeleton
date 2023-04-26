@@ -4,7 +4,7 @@ import entitymodel "github.com/devgek/webskeleton/entity/model"
 
 // ContactAddress ...
 type ContactAddress struct {
-	entitymodel.GormEntity `entity:"type:ContactAddress;name:contactaddress"`
+	entitymodel.GormEntity `entity:"type:ContactAddress;name:contactaddress;gui:no"`
 	ContactID              uint
 	Street                 string `gorm:"type:varchar(100);not null"`
 	StreetNr               string `gorm:"type:varchar(10);not null"`

@@ -123,7 +123,6 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="nav-main-heading">Heading</li>
                             <li class="nav-main-item {{.AdminMenuClass}}">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu"
                                     aria-haspopup="true" aria-expanded="false" href="#">
@@ -132,24 +131,23 @@
                                         class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.header"}}</span>
                                 </a>
                                 <ul class="nav-main-submenu">
+                                    <!-- Entity Navigation -->
                                     <li class="nav-main-item">
                                         <a class="nav-main-link" href="/entitylistuser">
-                                            <span
-                                                class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.user"}}</span>
+                                            <span class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.user"}}</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
                                         <a class="nav-main-link" href="/entitylistcontact">
-                                            <span
-                                                class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.contact"}}</span>
+                                            <span class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.contact"}}</span>
                                         </a>
                                     </li>
                                     <li class="nav-main-item">
                                         <a class="nav-main-link" href="/entitylistaccount">
-                                            <span
-                                                    class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.account"}}</span>
+                                            <span class="nav-main-link-name">{{.Messages.GetString "layout.page.nav.admin.account"}}</span>
                                         </a>
                                     </li>
+                                    <!-- END Entity Navigation -->
                                 </ul>
                             </li>
                         </ul>
