@@ -31,7 +31,7 @@ entity:
   account: "Konto"
 layout:
   page:
-    header: "webskeleton: Webapp mit Oneui-Golang-Templates Frontend und Golang-Entity-Datastore Backend"
+    header: "go-webskeleton: Webapp mit Oneui-Golang-Templates Frontend und Golang-Entity-Datastore Backend"
     logout: "Abmelden"
     nav:
       pages:
