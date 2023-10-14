@@ -16,7 +16,7 @@ It also contains a login form and a simple menu. You can login with "admin/xyz".
 ## Bootstrap new Project
 1. `cd {your-go-modules}`
 2. `mkdir {project}`
-3. `webskeleton bootstrap --type=[api|web|cli] --repository={repository} --user={user} --project={project} --title={projecttitle} --templatedir=$GOPATH\pkg\mod\github.com\devgek\webskeleton@0.1.6
+3. `webskeleton bootstrap --type=[api|web|cli] --repository={repository} --user={user} --project={project} --title={projecttitle} --templatedir={GOPATH}\pkg\mod\github.com\devgek\webskeleton@v0.1.7` 
 4. `cd {project}`
 5. `go run main.go serve --config=_test/config-serve.yaml`
 ---
