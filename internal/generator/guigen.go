@@ -43,13 +43,13 @@ func (gg GuiGenerator) generateGuiTemplates(models []genModel, genPath string) {
 			rList := strings.ReplaceAll(tList, "{{EntityName}}", genModel.Name)
 			rEdit := strings.ReplaceAll(tEdit, "{{EntityName}}", genModel.Name)
 
-			listPath := filepath.Join(genPath, genModel.Name+"-gen.html")
+			listPath := filepath.Join(genPath, genModel.Name+".html")
 			err := ioutil.WriteFile(listPath, []byte(rList), os.ModePerm)
 			if err != nil {
 				log.Fatalln(err)
 			}
 
-			editPath := filepath.Join(genPath, genModel.Name+"-edit-gen.html")
+			editPath := filepath.Join(genPath, genModel.Name+"-edit.html")
 			err1 := ioutil.WriteFile(editPath, []byte(rEdit), os.ModePerm)
 			if err1 != nil {
 				log.Fatalln(err)
