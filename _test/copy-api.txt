@@ -1,4 +1,3 @@
-copy;_template;_template
 copy;_test/config-serve.yaml;_test/config-serve.yaml
 copy;cmd/root.go;cmd/root.go
 copy;cmd/api.go;cmd/api.go
