@@ -22,7 +22,7 @@ It also contains a login form and a simple menu. You can login with "admin/xyz".
 ---
 ## Generate new Entities
 1. Write models-file (e.g. account.go) in directory models
-2. `webskeleton generate --type=db` or `webskeleton generate`
+2. `webskeleton generate --type=db --path={repository/user/project}` or `webskeleton generate --path={repository/user/project}`
 
    --> generates files *models/generated/entity_factory_creator.go* and *models/generated/entity_types_impl.go*
    

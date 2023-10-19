@@ -5,8 +5,8 @@ package genmodels
 
 import (
 	"errors"
-	entitymodel "github.com/devgek/webskeleton/entity/model"
-	"github.com/devgek/webskeleton/models"
+	entitymodel "{{ModulePath}}/entity/model"
+	"{{ModulePath}}/models"
 	"strings"
 )
 
