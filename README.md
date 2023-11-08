@@ -10,7 +10,8 @@ It also contains a login form and a simple menu. You can login with "admin/xyz".
 
 ---
 ## Installation
-1. `go install github.com/devgek/webskeleton@latest`
+1. `go install github.com/devgek/webskeleton@v0.1.x`
+2. `On Windows -> remove write protection on files in %GOPATH%/pkg/mod/github.com/devgek/webskeleton@v0.1.x`
 
 ---
 ## Bootstrap new Project
