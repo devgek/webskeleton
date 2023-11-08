@@ -7,6 +7,7 @@ import (
 	"errors"
 	entitymodel "github.com/devgek/webskeleton/entity/model"
 	"github.com/devgek/webskeleton/models"
+	"log"
 	"strings"
 )
 
@@ -59,12 +60,27 @@ func (ef EntityFactoryImpl) GetEntitySlice(entityName string) (interface{}, erro
 	Method ranges over entities and calls entityFunc with each entity. You can serve parameters with each call to entityFunc.
     Attention! Maybe params should be pointers to change things outside entityFunc.
 */
+
 func (ef EntityFactoryImpl) DoWithAllEntities(entityList interface{}, entityFunc entitymodel.DoWithEntityFunc, params ...interface{}) {
-	if val, ok := entityList.([]interface{}); ok {
-		for _, e := range val {
-			if entity, ok := e.(entitymodel.Entity); ok {
-				entityFunc(entity, params...)
-			}
+	switch entityListType := entityList.(type) {
+	case *[]models.Account:
+		for _, entity := range *entityListType {
+			entityFunc(entity, params...)
 		}
+	case *[]models.Contact:
+		for _, entity := range *entityListType {
+			entityFunc(entity, params...)
+		}
+	case *[]models.ContactAddress:
+		for _, entity := range *entityListType {
+			entityFunc(entity, params...)
+		}
+	case *[]models.User:
+		for _, entity := range *entityListType {
+			entityFunc(entity, params...)
+		}
+
+	default:
+		log.Println("DoWithAll::unknown entityList", entityListType)
 	}
 }

@@ -23,3 +23,7 @@ func (u User) EntityOption() entitydto.EntityOption {
 
 	return o
 }
+
+func (u User) EntityDesc() string {
+	return "User " + u.Name
+}

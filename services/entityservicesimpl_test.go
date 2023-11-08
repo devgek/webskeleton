@@ -1,10 +1,16 @@
 package services
 
-/*
+import (
+	"github.com/devgek/webskeleton/data"
+	"github.com/devgek/webskeleton/models"
+	genmodels "github.com/devgek/webskeleton/models/generated"
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
 func TestServices_GetEntityOptions(t *testing.T) {
 	mockedDB := data.MockedDatastore{}
-	ef := genmodels.CreateEntityFactory()
+	ef := genmodels.NewEntityFactoryImpl()
 	services := NewServices(ef, &mockedDB)
 
 	u := models.User{}
@@ -27,4 +33,3 @@ func TestServices_GetEntityOptions(t *testing.T) {
 	mockedDB.AssertNumberOfCalls(t, "GetAllEntities", 1)
 	mockedDB.AssertExpectations(t)
 }
-*/
