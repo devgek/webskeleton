@@ -10,19 +10,20 @@ It also contains a login form and a simple menu. You can login with "admin/xyz".
 
 ---
 ## Installation
-1. `go install github.com/devgek/webskeleton@latest`
+1. `go install github.com/devgek/webskeleton@v0.1.x`
+2. `On Windows -> remove write protection on files in %GOPATH%/pkg/mod/github.com/devgek/webskeleton@v0.1.x`
 
 ---
 ## Bootstrap new Project
 1. `cd {your-go-modules}`
 2. `mkdir {project}`
-3. `webskeleton bootstrap --type=[api|web|cli] --repository={repository} --user={user} --project={project} --title={projecttitle} --templatedir=$GOPATH\pkg\mod\github.com\devgek\webskeleton@0.1.6
+3. `webskeleton bootstrap --type=[api|web|cli] --repository={repository} --user={user} --project={project} --title={projecttitle} --templatedir={GOPATH}\pkg\mod\github.com\devgek\webskeleton@v0.1.7` 
 4. `cd {project}`
 5. `go run main.go serve --config=_test/config-serve.yaml`
 ---
 ## Generate new Entities
 1. Write models-file (e.g. account.go) in directory models
-2. `webskeleton generate --type=db` or `webskeleton generate`
+2. `webskeleton generate --type=db --path={repository/user/project}` or `webskeleton generate --path={repository/user/project}`
 
    --> generates files *models/generated/entity_factory_creator.go* and *models/generated/entity_types_impl.go*
    

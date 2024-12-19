@@ -5,8 +5,8 @@ package genmodels
 
 import (
 	"errors"
-	entitymodel "github.com/devgek/webskeleton/entity/model"
-	"github.com/devgek/webskeleton/models"
+	entitymodel "{{ModulePath}}/entity/model"
+	"{{ModulePath}}/models"
 	"strings"
 )
 
@@ -26,7 +26,6 @@ func (ef EntityFactoryImpl) GetEntity(entityName string) (interface{}, error) {
 	default:
 		return nil, errors.New("Unknown entity '" + entityName + "'")
 	}
-
 }
 
 //GetEntitySlice return slice of entity struct by name
@@ -38,7 +37,6 @@ func (ef EntityFactoryImpl) GetEntitySlice(entityName string) (interface{}, erro
 	default:
 		return nil, errors.New("Unknown entity '" + entityName + "'")
 	}
-
 }
 
 //DoWithAllEntities
@@ -47,11 +45,11 @@ func (ef EntityFactoryImpl) GetEntitySlice(entityName string) (interface{}, erro
     Attention! Maybe params should be pointers to change things outside entityFunc.
 */
 func (ef EntityFactoryImpl) DoWithAllEntities(entityList interface{}, entityFunc entitymodel.DoWithEntityFunc, params ...interface{}) {
-	if val, ok := entityList.([]interface{}); ok {
-		for _, e := range val {
-			if entity, ok := e.(entitymodel.Entity); ok {
-				entityFunc(entity, params...)
-			}
-		}
+	switch entityListType := entityList.(type) {
+
+	{{FactoryEntity3}}
+
+	default:
+		log.Println("DoWithAll::unknown entityList", entityListType)
 	}
 }

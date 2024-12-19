@@ -18,6 +18,9 @@ var feTemplate1 string
 //go:embed entity_templates/factory_entity_2.template
 var feTemplate2 string
 
+//go:embed entity_templates/factory_entity_3.template
+var feTemplate3 string
+
 //go:embed entity_templates/type_entity.template
 var teTemplate string
 
@@ -26,21 +29,22 @@ var teTemplate3 string
 
 type EntityGenerator struct{}
 
-func (eg EntityGenerator) Do(modelsPath string, genPath string) {
-	log.Println("Start generating entity types and factory in ", genPath)
+func (eg EntityGenerator) Do(modelsPath string, genPath string, modulePath string) {
+	log.Println("Start generating entity types and factory in ", genPath, " for module "+modulePath)
 	os.Mkdir(genPath, os.ModePerm)
 
 	genModels := getGenModels(modelsPath)
 
 	eg.generateEntityTypes(genModels, genPath)
 
-	eg.generateEntityFactory(genModels, genPath)
+	eg.generateEntityFactory(genModels, genPath, modulePath)
 }
 
-func (eg EntityGenerator) generateEntityFactory(models []genModel, modelsPath string) {
+func (eg EntityGenerator) generateEntityFactory(models []genModel, modelsPath string, modulePath string) {
 	t := feTemplate
 	t1 := feTemplate1
 	t2 := feTemplate2
+	t3 := feTemplate3
 
 	b1 := strings.Builder{}
 	b2 := strings.Builder{}
@@ -52,8 +56,12 @@ func (eg EntityGenerator) generateEntityFactory(models []genModel, modelsPath st
 		rt2 := strings.ReplaceAll(t2, "{{EntityName}}", genModel.Name)
 		rt2 = strings.ReplaceAll(rt2, "{{EntityTypeName}}", genModel.TypeName)
 		b2.WriteString(rt2)
+
+		rt3 := strings.ReplaceAll(t3, "{{EntityTypeName}}", genModel.TypeName)
+		b2.WriteString(rt3)
 	}
 
+	t = strings.ReplaceAll(t, "{{ModulePath}}", modulePath)
 	t = strings.ReplaceAll(t, "{{FactoryEntity1}}", b1.String())
 	t = strings.ReplaceAll(t, "{{FactoryEntity2}}", b2.String())
 

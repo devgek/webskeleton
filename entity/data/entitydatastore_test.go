@@ -1,6 +1,8 @@
 package entitydata_test
 
 import (
+	entitymodel "github.com/devgek/webskeleton/entity/model"
+	genmodels "github.com/devgek/webskeleton/models/generated"
 	"testing"
 
 	entitydata "github.com/devgek/webskeleton/entity/data"
@@ -67,6 +69,25 @@ func TestGetAllEntities(t *testing.T) {
 
 	assert.Nil(t, err, "No error expected")
 	assert.Equal(t, 2, len(users), "Expected %v, but got %v", 2, len(users))
+}
+
+func TestDoWithAllEntities(t *testing.T) {
+	inMemoryDS, err := data.NewInMemoryDatastore()
+
+	var users []models.User
+	err = inMemoryDS.GetAllEntities(&models.User{}, &users)
+
+	assert.Nil(t, err, "No error expected")
+	assert.Equal(t, 2, len(users), "Expected %v, but got %v", 2, len(users))
+
+	ef := genmodels.NewEntityFactoryImpl()
+	ef.DoWithAllEntities(&users, SayHelloEntity, t, "called from test", "TestDoWithAllEntities")
+}
+
+func SayHelloEntity(entity entitymodel.Entity, params ...interface{}) {
+	if val, ok := params[0].(*testing.T); ok {
+		val.Log("Hello from entity ", entity.EntityDesc(), " with params: ", params[1], params[2])
+	}
 }
 
 func TestGetAllEntitiesFiltered(t *testing.T) {

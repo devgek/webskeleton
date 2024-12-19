@@ -12,7 +12,7 @@ require (
 	github.com/spf13/viper v1.8.1
 	github.com/stretchr/objx v0.4.0
 	github.com/stretchr/testify v1.8.0
-	golang.org/x/crypto v0.14.0
+	golang.org/x/crypto v0.17.0
 	gorm.io/driver/postgres v1.4.5
 	gorm.io/driver/sqlite v1.4.3
 	gorm.io/gorm v1.24.2

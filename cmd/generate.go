@@ -24,11 +24,13 @@ func init() {
 
 	generateCmd.Flags().String("type", "db", "The type of generation you want to run [db|gui]")
 	generateCmd.Flags().String("modelsdir", "./models", "The directory with the model files")
+	generateCmd.Flags().String("path", "repository/user/project", "The module path, if type is db")
 }
 
 func runGenerate(cmd *cobra.Command) {
 	modelsDir, _ := cmd.Flags().GetString("modelsdir")
 	generationType, _ := cmd.Flags().GetString("type")
+	modulePath, _ := cmd.Flags().GetString("path")
 
 	currPath, err := os.Getwd()
 	helper.ExitOnError(err, "Can't get current path!")
@@ -39,7 +41,7 @@ func runGenerate(cmd *cobra.Command) {
 	if "db" == generationType {
 		theGenerator := generator.EntityGenerator{}
 		genPath = filepath.Join(modelsPath, "generated")
-		theGenerator.Do(modelsPath, genPath)
+		theGenerator.Do(modelsPath, genPath, modulePath)
 	} else if "gui" == generationType {
 		generator := generator.GuiGenerator{}
 		genPath = filepath.Join(currPath, "web", "app", "template", "templates")
