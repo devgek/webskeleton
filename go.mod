@@ -12,7 +12,7 @@ require (
 	github.com/spf13/viper v1.8.1
 	github.com/stretchr/objx v0.4.0
 	github.com/stretchr/testify v1.8.0
-	golang.org/x/crypto v0.31.0
+	golang.org/x/crypto v0.35.0
 	gorm.io/driver/postgres v1.4.5
 	gorm.io/driver/sqlite v1.4.3
 	gorm.io/gorm v1.24.2
@@ -53,8 +53,8 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.0.1 // indirect
 	golang.org/x/net v0.21.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
